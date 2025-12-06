@@ -556,7 +556,7 @@ p { margin-bottom: var(--spacing-md); }
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding-bottom: 1rem;
+    padding-bottom: 2rem;
 }
 
 .module-card-side {
@@ -679,9 +679,10 @@ p { margin-bottom: var(--spacing-md); }
 }
 
 .submenu-container.open {
-    max-height: 500px;
+    max-height: 1000px;
     margin-bottom: 0.75rem;
     opacity: 1;
+    overflow: visible;
 }
 
 .submenu-item {
@@ -692,6 +693,8 @@ p { margin-bottom: var(--spacing-md); }
     background: rgba(255, 255, 255, 0.03);
     border-radius: 0.5rem;
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
 }
 
 .submenu-item:first-child {
