@@ -64,6 +64,21 @@ O sistema possui design moderno e totalmente adaptável a qualquer dispositivo:
 - ✅ **PWA** - Instalável como aplicativo nativo
 - ✅ **Tema Personalizável** - Cores adaptadas ao segmento da empresa
 
+### 🎯 Melhorias Recentes de UI/UX
+
+**Submenu Expandivel:**
+- 📦 Menu Estoque com 3 sub-opções (Entrada, Saída, Saldo)
+- ⚙️ Animações suaves com `cubic-bezier` profissional
+- 🔄 Rotação do ícone chevron em 180°
+- 📊 Scroll suave no sidebar com scrollbar customizada
+
+**Otimizações de Layout:**
+- 📊 Espaçamento compacto e profissional
+- 🎯 Ícones otimizados (38px principais, 34px submenu)
+- 🖌️ Fontes balanceadas para melhor legibilidade
+- 💡 Hover effects com feedback visual
+- 🎨 Background sutil e bordas temáticas
+
 ### 🎯 Segmentos Empresariais Suportados
 
 | Segmento | Ícone | Cor |
@@ -237,7 +252,15 @@ Resultado:
 
 ### 2️⃣ Gestão de Estoque
 
-Sistema completo de controle de estoque com entrada e saída de produtos.
+Sistema completo de controle de estoque com submenu organizado e responsivo.
+
+**Estrutura do Menu:**
+```
+📦 Estoque (Menu Principal)
+  ├─ 📥 Entrada - Recebimento de produtos
+  ├─ 📤 Saída - Expedição e vendas
+  └─ 📊 Saldo - Visualização do estoque atual
+```
 
 **Entrada de Produtos:**
 - ✅ Cadastro de produtos com nome, quantidade e preço
@@ -250,6 +273,12 @@ Sistema completo de controle de estoque com entrada e saída de produtos.
 - ✅ Verificação automática de disponibilidade
 - ✅ Atualização em tempo real das quantidades
 - ✅ Controle de estoque mínimo
+
+**Saldo de Estoque:**
+- ✅ Visualização completa de todos os produtos
+- ✅ Estoque atual com valores totais
+- ✅ Filtros e busca avançada
+- ✅ Export de relatórios
 
 ---
 
@@ -685,6 +714,44 @@ Todos os integrantes contribuem ativamente para:
 - ✅ **Revisão de Código** - Code review e melhorias contínuas
 - ✅ **Arquitetura** - Decisões técnicas e de design
 - ✅ **Suporte** - Auxílio aos usuários e correção de bugs
+
+---
+
+## 📝 Changelog - Histórico de Atualizações
+
+### 🎯 Versão Atual - Dezembro 2025
+
+#### ✨ Melhorias de UI/UX
+- **Submenu Expandível no Estoque**
+  - Organização hierárquica: Entrada, Saída e Saldo dentro do menu Estoque
+  - Animações suaves com `cubic-bezier(0.4, 0, 0.2, 1)`
+  - Ícone chevron com rotação de 180° ao expandir
+  - Transição de opacidade (fade in/out) profissional
+
+#### 🔧 Otimizações de Layout
+- **Sidebar Responsivo**
+  - Scroll suave com scrollbar customizada (6px, cores sutis)
+  - Espaçamento compacto para visualizar todos os módulos
+  - Padding otimizado: reduzido 35% mantendo legibilidade
+  - Ícones redimensionados: 38px (principal) e 34px (submenu)
+  
+- **Submenu Técnico**
+  - `max-height: 1000px` para comportar 3+ itens
+  - `overflow: visible` quando expandido
+  - `z-index: 1` para evitar sobreposição
+  - `padding-bottom: 2rem` para scroll completo
+
+#### 🎨 Melhorias Visuais
+- Background sutil nos itens do submenu: `rgba(255, 255, 255, 0.03)`
+- Bordas temáticas de 3px com cores por categoria
+- Hover effects: `translateX(5px)` + shadow para feedback
+- Text overflow com ellipsis para textos longos
+
+#### 🐛 Correções
+- ✅ Botão "Saldo" agora completamente visível no submenu
+- ✅ Scroll do sidebar funcional em todas as resoluções
+- ✅ Animações suaves sem travamentos
+- ✅ Layout responsivo mantido em mobile/tablet/desktop
 
 ---
 
