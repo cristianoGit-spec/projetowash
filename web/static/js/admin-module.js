@@ -157,8 +157,16 @@ function popularFiltroSegmentos() {
 function carregarEmpresas() {
     const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
     
-    // Filtrar apenas empresas (role = 'admin'), excluindo super admin
-    const empresas = localUsers.filter(u => u.role === 'admin' && u.email !== 'admin@local.com');
+    // Filtrar apenas empresas (role = 'admin'), excluindo o super admin
+    const empresas = localUsers.filter(u => 
+        u.role === 'admin' && 
+        u.email !== 'superadmin@quatrocantos.com' &&
+        u.companyId && 
+        u.companyId !== 'superadmin-master'
+    );
+    
+    console.log('📊 Total de empresas encontradas:', empresas.length);
+    console.log('🏢 Empresas:', empresas);
     
     // Atualizar estatísticas
     atualizarEstatisticas(empresas);
@@ -286,7 +294,14 @@ function filtrarEmpresas() {
     const segmentoFilter = document.getElementById('filterSegmento').value;
     
     const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
-    let empresas = localUsers.filter(u => u.role === 'admin' && u.email !== 'admin@local.com');
+    
+    // Filtrar apenas empresas (role = 'admin'), excluindo o super admin
+    let empresas = localUsers.filter(u => 
+        u.role === 'admin' && 
+        u.email !== 'superadmin@quatrocantos.com' &&
+        u.companyId && 
+        u.companyId !== 'superadmin-master'
+    );
     
     // Filtrar por busca
     if (searchTerm) {

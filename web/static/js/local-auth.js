@@ -252,8 +252,16 @@ async function cadastrarUsuarioLocal(nome, email, contato, loginUsuario, senha, 
         newUser.role = 'admin';
         newUser.cargo = 'Administrador';
         newUser.nomeEmpresa = extraData.nomeEmpresa;
+        newUser.segmento = extraData.segmento; // Adicionar segmento
         newUser.companyId = 'comp-' + Date.now(); // Gerar ID da empresa
         newUser.allowedModules = ['operacional', 'estoque-entrada', 'estoque-saida', 'financeiro', 'rh', 'visualizar'];
+        
+        console.log('✅ Empresa criada:', {
+            nome: newUser.nomeEmpresa,
+            email: newUser.email,
+            segmento: newUser.segmento,
+            companyId: newUser.companyId
+        });
     } else {
         // Cadastro de Funcionário (vinculado a uma empresa)
         newUser.role = extraData.role || 'user';
