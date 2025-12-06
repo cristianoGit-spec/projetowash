@@ -529,12 +529,15 @@ p { margin-bottom: var(--spacing-md); }
     top: 90px; /* Adjust based on header height */
     background: white;
     border-radius: var(--radius-lg);
-    padding: var(--spacing-md);
+    padding: 1rem 0.875rem;
     box-shadow: var(--shadow-md);
     height: fit-content;
     max-height: calc(100vh - 110px);
     overflow-y: auto;
+    overflow-x: hidden;
     transition: transform 0.3s ease, opacity 0.3s ease;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
 /* Custom Scrollbar for Sidebar */
@@ -552,16 +555,17 @@ p { margin-bottom: var(--spacing-md); }
 .modules-list {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: 0.5rem;
+    padding-bottom: 1rem;
 }
 
 .module-card-side {
     background: transparent;
     border-radius: var(--radius-md);
-    padding: var(--spacing-md);
+    padding: 0.75rem 1rem;
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: 0.875rem;
     cursor: pointer;
     transition: all 0.2s ease;
     border: 1px solid transparent;
@@ -598,13 +602,13 @@ p { margin-bottom: var(--spacing-md); }
 }
 
 .module-icon-side {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: white;
     flex-shrink: 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -622,19 +626,27 @@ p { margin-bottom: var(--spacing-md); }
 
 .module-info-side {
     flex: 1;
+    min-width: 0;
 }
 
 .module-info-side h3 {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
     margin: 0;
     color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .module-info-side p {
-    font-size: 0.75rem;
+    font-size: 0.725rem;
     color: var(--text-secondary);
     margin: 0;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .arrow-icon {
@@ -660,24 +672,34 @@ p { margin-bottom: var(--spacing-md); }
 .submenu-container {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding-left: 1rem;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    padding-left: 0.75rem;
     margin-top: 0.25rem;
+    opacity: 0;
 }
 
 .submenu-container.open {
-    max-height: 600px;
-    margin-bottom: 0.5rem;
+    max-height: 500px;
+    margin-bottom: 0.75rem;
+    opacity: 1;
 }
 
 .submenu-item {
-    margin: 0.5rem 0;
-    padding: 0.875rem 1rem;
+    margin: 0.4rem 0;
+    padding: 0.75rem 0.875rem;
     font-size: 0.9rem;
     border-left: 3px solid rgba(37, 99, 235, 0.15);
     background: rgba(255, 255, 255, 0.03);
     border-radius: 0.5rem;
     transition: all 0.3s ease;
+}
+
+.submenu-item:first-child {
+    margin-top: 0.5rem;
+}
+
+.submenu-item:last-child {
+    margin-bottom: 0.5rem;
 }
 
 .submenu-item:hover {
@@ -688,17 +710,19 @@ p { margin-bottom: var(--spacing-md); }
 }
 
 .submenu-item .module-icon-side {
-    width: 32px;
-    height: 32px;
-    font-size: 0.9rem;
+    width: 34px;
+    height: 34px;
+    font-size: 0.875rem;
 }
 
 .submenu-item .module-info-side h3 {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
+    font-weight: 500;
 }
 
 .submenu-item .module-info-side p {
     font-size: 0.7rem;
+    opacity: 0.8;
 }
 
 /* Cyan color for Estoque parent */
