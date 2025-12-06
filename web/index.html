@@ -340,26 +340,51 @@
                         <i class="fas fa-chevron-right arrow-icon"></i>
                     </div>
 
-                    <div class="module-card-side" onclick="showModule('estoque-entrada')">
-                        <div class="module-icon-side green">
-                            <i class="fas fa-box-open"></i>
+                    <!-- Módulo Estoque com Submenu -->
+                    <div class="module-card-side module-with-submenu" onclick="toggleEstoqueSubmenu(event)">
+                        <div class="module-icon-side cyan">
+                            <i class="fas fa-warehouse"></i>
                         </div>
                         <div class="module-info-side">
-                            <h3>Entrada</h3>
-                            <p>Recebimento</p>
+                            <h3>Estoque</h3>
+                            <p>Gestão</p>
                         </div>
-                        <i class="fas fa-chevron-right arrow-icon"></i>
+                        <i class="fas fa-chevron-down arrow-icon submenu-arrow"></i>
                     </div>
+                    
+                    <div class="submenu-container" id="estoqueSubmenu">
+                        <div class="module-card-side submenu-item" onclick="showModule('estoque-entrada')">
+                            <div class="module-icon-side green">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                            <div class="module-info-side">
+                                <h3>Entrada</h3>
+                                <p>Recebimento</p>
+                            </div>
+                            <i class="fas fa-chevron-right arrow-icon"></i>
+                        </div>
 
-                    <div class="module-card-side" onclick="showModule('estoque-saida')">
-                        <div class="module-icon-side orange">
-                            <i class="fas fa-truck-loading"></i>
+                        <div class="module-card-side submenu-item" onclick="showModule('estoque-saida')">
+                            <div class="module-icon-side orange">
+                                <i class="fas fa-truck-loading"></i>
+                            </div>
+                            <div class="module-info-side">
+                                <h3>Saída</h3>
+                                <p>Expedição</p>
+                            </div>
+                            <i class="fas fa-chevron-right arrow-icon"></i>
                         </div>
-                        <div class="module-info-side">
-                            <h3>Saída</h3>
-                            <p>Expedição</p>
+
+                        <div class="module-card-side submenu-item" onclick="showModule('visualizar')">
+                            <div class="module-icon-side gray">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="module-info-side">
+                                <h3>Consulta</h3>
+                                <p>Visualizar</p>
+                            </div>
+                            <i class="fas fa-chevron-right arrow-icon"></i>
                         </div>
-                        <i class="fas fa-chevron-right arrow-icon"></i>
                     </div>
 
                     <div class="module-card-side" onclick="showModule('financeiro')">
@@ -380,17 +405,6 @@
                         <div class="module-info-side">
                             <h3>RH</h3>
                             <p>Equipe</p>
-                        </div>
-                        <i class="fas fa-chevron-right arrow-icon"></i>
-                    </div>
-
-                    <div class="module-card-side" onclick="showModule('visualizar')">
-                        <div class="module-icon-side gray">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                        <div class="module-info-side">
-                            <h3>Estoque</h3>
-                            <p>Consulta</p>
                         </div>
                         <i class="fas fa-chevron-right arrow-icon"></i>
                     </div>
@@ -443,20 +457,29 @@
                     <button class="sidebar-btn module-nav-btn" data-module="operacional" onclick="showModule('operacional'); toggleMobileMenu()">
                         <i class="fas fa-industry"></i> Operacional
                     </button>
-                    <button class="sidebar-btn module-nav-btn" data-module="estoque-entrada" onclick="showModule('estoque-entrada'); toggleMobileMenu()">
-                        <i class="fas fa-box-open"></i> Entrada
+                    
+                    <!-- Estoque com Submenu Mobile -->
+                    <button class="sidebar-btn module-nav-btn submenu-toggle" onclick="toggleEstoqueSubmenuMobile(event)">
+                        <i class="fas fa-warehouse"></i> Estoque
+                        <i class="fas fa-chevron-down submenu-arrow-mobile"></i>
                     </button>
-                    <button class="sidebar-btn module-nav-btn" data-module="estoque-saida" onclick="showModule('estoque-saida'); toggleMobileMenu()">
-                        <i class="fas fa-truck-loading"></i> Saída
-                    </button>
+                    <div class="mobile-submenu" id="estoqueSubmenuMobile">
+                        <button class="sidebar-btn module-nav-btn submenu-btn" data-module="estoque-entrada" onclick="showModule('estoque-entrada'); toggleMobileMenu()">
+                            <i class="fas fa-box-open"></i> Entrada
+                        </button>
+                        <button class="sidebar-btn module-nav-btn submenu-btn" data-module="estoque-saida" onclick="showModule('estoque-saida'); toggleMobileMenu()">
+                            <i class="fas fa-truck-loading"></i> Saída
+                        </button>
+                        <button class="sidebar-btn module-nav-btn submenu-btn" data-module="visualizar" onclick="showModule('visualizar'); toggleMobileMenu()">
+                            <i class="fas fa-eye"></i> Consulta
+                        </button>
+                    </div>
+                    
                     <button class="sidebar-btn module-nav-btn" data-module="financeiro" onclick="showModule('financeiro'); toggleMobileMenu()">
                         <i class="fas fa-chart-line"></i> Financeiro
                     </button>
                     <button class="sidebar-btn module-nav-btn" data-module="rh" onclick="showModule('rh'); toggleMobileMenu()">
                         <i class="fas fa-users"></i> RH
-                    </button>
-                    <button class="sidebar-btn module-nav-btn" data-module="visualizar" onclick="showModule('visualizar'); toggleMobileMenu()">
-                        <i class="fas fa-eye"></i> Estoque
                     </button>
                     <!-- Admin Only -->
                     <button class="sidebar-btn module-nav-btn admin-only hidden" data-module="historico" onclick="showModule('historico'); toggleMobileMenu()">

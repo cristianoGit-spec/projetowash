@@ -648,6 +648,90 @@ p { margin-bottom: var(--spacing-md); }
     color: var(--primary-color);
 }
 
+/* Submenu Styles - Desktop */
+.module-with-submenu .submenu-arrow {
+    transition: transform 0.3s ease;
+}
+
+.module-with-submenu.open .submenu-arrow {
+    transform: rotate(180deg);
+}
+
+.submenu-container {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+    padding-left: 1rem;
+}
+
+.submenu-container.open {
+    max-height: 500px;
+}
+
+.submenu-item {
+    margin: 0.25rem 0;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    border-left: 2px solid rgba(37, 99, 235, 0.2);
+}
+
+.submenu-item:hover {
+    transform: translateX(3px);
+    border-left-color: var(--primary-color);
+}
+
+.submenu-item .module-icon-side {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+}
+
+.submenu-item .module-info-side h3 {
+    font-size: 0.875rem;
+}
+
+.submenu-item .module-info-side p {
+    font-size: 0.7rem;
+}
+
+/* Cyan color for Estoque parent */
+.module-icon-side.cyan { 
+    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); 
+}
+
+/* Mobile Submenu Styles */
+.submenu-toggle {
+    position: relative;
+    justify-content: space-between;
+}
+
+.submenu-arrow-mobile {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.submenu-toggle.open .submenu-arrow-mobile {
+    transform: rotate(180deg);
+}
+
+.mobile-submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+    padding-left: 1.5rem;
+}
+
+.mobile-submenu.open {
+    max-height: 300px;
+}
+
+.submenu-btn {
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+    border-left: 2px solid rgba(37, 99, 235, 0.3);
+}
+
 /* Dashboard Content Area */
 .dashboard-content {
     background: white;

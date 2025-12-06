@@ -675,3 +675,33 @@ function toggleMobileMenu() {
         overlay.classList.toggle('active');
     }
 }
+
+/**
+ * Alternar submenu de Estoque na Sidebar Desktop
+ */
+function toggleEstoqueSubmenu(event) {
+    event.stopPropagation();
+    
+    const submenu = document.getElementById('estoqueSubmenu');
+    const button = event.currentTarget;
+    
+    if (submenu && button) {
+        submenu.classList.toggle('open');
+        button.classList.toggle('open');
+    }
+}
+
+/**
+ * Alternar submenu de Estoque na Sidebar Mobile
+ */
+function toggleEstoqueSubmenuMobile(event) {
+    event.stopPropagation();
+    
+    const submenu = document.getElementById('estoqueSubmenuMobile');
+    const button = event.currentTarget;
+    
+    if (submenu && button) {
+        submenu.classList.toggle('open');
+        button.classList.toggle('open');
+    }
+}
