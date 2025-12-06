@@ -24,14 +24,27 @@ const mimeTypes = {
 const server = http.createServer((req, res) => {
     console.log(`${req.method} ${req.url}`);
 
-    let filePath = path.join(__dirname, 'web', req.url === '/' ? 'index.html' : req.url);
+    // Determinar o caminho do arquivo
+    let filePath;
+    if (req.url === '/') {
+        filePath = path.join(__dirname, 'web', 'index.html');
+    } else {
+        // Remove query string (ex: ?v=11)
+        const urlWithoutQuery = req.url.split('?')[0];
+        filePath = path.join(__dirname, 'web', urlWithoutQuery);
+    }
     
     const extname = String(path.extname(filePath)).toLowerCase();
     const contentType = mimeTypes[extname] || 'application/octet-stream';
+    
+    console.log(`📂 Tentando carregar: ${filePath}`);
+
+    console.log(`📂 Tentando carregar: ${filePath}`);
 
     fs.readFile(filePath, (error, content) => {
         if (error) {
             if(error.code == 'ENOENT') {
+                console.log(`❌ Arquivo não encontrado: ${filePath}`);
                 res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
                 res.end(`
                     <!DOCTYPE html>
@@ -58,10 +71,12 @@ const server = http.createServer((req, res) => {
                     </html>
                 `, 'utf-8');
             } else {
+                console.log(`❌ Erro no servidor: ${error.code}`);
                 res.writeHead(500);
                 res.end('Erro no servidor: ' + error.code);
             }
         } else {
+            console.log(`✅ Arquivo carregado: ${filePath}`);
             res.writeHead(200, { 
                 'Content-Type': contentType,
                 'Cache-Control': 'no-cache, no-store, must-revalidate',
