@@ -1,0 +1,207 @@
+/* ============================================================================
+   ESTILOS PARA SEGMENTOS E TIPOS DE MATERIAIS
+   ============================================================================ */
+
+/* Dica de formulário */
+.form-hint {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Estilo personalizado para selects */
+select.form-control,
+select {
+    appearance: none;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%278%27 viewBox=%270 0 12 8%27%3E%3Cpath fill=%27%23475569%27 d=%27M6 8L0 0h12z%27/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 12px 8px;
+    padding-right: 2.5rem;
+}
+
+.input-group select + i {
+    pointer-events: none;
+}
+
+/* ============================================================================
+   TEMA DINÂMICO BASEADO NO SEGMENTO DA EMPRESA
+   ============================================================================ */
+
+/* Construção Civil - Laranja */
+[data-segmento='construcao'],
+body.segmento-construcao {
+    --primary-color: #d97706;
+    --primary-dark: #b45309;
+}
+
+/* Automotivo - Vermelho */
+[data-segmento='automotivo'],
+body.segmento-automotivo {
+    --primary-color: #dc2626;
+    --primary-dark: #b91c1c;
+}
+
+/* Industrial - Verde Escuro */
+[data-segmento='industrial'],
+body.segmento-industrial {
+    --primary-color: #059669;
+    --primary-dark: #047857;
+}
+
+/* Alimentício - Verde */
+[data-segmento='alimenticio'],
+body.segmento-alimenticio {
+    --primary-color: #16a34a;
+    --primary-dark: #15803d;
+}
+
+/* Farmacêutico - Azul */
+[data-segmento='farmaceutico'],
+body.segmento-farmaceutico {
+    --primary-color: #2563eb;
+    --primary-dark: #1d4ed8;
+}
+
+/* Eletroeletrônico - Roxo */
+[data-segmento='eletroeletronico'],
+body.segmento-eletroeletronico {
+    --primary-color: #7c3aed;
+    --primary-dark: #6d28d9;
+}
+
+/* Têxtil - Rosa */
+[data-segmento='textil'],
+body.segmento-textil {
+    --primary-color: #ec4899;
+    --primary-dark: #db2777;
+}
+
+/* Agrícola - Verde Lima */
+[data-segmento='agricola'],
+body.segmento-agricola {
+    --primary-color: #65a30d;
+    --primary-dark: #4d7c0f;
+}
+
+/* Químico - Ciano */
+[data-segmento='quimico'],
+body.segmento-quimico {
+    --primary-color: #0891b2;
+    --primary-dark: #0e7490;
+}
+
+/* Papelaria - Âmbar */
+[data-segmento='papelaria'],
+body.segmento-papelaria {
+    --primary-color: #f59e0b;
+    --primary-dark: #d97706;
+}
+
+/* ============================================================================
+   BADGES DE TIPO DE MATERIAL
+   ============================================================================ */
+
+.badge-tipo-material {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.badge-tipo-material i {
+    font-size: 1rem;
+}
+
+/* Cores específicas por tipo de material */
+.badge-tipo-material[data-tipo="materia_prima"] {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border-color: #93c5fd;
+}
+
+.badge-tipo-material[data-tipo="semi_acabado"] {
+    background-color: #fef3c7;
+    color: #92400e;
+    border-color: #fcd34d;
+}
+
+.badge-tipo-material[data-tipo="produto_acabado"] {
+    background-color: #d1fae5;
+    color: #065f46;
+    border-color: #6ee7b7;
+}
+
+.badge-tipo-material[data-tipo="mro"] {
+    background-color: #e0e7ff;
+    color: #3730a3;
+    border-color: #a5b4fc;
+}
+
+.badge-tipo-material[data-tipo="consumivel"] {
+    background-color: #fce7f3;
+    color: #9f1239;
+    border-color: #f9a8d4;
+}
+
+/* ============================================================================
+   INDICADORES DE CATEGORIA
+   ============================================================================ */
+
+.categoria-tag {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: var(--primary-color);
+    color: white;
+    opacity: 0.9;
+}
+
+/* ============================================================================
+   ÍCONES DE SEGMENTO
+   ============================================================================ */
+
+.segmento-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-lg);
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.25rem;
+}
+
+.segmento-icon.small {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.875rem;
+}
+
+/* ============================================================================
+   RESPONSIVIDADE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    .badge-tipo-material {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .segmento-icon {
+        width: 2rem;
+        height: 2rem;
+        font-size: 1rem;
+    }
+}

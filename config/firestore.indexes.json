@@ -1,0 +1,33 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "movimentacoes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "tipo",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "timestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "estoque",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "nome",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "quantidade",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

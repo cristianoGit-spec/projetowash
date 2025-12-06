@@ -1,0 +1,130 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===== SISTEMA MULTI-TENANT - ISOLAMENTO POR EMPRESA =====
+    // 
+    // Cada empresa possui um companyId único
+    // Todos os documentos contêm companyId para isolamento
+    // Usuários só podem acessar dados da própria empresa
+    // 
+    // SEGURANÇA:
+    // - Autenticação obrigatória para todas as operações
+    // - Dados isolados por companyId (multi-tenancy)
+    // - Admin só gerencia usuários da própria empresa
+    // - Validação automática de companyId em todas operações
+    //
+    
+    // ===== FUNÇÕES AUXILIARES =====
+    
+    // Verificar se o usuário está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Obter companyId do usuário autenticado
+    function getUserCompanyId() {
+      return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.companyId;
+    }
+    
+    // Verificar se o documento pertence à empresa do usuário (READ/UPDATE/DELETE)
+    function belongsToCompany() {
+      return isAuthenticated() && 
+             resource.data.companyId == getUserCompanyId();
+    }
+    
+    // Validar companyId na criação de documentos (CREATE)
+    function hasValidCompanyId() {
+      return isAuthenticated() && 
+             request.resource.data.companyId == getUserCompanyId();
+    }
+    
+    // Verificar se é admin da empresa
+    function isCompanyAdmin() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // ===== REGRAS DE ACESSO =====
+    
+    // USUÁRIOS: Cada usuário acessa apenas seus dados + Admin lista usuários da empresa
+    match /usuarios/{userId} {
+      // Ler próprio perfil OU admin pode ler usuários da mesma empresa
+      allow read: if isAuthenticated() && (
+        request.auth.uid == userId ||
+        (isCompanyAdmin() && get(/databases/$(database)/documents/usuarios/$(userId)).data.companyId == getUserCompanyId())
+      );
+      
+      // Criar: apenas na primeira vez (cadastro) ou admin criando funcionário
+      allow create: if isAuthenticated() && (
+        request.auth.uid == userId ||
+        (isCompanyAdmin() && request.resource.data.companyId == getUserCompanyId())
+      );
+      
+      // Atualizar: próprio usuário ou admin da empresa
+      allow update: if isAuthenticated() && (
+        request.auth.uid == userId ||
+        (isCompanyAdmin() && resource.data.companyId == getUserCompanyId())
+      );
+      
+      // Deletar: apenas admin da empresa
+      allow delete: if isCompanyAdmin() && 
+                       resource.data.companyId == getUserCompanyId() &&
+                       request.auth.uid != userId; // Admin não pode se auto-deletar
+    }
+    
+    // ESTOQUE: Multi-tenant por companyId
+    match /estoque/{produtoId} {
+      allow read: if belongsToCompany();
+      allow create: if hasValidCompanyId();
+      allow update, delete: if belongsToCompany();
+    }
+    
+    // PRODUTOS (alternativa): Multi-tenant por companyId
+    match /produtos/{produtoId} {
+      allow read: if belongsToCompany();
+      allow create: if hasValidCompanyId();
+      allow update, delete: if belongsToCompany();
+    }
+    
+    // MOVIMENTAÇÕES: Histórico isolado por empresa
+    match /movimentacoes/{movId} {
+      allow read: if belongsToCompany();
+      allow create: if hasValidCompanyId();
+      allow update, delete: if belongsToCompany();
+    }
+    
+    // FINANCEIRO: Dados financeiros isolados por empresa
+    match /financeiro/{docId} {
+      allow read: if belongsToCompany();
+      allow create: if hasValidCompanyId();
+      allow update, delete: if belongsToCompany();
+    }
+    
+    // FOLHA DE PAGAMENTO: Salários isolados por empresa
+    match /folha_pagamento/{docId} {
+      allow read: if belongsToCompany();
+      allow create: if hasValidCompanyId();
+      allow update, delete: if belongsToCompany();
+    }
+    
+    // FUNCIONÁRIOS (se usado): Multi-tenant
+    match /funcionarios/{funcId} {
+      allow read: if belongsToCompany();
+      allow create: if hasValidCompanyId() && isCompanyAdmin();
+      allow update, delete: if belongsToCompany() && isCompanyAdmin();
+    }
+    
+    // BACKUPS: Apenas admin da empresa
+    match /backups/{backupId} {
+      allow read: if isCompanyAdmin() && belongsToCompany();
+      allow create: if isCompanyAdmin() && hasValidCompanyId();
+      allow update, delete: if isCompanyAdmin() && belongsToCompany();
+    }
+    
+    // BLOQUEAR TODO O RESTO
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

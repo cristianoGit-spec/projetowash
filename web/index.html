@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quatro Cantos - Sistema de Gestao Empresarial">
+    <meta name="theme-color" content="#2563eb">
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/static/icons/icon-192x192.png">
+    
+    <title>Quatro Cantos - Sistema de Gestao</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/style.css?v=11">
+    <link rel="stylesheet" href="/static/css/segments.css?v=11">
+    <link rel="stylesheet" href="/static/css/admin.css?v=11">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    
+    <!-- Segments Config -->
+    <script src="/static/js/segments-config.js?v=6"></script>
+    
+    <!-- Limpeza de Cache (v13 - remover dados de criptografia antiga) -->
+    <script>
+        if (!localStorage.getItem('auth_restored_v13')) {
+            console.log('🔄 Restaurando sistema - removendo dados de criptografia...');
+            localStorage.removeItem('localUsers');
+            localStorage.removeItem('localCurrentUser');
+            localStorage.setItem('auth_restored_v13', 'true');
+            console.log('✅ Sistema restaurado para modo simples!');
+        }
+    </script>
+</head>
+<body>
+    
+    <!-- CONTAINER DE AUTENTICACAO -->
+    <div id="authContainer" class="auth-wrapper">
+        <!-- Lado Esquerdo - Banner -->
+        <div class="auth-banner">
+            <div class="banner-content">
+                <i class="fas fa-warehouse"></i>
+                <h1>Domine seu Estoque.<br>Maximize seus Lucros.</h1>
+                <p>A solução completa para gestão inteligente, segura e eficiente do seu negócio.</p>
+            </div>
+        </div>
+
+        <!-- Lado Direito - Conteúdo -->
+        <div class="auth-content">
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-card">
+                <div class="auth-header">
+                    <i class="fas fa-warehouse auth-icon-large"></i>
+                    <h2>Bem-vindo de volta</h2>
+                    <p>Acesse sua conta para continuar</p>
+                </div>
+                
+                <form onsubmit="handleLogin(event)" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Email ou Usuário</label>
+                        <div class="input-group">
+                            <input type="text" id="loginEmail" required placeholder="seu@email.com">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <div class="input-group">
+                            <input type="password" id="loginPassword" required placeholder="Sua senha">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-block">
+                        Entrar no Sistema
+                    </button>
+                    
+                    <div class="login-buttons-container">
+                        <button type="button" onclick="loginRapido('superadmin')" class="btn-login-superadmin" aria-label="Login rápido como Super Administrador">
+                            <i class="fas fa-shield-alt"></i> Super Admin
+                        </button>
+                        <button type="button" onclick="loginRapido('admin')" class="btn-login-admin" aria-label="Login rápido como Administrador">
+                            <i class="fas fa-user-shield"></i> Admin
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="auth-links">
+                    <a href="#" onclick="showForgotPassword()">Esqueceu a senha?</a>
+                    <span class="auth-separator">|</span>
+                    Não tem conta? <a href="#" onclick="showRegister()">Criar conta</a>
+                </div>
+                
+                <div class="admin-login-hint">
+                    <i class="fas fa-info-circle"></i>
+                    <p><strong>Modo Demo:</strong> Admin: admin@local.com / admin123 | Super Admin: superadmin@quatrocantos.com / admin@2025</p>
+                    <button onclick="resetLocalStorage()" class="btn-reset-storage" aria-label="Resetar usuários de demonstração">
+                        <i class="fas fa-sync-alt"></i> Resetar Usuários Demo
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="registerForm" class="auth-card hidden">
+                <div class="auth-header">
+                    <h2>Criar Conta</h2>
+                    <p>Cadastre sua empresa no sistema</p>
+                </div>
+                
+                <form onsubmit="handleRegister(event)" class="auth-form">
+                    <input type="hidden" id="regType" value="empresa">
+                    
+                    <!-- Campos Comuns -->
+                    <div class="form-group">
+                        <label for="regNome">Nome Completo</label>
+                        <div class="input-group">
+                            <input type="text" id="regNome" required placeholder="Seu nome completo">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <div class="input-group">
+                            <input type="email" id="regEmail" required placeholder="seu@email.com">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regContato">Contato</label>
+                        <div class="input-group">
+                            <input type="tel" id="regContato" required placeholder="(00) 00000-0000">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                    </div>
+
+                    <!-- Campos Empresa -->
+                    <div id="fieldsEmpresa">
+                        <div class="form-group">
+                            <label for="regNomeEmpresa">Nome da Empresa</label>
+                            <div class="input-group">
+                                <input type="text" id="regNomeEmpresa" required placeholder="Nome da sua empresa">
+                                <i class="fas fa-building"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regSegmento">Segmento da Empresa</label>
+                            <div class="input-group">
+                                <select id="regSegmento" required class="form-select select-with-icon" onchange="aplicarTemaSegmento(this.value)">
+                                    <option value="" disabled selected>Selecione o segmento</option>
+                                    <option value="construcao">Construção Civil</option>
+                                    <option value="varejo">Varejo</option>
+                                    <option value="servicos">Serviços</option>
+                                    <option value="industria">Indústria</option>
+                                    <option value="logistica">Logística</option>
+                                    <option value="outros">Outros</option>
+                                </select>
+                                <i class="fas fa-industry"></i>
+                            </div>
+                            <small class="segmento-info-text">
+                                O layout se adaptará ao seu segmento
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regLogin">Login de Usuário</label>
+                        <div class="input-group">
+                            <input type="text" id="regLogin" required placeholder="usuario123">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regPassword">Senha</label>
+                        <div class="input-group">
+                            <input type="password" id="regPassword" required placeholder="Minimo 6 caracteres">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regPasswordConfirm">Confirmar Senha</label>
+                        <div class="input-group">
+                            <input type="password" id="regPasswordConfirm" required placeholder="Digite novamente">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-block">
+                        <span id="btnRegisterText">Cadastrar Empresa</span>
+                    </button>
+                </form>
+                
+                <div class="auth-links">
+                    Já tem uma conta? <a href="#" onclick="showLogin()">Fazer login</a>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form -->
+            <div id="forgotPasswordForm" class="auth-card hidden">
+                <div class="auth-header">
+                    <h2>Recuperar Senha</h2>
+                    <p>Digite seu email para receber instruções</p>
+                </div>
+                
+                <form onsubmit="handleForgotPassword(event)" class="auth-form">
+                    <div class="form-group">
+                        <label for="forgotEmail">Email</label>
+                        <div class="input-group">
+                            <input type="email" id="forgotEmail" required placeholder="seu@email.com">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-block">
+                        Enviar Email
+                    </button>
+                </form>
+                
+                <div class="auth-links">
+                    <a href="#" onclick="showLogin()">Voltar para login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTAINER DO APLICATIVO -->
+    <div id="appContainer" class="app-container hidden">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="container-fluid">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-bolt"></i>
+                        <h1>Quatro Cantos</h1>
+                        <p class="system-subtitle">Sistema de Gestão Empresarial</p>
+                    </div>
+                    
+                    <!-- Global Search -->
+                    <div class="global-search desktop-only global-search-container">
+                        <div class="input-group global-search-input-group">
+                            <input type="text" placeholder="Buscar peça, lote ou serial..." class="global-search-input">
+                            <i class="fas fa-search global-search-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="header-actions">
+                        <!-- Mobile Menu Button -->
+                        <button class="mobile-menu-btn hidden-desktop" onclick="toggleMobileMenu()" aria-label="Abrir menu de navegação">
+                            <i class="fas fa-bars"></i>
+                        </button>
+
+                        <!-- Notifications -->
+                        <button class="nav-btn btn-notifications" aria-label="Notificações">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge"></span>
+                        </button>
+
+                        <button id="installBtn" class="install-btn hidden">
+                            <i class="fas fa-download"></i>
+                            Instalar App
+                        </button>
+                        
+                        <div class="user-menu">
+                            <button class="user-btn" onclick="toggleUserMenu()">
+                                <i class="fas fa-user-circle"></i>
+                                <div class="user-info">
+                                    <span id="userEmail">usuario@email.com</span>
+                                    <small id="userCompanyInfo" class="company-info">Empresa</small>
+                                </div>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            
+                            <div id="userMenuDropdown" class="user-menu-dropdown hidden">
+                                <div class="company-header">
+                                    <i class="fas fa-building"></i>
+                                    <div>
+                                        <small>Empresa:</small>
+                                        <strong id="companyName">Carregando...</strong>
+                                        <small id="companyId" class="company-id">ID: ...</small>
+                                    </div>
+                                </div>
+                                <hr>
+                                <a href="#" onclick="showProfile()">
+                                    <i class="fas fa-user"></i> Meu Perfil
+                                </a>
+                                <a href="#" onclick="showConfig()" class="admin-only hidden">
+                                    <i class="fas fa-cog"></i> Configuracoes
+                                </a>
+                                <a href="#" onclick="handleLogout()">
+                                    <i class="fas fa-sign-out-alt"></i> Sair
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Layout Wrapper -->
+        <div class="dashboard-layout container-fluid dashboard-spacing">
+            
+            <!-- Desktop Sidebar -->
+            <aside class="dashboard-sidebar desktop-only">
+                <div class="modules-list">
+                    <div class="module-card-side active" onclick="showModule('dashboard')">
+                        <div class="module-icon-side blue">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <div class="module-info-side">
+                            <h3>Dashboard</h3>
+                            <p>Visão Geral</p>
+                        </div>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+
+                    <div class="module-card-side" onclick="showModule('operacional')">
+                        <div class="module-icon-side indigo">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <div class="module-info-side">
+                            <h3>Operacional</h3>
+                            <p>Produção</p>
+                        </div>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+
+                    <div class="module-card-side" onclick="showModule('estoque-entrada')">
+                        <div class="module-icon-side green">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <div class="module-info-side">
+                            <h3>Entrada</h3>
+                            <p>Recebimento</p>
+                        </div>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+
+                    <div class="module-card-side" onclick="showModule('estoque-saida')">
+                        <div class="module-icon-side orange">
+                            <i class="fas fa-truck-loading"></i>
+                        </div>
+                        <div class="module-info-side">
+                            <h3>Saída</h3>
+                            <p>Expedição</p>
+                        </div>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+
+                    <div class="module-card-side" onclick="showModule('financeiro')">
+                        <div class="module-icon-side purple">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="module-info-side">
+                            <h3>Financeiro</h3>
+                            <p>Custos e Receitas</p>
+                        </div>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+
+                    <div class="module-card-side" onclick="showModule('rh')">
+                        <div class="module-icon-side teal">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="module-info-side">
+                            <h3>RH</h3>
+                            <p>Equipe</p>
+                        </div>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+
+                    <div class="module-card-side" onclick="showModule('visualizar')">
+                        <div class="module-icon-side gray">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="module-info-side">
+                            <h3>Estoque</h3>
+                            <p>Consulta</p>
+                        </div>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+
+                    <!-- Admin Only -->
+                    <div class="module-card-side admin-only hidden" onclick="showModule('historico')">
+                        <div class="module-icon-side blue">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="module-info-side">
+                            <h3>Histórico</h3>
+                            <p>Auditoria</p>
+                        </div>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+
+                    <!-- Super Admin Only -->
+                    <div class="module-card-side superadmin-only hidden" onclick="showModule('admin')">
+                        <div class="module-icon-side red">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="module-info-side">
+                            <h3>Painel Admin</h3>
+                            <p>Gerenciar Empresas</p>
+                        </div>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+                </div>
+
+                <div class="sidebar-footer">
+                    <div class="sidebar-status-container">
+                        <span class="status-indicator"></span>
+                        SISTEMA ONLINE
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Mobile Sidebar (Hidden on Desktop) -->
+            <div id="mobileSidebar" class="mobile-sidebar hidden-desktop">
+                <div class="sidebar-header">
+                    <h3>Menu</h3>
+                    <button class="close-sidebar-btn" onclick="toggleMobileMenu()" aria-label="Fechar menu de navegação">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="sidebar-content">
+                    <button class="sidebar-btn module-nav-btn" onclick="showModule('dashboard'); toggleMobileMenu()">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </button>
+                    <button class="sidebar-btn module-nav-btn" data-module="operacional" onclick="showModule('operacional'); toggleMobileMenu()">
+                        <i class="fas fa-industry"></i> Operacional
+                    </button>
+                    <button class="sidebar-btn module-nav-btn" data-module="estoque-entrada" onclick="showModule('estoque-entrada'); toggleMobileMenu()">
+                        <i class="fas fa-box-open"></i> Entrada
+                    </button>
+                    <button class="sidebar-btn module-nav-btn" data-module="estoque-saida" onclick="showModule('estoque-saida'); toggleMobileMenu()">
+                        <i class="fas fa-truck-loading"></i> Saída
+                    </button>
+                    <button class="sidebar-btn module-nav-btn" data-module="financeiro" onclick="showModule('financeiro'); toggleMobileMenu()">
+                        <i class="fas fa-chart-line"></i> Financeiro
+                    </button>
+                    <button class="sidebar-btn module-nav-btn" data-module="rh" onclick="showModule('rh'); toggleMobileMenu()">
+                        <i class="fas fa-users"></i> RH
+                    </button>
+                    <button class="sidebar-btn module-nav-btn" data-module="visualizar" onclick="showModule('visualizar'); toggleMobileMenu()">
+                        <i class="fas fa-eye"></i> Estoque
+                    </button>
+                    <!-- Admin Only -->
+                    <button class="sidebar-btn module-nav-btn admin-only hidden" data-module="historico" onclick="showModule('historico'); toggleMobileMenu()">
+                        <i class="fas fa-history"></i> Histórico
+                    </button>
+                    <button class="sidebar-btn module-nav-btn admin-only hidden" data-module="backup" onclick="realizarBackup(); toggleMobileMenu()">
+                        <i class="fas fa-database"></i> Backup
+                    </button>
+                    <!-- Super Admin Only -->
+                    <button class="sidebar-btn module-nav-btn superadmin-only hidden btn-admin-module" data-module="admin" onclick="showModule('admin'); toggleMobileMenu()">
+                        <i class="fas fa-shield-alt"></i> Administração
+                    </button>
+                </div>
+            </div>
+            <div id="sidebarOverlay" class="sidebar-overlay hidden-desktop" onclick="toggleMobileMenu()"></div>
+
+            <!-- Main Content Area -->
+            <main class="main-content main-content-no-padding">
+                
+                <!-- Dashboard Section -->
+                <section id="dashboardSection" class="dashboard-section">
+                    <div class="welcome-header">
+                        <h2>Dashboard</h2>
+                        <p>Visao geral do sistema</p>
+                    </div>
+                    
+                    <!-- Alertas de Estoque Baixo -->
+                    <div id="stockAlerts" class="hidden"></div>
+                    
+                    <!-- Cards de Estatisticas -->
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="statTotalProdutos">0</h3>
+                                <p>Total de Produtos</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card green">
+                            <div class="stat-icon">
+                                <i class="fas fa-cubes"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="statTotalItens">0</h3>
+                                <p>Total de Itens</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card purple">
+                            <div class="stat-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="statValorTotal">R$ 0,00</h3>
+                                <p>Valor em Estoque</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card orange">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="statVendasMes">R$ 0,00</h3>
+                                <p>Vendas do Mes</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Graficos -->
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <h3>Movimentacoes Recentes</h3>
+                            <canvas id="chartMovimentacoes"></canvas>
+                        </div>
+                        
+                        <div class="chart-card">
+                            <h3>Top 5 Produtos</h3>
+                            <canvas id="chartTopProdutos"></canvas>
+                        </div>
+
+                        <div class="chart-card">
+                            <h3>Eficiência da Linha</h3>
+                            <canvas id="chartEficiencia"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Historico Recente -->
+                    <div class="history-card">
+                        <h3>Ultimas Movimentacoes</h3>
+                        <div id="historicoRecente" class="history-list">
+                            <!-- Preenchido via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation Cards (Modulos) - REMOVIDO (Agora no Header/Sidebar) -->
+                <!-- <section id="modulesSection" class="modules-grid"> ... </section> -->
+            </div>
+        </main>
+        </div>
+
+        <!-- Modal Container -->
+        <div id="modalContainer" class="modal-container hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Modulo</h2>
+                    <button class="close-btn" onclick="closeModule()" aria-label="Fechar modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- O conteudo sera inserido dinamicamente pelo JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container-fluid">
+                <p>&copy; 2025 Quatro Cantos. Todos os direitos reservados.</p>
+                <p>Sistema de Gestao Empresarial v2.0</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>Processando...</p>
+    </div>
+
+    <!-- Configuração Global -->
+    <script>
+        // Injeta a API Key do backend para uso nas requisições
+        // Se estiver rodando estático (Netlify), a variável não será substituída, então tratamos isso.
+        const RAW_API_KEY = "{{ api_key }}";
+        const SERVER_API_KEY = RAW_API_KEY.includes("{" + "{") ? "" : RAW_API_KEY;
+    </script>
+
+    <!-- JavaScript -->
+    <!-- MODO LOCAL/DEMO (ativado) -->
+    <script src="/static/js/local-auth.js?v=13"></script>
+    <script src="/static/js/local-firestore.js?v=8"></script>
+    
+    <!-- MODO FIREBASE (descomentar essas 2 linhas quando configurar Firebase) -->
+    <!-- <script src="/static/js/firebase-config.js?v=6"></script> -->
+    <!-- <script src="/static/js/firestore-service.js?v=6"></script> -->
+    
+    <!-- Scripts comuns (sempre carregados) -->
+    <script src="/static/js/auth.js?v=10"></script>
+    <script src="/static/js/admin-module.js?v=9"></script>
+    <script src="/static/js/app.js?v=9"></script>
+    <script src="/static/js/modules.js?v=9"></script>
+    <script src="/static/js/dashboard.js?v=9"></script>
+    <script src="/static/js/pwa.js?v=9"></script>
+    
+    <!-- Inicialização do formulário de cadastro -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Popular select de segmento no formulário de cadastro
+            if (typeof popularSelectSegmento !== 'undefined') {
+                popularSelectSegmento('regSegmento');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Hash Bcrypt</title>
+    <script src="bcrypt.min.js"></script>
+    <script src="crypto-utils.js"></script>
+</head>
+<body>
+    <h1>Gerador de Hash Bcrypt</h1>
+    <script>
+        // Gerar hashes para as senhas padrão
+        const passwords = {
+            superadmin: 'admin@2025',
+            admin: 'admin123'
+        };
+        
+        console.log('Gerando hashes bcrypt...');
+        for (const [user, password] of Object.entries(passwords)) {
+            const hash = CryptoUtils.hashPassword(password);
+            console.log(`${user}: '${password}' => '${hash}'`);
+        }
+    </script>
+</body>
+</html>

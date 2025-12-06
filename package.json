@@ -1,0 +1,37 @@
+{
+  "name": "estoque-certo-ltda",
+  "version": "2.0.1",
+  "description": "Sistema de Gestao Empresarial com Firebase e Netlify",
+  "main": "web/index.html",
+  "scripts": {
+    "dev": "echo 'Abra web/index.html com Live Server' && exit 0",
+    "build": "echo 'Build concluido - Arquivos estaticos prontos'",
+    "deploy": "netlify deploy --prod",
+    "firebase:deploy": "firebase deploy",
+    "firebase:rules": "firebase deploy --only firestore:rules",
+    "firebase:indexes": "firebase deploy --only firestore:indexes"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seu-usuario/estoque-certo-ltda.git"
+  },
+  "keywords": [
+    "gestao",
+    "estoque",
+    "firebase",
+    "netlify",
+    "pwa",
+    "dashboard",
+    "erp"
+  ],
+  "author": "Quatro Cantos",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "netlify-cli": "^17.0.0",
+    "firebase-tools": "^13.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

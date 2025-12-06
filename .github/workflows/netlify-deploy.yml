@@ -1,0 +1,43 @@
+name: Deploy to Netlify
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Instalar Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy para Netlify
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          netlify deploy --prod --dir=web --site=$NETLIFY_SITE_ID --auth=$NETLIFY_AUTH_TOKEN
+
+      - name: Notificar sucesso
+        if: success()
+        run: |
+          echo "✅ Deploy realizado com sucesso!"
+          echo "🌐 Site disponível em: https://projetowash.netlify.app"
+
+      - name: Notificar falha
+        if: failure()
+        run: |
+          echo "❌ Deploy falhou. Verifique os logs acima."
