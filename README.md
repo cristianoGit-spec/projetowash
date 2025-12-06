@@ -2,12 +2,13 @@
 
 # 🏢 Sistema Quatro Cantos
 
-### Sistema de Gestão Empresarial com Controle de Acesso Multi-Empresa
+### Sistema de Gestão Empresarial Multi-Empresa com Layout Responsivo
 
-[![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/)
-[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-red.svg)](https://www.sqlalchemy.org/)
+[![Status](https://img.shields.io/badge/Status-Active-success.svg)](https://github.com/cristiano-superacao/projetowash)
+[![Deploy](https://img.shields.io/badge/Deploy-Netlify-00C7B7.svg)](https://quatrocanto.netlify.app)
 [![License](https://img.shields.io/badge/License-Educational-green.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Active-success.svg)](https://github.com/gabrielamnss1/Quatro-Cantos)
+
+**🌐 Demo Online:** [quatrocanto.netlify.app](https://quatrocanto.netlify.app)
 
 </div>
 
@@ -15,132 +16,194 @@
 
 ## 📋 Visão Geral
 
-O **Sistema Quatro Cantos** é uma solução completa e profissional para gestão empresarial multi-tenant com controle de acesso baseado em permissões. Sistema desenvolvido em Python com arquitetura modular e segurança empresarial.
+O **Sistema Quatro Cantos** é uma solução completa e profissional para gestão empresarial multi-tenant (múltiplas empresas) com controle de acesso baseado em permissões. Interface moderna, responsiva e intuitiva com suporte PWA (Progressive Web App).
 
 ### 🎯 Características Principais
 
-| Módulo | Descrição |
-|--------|-----------|
-| 🔐 **Autenticação** | Sistema completo de login com hash bcrypt |
-| 🏢 **Multi-Empresa** | Suporte a múltiplas empresas com isolamento de dados |
-| 👥 **Gestão de Usuários** | Cadastro e gerenciamento de usuários por empresa |
-| 🔒 **Controle de Acesso** | Permissões granulares por módulo (RBAC) |
-| ⚙️ **Operacional** | Cálculo de capacidade produtiva por turnos |
-| 📦 **Estoque** | Controle completo de entrada e saída de produtos |
-| 💰 **Financeiro** | Análise de custos, precificação e projeções |
-| 👨‍💼 **RH** | Folha de pagamento com INSS e IR progressivos |
+| Módulo | Descrição | Status |
+|--------|-----------|--------|
+| 🔐 **Autenticação** | Sistema completo de login/registro | ✅ Ativo |
+| 🏢 **Multi-Empresa** | Suporte a múltiplas empresas com isolamento de dados | ✅ Ativo |
+| 👥 **Gestão de Usuários** | Cadastro e gerenciamento de usuários por empresa | ✅ Ativo |
+| 🛡️ **Painel Admin** | Super administrador com controle total das empresas | ✅ Ativo |
+| 🔒 **Controle de Acesso** | Permissões granulares por módulo (RBAC) | ✅ Ativo |
+| ⚙️ **Operacional** | Cálculo de capacidade produtiva por turnos | ✅ Ativo |
+| 📦 **Estoque** | Controle completo de entrada e saída de produtos | ✅ Ativo |
+| 💰 **Financeiro** | Análise de custos, precificação e projeções | ✅ Ativo |
+| 👨‍💼 **RH** | Folha de pagamento com INSS e IR progressivos | ✅ Ativo |
 
 ---
 
-## 🚀 Instalação Rápida
+## 🚀 Acesso Rápido - Demo Online
+
+### 🌐 URL: [quatrocanto.netlify.app](https://quatrocanto.netlify.app)
+
+### 👤 Credenciais de Teste
+
+**Super Administrador** (Acesso Total)
+```
+Email: superadmin@quatrocantos.com
+Senha: admin@2025
+```
+
+**Administrador** (Empresa Demo)
+```
+Email: admin@local.com
+Senha: admin123
+```
+
+---
+
+## 🎨 Layout Responsivo e Profissional
+
+O sistema possui design moderno e totalmente adaptável a qualquer dispositivo:
+
+- ✅ **Desktop** - Layout completo com sidebar e dashboard expansivo
+- ✅ **Tablet** - Interface otimizada com navegação adaptativa
+- ✅ **Mobile** - Menu mobile responsivo e cards otimizados
+- ✅ **PWA** - Instalável como aplicativo nativo
+- ✅ **Tema Personalizável** - Cores adaptadas ao segmento da empresa
+
+### 🎯 Segmentos Empresariais Suportados
+
+| Segmento | Ícone | Cor |
+|----------|-------|-----|
+| 🏗️ Construção | `fa-hard-hat` | #d97706 |
+| 🍔 Restaurante | `fa-utensils` | #dc2626 |
+| 🛒 Varejo | `fa-shopping-cart` | #2563eb |
+| 🏥 Saúde | `fa-heartbeat` | #16a34a |
+| 🎓 Educação | `fa-graduation-cap` | #7c3aed |
+| 🚗 Automotivo | `fa-car` | #0891b2 |
+| 🏭 Indústria | `fa-industry` | #64748b |
+| 💻 Tecnologia | `fa-laptop-code` | #6366f1 |
+
+---
+
+## 💻 Instalação Local
 
 ### 📋 Pré-requisitos
 
-- **Python 3.7+** instalado
-- **pip** (gerenciador de pacotes Python)
+- **Node.js 18+** (para desenvolvimento local)
 - **Git** (para clonar o repositório)
+- **Navegador moderno** (Chrome, Firefox, Edge, Safari)
 
 ### 📥 Passo a Passo
 
 #### 1️⃣ Clone o repositório
 
 ```bash
-git clone https://github.com/gabrielamnss1/Quatro-Cantos.git
-cd Quatro-Cantos
+git clone https://github.com/cristiano-superacao/projetowash.git
+cd projetowash
 ```
 
-#### 2️⃣ Crie e ative o ambiente virtual
-
-**Windows:**
-```powershell
-python -m venv venv
-venv\Scripts\activate
-```
-
-**Linux/Mac:**
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-#### 3️⃣ Instale as dependências
+#### 2️⃣ Inicie o servidor local
 
 ```bash
-pip install sqlalchemy python-dotenv bcrypt
+node server.js
 ```
 
-#### 4️⃣ Execute o sistema
+#### 3️⃣ Acesse no navegador
 
-**Sistema com Autenticação (Recomendado):**
-```bash
-python main_auth.py
 ```
-
-**Sistema Direto (Sem Autenticação):**
-```bash
-python main.py
+http://localhost:8000
 ```
 
 ---
 
-## 🔐 Sistema de Autenticação
+## 🗄️ Banco de Dados
 
-### Primeiro Acesso
+### LocalStorage (Atual - Modo Demo)
 
-1. Execute `python main_auth.py`
-2. Escolha opção **2** - Gestão de Usuários e Empresas
-3. Cadastre uma nova empresa
-4. Cadastre o primeiro usuário administrador
-5. Configure as permissões do usuário
-6. Faça login com as credenciais criadas
+O sistema utiliza `localStorage` do navegador para armazenar dados:
 
-### Estrutura de Permissões
+- ✅ Sem necessidade de servidor backend
+- ✅ Funciona 100% offline
+- ✅ Perfeito para demonstrações
+- ✅ Dados persistem no navegador
+- ⚠️ Limitado ao navegador/dispositivo
 
-O sistema oferece controle granular de acesso aos módulos:
+### Estrutura de Dados
 
-| Permissão | Descrição | Acesso |
-|-----------|-----------|--------|
-| 📊 **Operacional** | Cálculo de capacidade produtiva | Menu opção 1 |
-| 📦 **Estoque** | Entrada e saída de produtos | Menu opções 2 e 3 |
-| 💰 **Financeiro** | Análise financeira e custos | Menu opção 4 |
-| 👥 **RH** | Folha de pagamento | Menu opção 5 |
-| ⚙️ **Gestão Usuários** | Administração do sistema | Configuração |
+**localUsers** - Array de usuários/empresas
+```javascript
+{
+  uid: string,
+  nome: string,
+  email: string,
+  senha: string,
+  role: 'admin' | 'superadmin' | 'user',
+  nomeEmpresa: string,
+  companyId: string,
+  segmento: string,
+  ativo: boolean,
+  dataCadastro: string
+}
+```
 
-### Multi-Tenant (Multi-Empresa)
+**localCurrentUser** - Usuário logado atualmente
+```javascript
+{
+  uid: string,
+  email: string,
+  role: string,
+  companyId: string,
+  // ... outros campos
+}
+```
 
-- Cada empresa tem seus próprios dados isolados
-- Usuários pertencem a uma empresa específica
-- Permissões configuráveis por usuário
-- Relatórios e operações filtrados por empresa
+### Firebase (Opcional - Produção)
+
+Para ambiente de produção, descomente as linhas no `index.html`:
+```html
+<!-- <script src="/static/js/firebase-config.js"></script> -->
+<!-- <script src="/static/js/firestore-service.js"></script> -->
+```
 
 ---
 
 ## 📁 Estrutura do Projeto
 
 ```
-Quatro-Cantos/
+projetowash/
 │
-├── 📂 src/
-│   ├── 🔐 main_auth.py          # Sistema com autenticação (RECOMENDADO)
-│   ├── 📄 main.py               # Sistema direto sem autenticação
-│   ├── 🗄️ database.py            # Configuração do banco de dados
-│   ├── 👤 models.py             # Modelos de Empresa, Usuário e Permissões
-│   ├── 🔑 auth_utils.py         # Utilitários de autenticação (bcrypt)
-│   ├── 👥 gestao_usuarios.py    # Módulo de gestão de usuários e empresas
-│   ├── ⚙️ operacional.py         # Módulo de capacidade produtiva
-│   ├── 📥 estoque_entrada.py    # Entrada de produtos no estoque
-│   ├── 📤 estoque_saida.py      # Saída de produtos do estoque
-│   ├── 💰 financeiro.py         # Módulo financeiro e análises
-│   └── 👨‍💼 rh.py                 # Recursos humanos e folha de pagamento
+├── 📂 web/                      # Frontend (deploy no Netlify)
+│   ├── index.html               # Página principal
+│   ├── favicon.ico              # Ícone do site
+│   ├── service-worker.js        # PWA Service Worker
+│   │
+│   └── 📂 static/
+│       ├── 📂 css/
+│       │   ├── style.css        # Estilos principais
+│       │   ├── admin.css        # Estilos do painel admin
+│       │   └── segments.css     # Estilos dos segmentos
+│       │
+│       ├── 📂 js/
+│       │   ├── app.js           # Lógica principal
+│       │   ├── auth.js          # Autenticação
+│       │   ├── admin-module.js  # Painel super admin
+│       │   ├── dashboard.js     # Dashboard principal
+│       │   ├── local-auth.js    # Auth localStorage
+│       │   ├── local-firestore.js # DB localStorage
+│       │   │
+│       │   └── 📂 modules/
+│       │       ├── operacional.js
+│       │       ├── estoque_entrada.js
+│       │       ├── estoque_saida.js
+│       │       ├── financeiro.js
+│       │       ├── rh.js
+│       │       └── visualizar_estoque.js
+│       │
+│       └── 📂 icons/            # Ícones PWA
 │
-├── 📂 docs/
-│   ├── 📖 index.html            # Documentação completa HTML
-│   └── 📊 fluxograma.html       # Fluxograma interativo do sistema
+├── 📂 config/
+│   ├── netlify.toml             # Config Netlify
+│   ├── firebase.json            # Config Firebase
+│   └── firestore.rules          # Regras Firestore
 │
-├── 📂 data/
-│   └── 🗃️ dados.db              # Banco de dados SQLite (gerado automaticamente)
-│
-├── 📄 .env                      # Configurações de ambiente (não versionado)
+├── server.js                    # Servidor local Node.js
+├── netlify.toml                 # Config deploy
+├── package.json                 # Dependências npm
+└── README.md                    # Documentação
 ├── 📄 .gitignore                # Arquivos ignorados pelo Git
 ├── 📄 GUIA_AUTENTICACAO.md      # Guia completo do sistema de autenticação
 └── 📄 README.md                 # Este arquivo
