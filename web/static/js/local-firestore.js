@@ -37,6 +37,11 @@ async function listarProdutosLocal() {
     return localEstoque;
 }
 
+// Obter dados do estoque (alias para compatibilidade com visualizar_estoque.js)
+async function obterDadosEstoque() {
+    return await listarProdutosLocal();
+}
+
 // Cadastrar produto
 async function cadastrarProdutoFirestoreLocal(codigo, nome, quantidade, data, fornecedor, local, valor) {
     // Verificar duplicata (no contexto da empresa)

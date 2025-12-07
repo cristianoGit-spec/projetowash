@@ -75,7 +75,7 @@ async function loadModule(moduleName) {
 
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = moduleConfig.path + '?v=13'; // Cache bust v13
+        script.src = moduleConfig.path + '?v=15'; // Cache bust v15
         script.async = false; // Carrega em ordem
 
         script.onload = () => {
