@@ -6,7 +6,11 @@
 
 [build]
   publish = "web"
-  command = ""
+  # Sem comando de build - site estático puro (HTML, CSS, JS)
+  
+# Ignorar node_modules e arquivos desnecessários
+[build.environment]
+  NODE_VERSION = "18"
 
 # Redirecionar todas as rotas para index.html (SPA - Single Page Application)
 [[redirects]]

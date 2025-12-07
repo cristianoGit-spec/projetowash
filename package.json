@@ -5,7 +5,7 @@
   "main": "web/index.html",
   "scripts": {
     "dev": "echo 'Abra web/index.html com Live Server' && exit 0",
-    "build": "echo 'Build concluido - Arquivos estaticos prontos'",
+    "build": "exit 0",
     "deploy": "netlify deploy --prod",
     "firebase:deploy": "firebase deploy",
     "firebase:rules": "firebase deploy --only firestore:rules",
