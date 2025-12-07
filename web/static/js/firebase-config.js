@@ -1,6 +1,8 @@
-// ===== CONFIGURAÇÃO DO FIREBASE - SISTEMA MULTI-TENANT =====
+// ============================================================================
+// CONFIGURAÇÃO FIREBASE - SISTEMA HÍBRIDO (v15.0)
+// ============================================================================
 // 
-// ✅ MODO ATIVO: PRODUÇÃO (Firebase Cloud)
+// 🌐 MODO HÍBRIDO ATIVO: Firebase Cloud + Fallback Local
 // 
 // PROJETO FIREBASE CONFIGURADO:
 // - Projeto: projetowash-production
@@ -15,7 +17,12 @@
 // - Acesso de qualquer dispositivo/rede (dados na nuvem Firebase)
 // - Sincronização automática em tempo real
 // - Backup automático na nuvem Google
+// - Fallback automático para localStorage se Firebase estiver offline
 //
+// ============================================================================
+
+console.log('🔧 Inicializando Firebase Config v15.0...');
+
 const firebaseConfig = {
     apiKey: "AIzaSyBqU8Y9xJ5LmKp7NwQzT3VxRyH4SfEaGcI",
     authDomain: "projetowash-production.firebaseapp.com",
@@ -25,113 +32,268 @@ const firebaseConfig = {
     appId: "1:847562931048:web:a5c3d7e9f1b2c4d6e8f0a2"
 };
 
-// Inicializar Firebase
-let auth, db;
+// Variáveis globais do Firebase
+let auth = null;
+let db = null;
 let firebaseInitialized = false;
+let useFirebase = true; // Flag para controlar qual sistema usar
 
+// Tentar inicializar Firebase
 try {
-    if (firebaseConfig.apiKey.startsWith("AIza")) {
+    if (typeof firebase !== 'undefined' && firebaseConfig.apiKey.startsWith("AIza")) {
         firebase.initializeApp(firebaseConfig);
         auth = firebase.auth();
         db = firebase.firestore();
-        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        
+        // Configurar persistência local
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+            .then(() => {
+                console.log('✅ Persistência de autenticação configurada');
+            })
+            .catch((error) => {
+                console.warn('⚠️ Erro ao configurar persistência:', error.message);
+            });
+        
         firebaseInitialized = true;
-        console.log("✅ Firebase inicializado! Modo: PRODUÇÃO - Dados na nuvem Google Cloud");
+        useFirebase = true;
+        
+        console.log("✅ Firebase inicializado com sucesso!");
+        console.log("🌐 Modo: PRODUÇÃO - Dados na nuvem Google Cloud");
         console.log("📍 Região: southamerica-east1 (São Paulo, Brasil)");
         console.log("🔐 Multi-tenant: Isolamento completo por empresa (companyId)");
+        console.log("🔄 Sistema híbrido: Firebase ativo com backup local");
+        
     } else {
-        console.warn(" Firebase não configurado. Usando modo local offline.");
-        console.info("Para ativar Firebase: Configure em firebase-config.js");
+        throw new Error("Firebase SDK não disponível ou configuração inválida");
     }
 } catch (e) {
-    console.error(" Erro ao inicializar Firebase:", e);
-    console.warn("Usando modo local como fallback");
+    console.warn("⚠️ Firebase não disponível:", e.message);
+    console.log("📦 Usando modo LOCAL como fallback");
+    console.log("💾 Dados serão armazenados apenas no localStorage do navegador");
+    firebaseInitialized = false;
+    useFirebase = false;
 }
 
-// Estado de autenticacao
+// ============================================================================
+// ESTADO GLOBAL E OBSERVADORES
+// ============================================================================
+
+// Estado de autenticação
 let currentUser = null;
 let isAdmin = false;
+let isSuperAdmin = false;
 
-// Observador de autenticacao (apenas se Firebase estiver ativo)
-if (firebaseInitialized) {
+// Observador de autenticação Firebase
+if (firebaseInitialized && auth) {
     auth.onAuthStateChanged(async (user) => {
         if (user) {
             currentUser = user;
             
-            // Verificar se eh admin
+            // Buscar dados adicionais do usuário
             try {
                 const userDoc = await db.collection('usuarios').doc(user.uid).get();
                 if (userDoc.exists) {
                     const userData = userDoc.data();
-                    isAdmin = userData.role === 'admin';
-                    // Attach companyId to currentUser for easy access
+                    
+                    // Anexar dados ao currentUser
                     currentUser.companyId = userData.companyId;
                     currentUser.role = userData.role;
                     currentUser.cargo = userData.cargo;
                     currentUser.allowedModules = userData.allowedModules;
+                    currentUser.nome = userData.nome;
+                    currentUser.nomeEmpresa = userData.nomeEmpresa;
+                    
+                    // Verificar roles
+                    isAdmin = userData.role === 'admin';
+                    isSuperAdmin = userData.role === 'superadmin';
+                    
+                    console.log('✅ Usuário autenticado:', userData.nome);
+                    console.log('🏢 Empresa:', userData.nomeEmpresa);
+                    console.log('🔑 Role:', userData.role);
                 }
             } catch (e) {
-                console.error("Erro ao buscar dados do usuário", e);
+                console.error("❌ Erro ao buscar dados do usuário:", e);
             }
             
             // Mostrar sistema
-            showApp();
-            loadDashboard();
+            if (typeof showApp === 'function') {
+                showApp();
+            }
+            if (typeof loadDashboard === 'function') {
+                loadDashboard();
+            }
         } else {
             currentUser = null;
             isAdmin = false;
-            showAuth();
+            isSuperAdmin = false;
+            
+            // Mostrar tela de autenticação
+            if (typeof showAuth === 'function') {
+                showAuth();
+            }
         }
     });
 }
 
-// Funcao de login
-async function login(email, password) {
-    if (!firebaseInitialized) {
-        throw new Error("Firebase não configurado. Use o modo local.");
+// ============================================================================
+// FUNÇÕES DE AUTENTICAÇÃO FIREBASE
+// ============================================================================
+
+/**
+ * Login com Firebase Authentication
+ * @param {string} email - Email do usuário
+ * @param {string} password - Senha do usuário
+ * @returns {Promise<Object>} - Dados do usuário autenticado
+ */
+async function loginFirebase(email, password) {
+    if (!firebaseInitialized || !auth) {
+        throw new Error("Firebase não disponível. Use loginLocal()");
     }
+    
     try {
-        showLoading('Entrando no sistema...');
+        if (typeof showLoading === 'function') {
+            showLoading('Entrando no sistema...');
+        }
+        
         const result = await auth.signInWithEmailAndPassword(email, password);
-        hideLoading();
-        showToast('Login realizado com sucesso!', 'success');
+        
+        if (typeof hideLoading === 'function') {
+            hideLoading();
+        }
+        if (typeof showToast === 'function') {
+            showToast('Login realizado com sucesso!', 'success');
+        }
+        
         return result.user;
     } catch (error) {
-        hideLoading();
+        if (typeof hideLoading === 'function') {
+            hideLoading();
+        }
+        
         let message = 'Erro ao fazer login';
         
         if (error.code === 'auth/user-not-found') {
-            message = 'Usuario nao encontrado';
+            message = 'Usuário não encontrado';
         } else if (error.code === 'auth/wrong-password') {
             message = 'Senha incorreta';
         } else if (error.code === 'auth/invalid-email') {
-            message = 'Email invalido';
+            message = 'Email inválido';
+        } else if (error.code === 'auth/network-request-failed') {
+            message = 'Erro de conexão. Tente novamente.';
         }
         
-        showToast(message, 'error');
+        if (typeof showToast === 'function') {
+            showToast(message, 'error');
+        }
         throw error;
     }
 }
 
-// Funcao de cadastro
-async function cadastrarUsuario(nome, email, contato, loginUsuario, senha, extraData = {}) {
-    if (!firebaseInitialized) {
-        throw new Error("Firebase não configurado. Use o modo local.");
+/**
+ * Cadastro de novo usuário com Firebase
+ * @param {string} nome - Nome completo
+ * @param {string} email - Email
+ * @param {string} senha - Senha
+ * @param {Object} extraData - Dados adicionais (nomeEmpresa, segmento, etc)
+ * @returns {Promise<Object>} - Dados do usuário criado
+ */
+async function cadastrarUsuarioFirebase(nome, email, senha, extraData = {}) {
+    if (!firebaseInitialized || !auth || !db) {
+        throw new Error("Firebase não disponível. Use cadastrarUsuarioLocal()");
     }
+    
     try {
-        showLoading('Criando conta...');
+        if (typeof showLoading === 'function') {
+            showLoading('Criando conta...');
+        }
         
         // Sempre cadastro de empresa (admin)
         const role = 'admin';
+        const companyId = 'company_' + Date.now(); // ID único da empresa
         
-        // Criar usuario no Authentication
+        // Criar usuário no Authentication
         const result = await auth.createUserWithEmailAndPassword(email, senha);
         const user = result.user;
         
-        // Se for admin (nova empresa), o ID da empresa é o próprio UID do usuário
-        if (role === 'admin') {
-            companyId = user.uid;
+        // Criar documento do usuário no Firestore
+        const userData = {
+            uid: user.uid,
+            nome: nome,
+            email: email,
+            nomeEmpresa: extraData.nomeEmpresa || 'Minha Empresa',
+            segmento: extraData.segmento || 'comercio',
+            role: role,
+            companyId: companyId,
+            ativo: true,
+            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+            allowedModules: ['dashboard', 'operacional', 'estoque-entrada', 'estoque-saida', 'financeiro', 'rh', 'visualizar', 'historico']
+        };
+        
+        await db.collection('usuarios').doc(user.uid).set(userData);
+        
+        // Criar documento da empresa
+        const empresaData = {
+            companyId: companyId,
+            nome: extraData.nomeEmpresa || 'Minha Empresa',
+            segmento: extraData.segmento || 'comercio',
+            adminUid: user.uid,
+            dataCriacao: firebase.firestore.FieldValue.serverTimestamp(),
+            ativo: true
+        };
+        
+        await db.collection('empresas').doc(companyId).set(empresaData);
+        
+        if (typeof hideLoading === 'function') {
+            hideLoading();
         }
+        if (typeof showToast === 'function') {
+            showToast('Conta criada com sucesso!', 'success');
+        }
+        
+        console.log('✅ Usuário cadastrado:', userData.nome);
+        console.log('🏢 Empresa criada:', empresaData.nome);
+        
+        return userData;
+    } catch (error) {
+        if (typeof hideLoading === 'function') {
+            hideLoading();
+        }
+        
+        let message = 'Erro ao criar conta';
+        
+        if (error.code === 'auth/email-already-in-use') {
+            message = 'Este email já está em uso';
+        } else if (error.code === 'auth/weak-password') {
+            message = 'Senha muito fraca. Use no mínimo 6 caracteres';
+        } else if (error.code === 'auth/invalid-email') {
+            message = 'Email inválido';
+        }
+        
+        if (typeof showToast === 'function') {
+            showToast(message, 'error');
+        }
+        throw error;
+    }
+}
+
+/**
+ * Logout do Firebase
+ */
+async function logoutFirebase() {
+    if (!firebaseInitialized || !auth) {
+        throw new Error("Firebase não disponível");
+    }
+    
+    try {
+        await auth.signOut();
+        if (typeof showToast === 'function') {
+            showToast('Logout realizado com sucesso', 'success');
+        }
+    } catch (error) {
+        console.error('❌ Erro ao fazer logout:', error);
+        throw error;
+    }
+}
         
         // Atualizar display name
         await user.updateProfile({

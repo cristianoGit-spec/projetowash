@@ -1,6 +1,17 @@
-// Funcoes de autenticacao UI
+// ============================================================================
+// SISTEMA DE AUTENTICAÇÃO - INTERFACE (v15.0 - Híbrido)
+// ============================================================================
 
-// Login rápido com credenciais pré-definidas
+console.log('🔐 Auth UI v15.0 carregado - Sistema Híbrido');
+
+// ============================================================================
+// LOGIN RÁPIDO (Desenvolvimento/Demo)
+// ============================================================================
+
+/**
+ * Login rápido com credenciais pré-definidas
+ * @param {string} tipo - 'superadmin' ou 'admin'
+ */
 async function loginRapido(tipo) {
     const credenciais = {
         'superadmin': {
@@ -24,7 +35,10 @@ async function loginRapido(tipo) {
     showLoading(`Entrando como ${tipo === 'superadmin' ? 'Super Admin' : 'Admin'}...`);
     
     try {
-        if (typeof loginLocal !== 'undefined') {
+        // Tentar Firebase primeiro, fallback para local
+        if (typeof firebaseInitialized !== 'undefined' && firebaseInitialized && typeof loginFirebase !== 'undefined') {
+            await loginFirebase(cred.email, cred.senha);
+        } else if (typeof loginLocal !== 'undefined') {
             await loginLocal(cred.email, cred.senha);
             window.location.reload();
         }
@@ -36,22 +50,36 @@ async function loginRapido(tipo) {
     }
 }
 
-// Mostrar formulario de login
+// ============================================================================
+// NAVEGAÇÃO ENTRE FORMULÁRIOS
+// ============================================================================
+
+/**
+ * Mostrar formulário de login
+ */
 function showLogin() {
     document.getElementById('loginForm').classList.remove('hidden');
     document.getElementById('registerForm').classList.add('hidden');
     document.getElementById('forgotPasswordForm').classList.add('hidden');
 }
 
-// Mostrar formulario de cadastro
+/**
+ * Mostrar formulário de cadastro
+ */
 function showRegister() {
     document.getElementById('loginForm').classList.add('hidden');
     document.getElementById('registerForm').classList.remove('hidden');
     document.getElementById('forgotPasswordForm').classList.add('hidden');
-    // Sempre cadastro de empresa - campos já estão visíveis por padrão
 }
 
-// Handler de login
+// ============================================================================
+// HANDLERS DE FORMULÁRIOS
+// ============================================================================
+
+/**
+ * Handler de login - Sistema Híbrido
+ * Tenta Firebase primeiro, depois fallback para local
+ */
 async function handleLogin(event) {
     event.preventDefault();
     
@@ -63,19 +91,23 @@ async function handleLogin(event) {
         return;
     }
     
-    showLoading('Entrando...');
+    showLoading('Entrando no sistema...');
     
     try {
-        // Verificar qual modo está ativo
+        // Verificar se Firebase está disponível
         const isFirebaseActive = typeof firebaseInitialized !== 'undefined' && firebaseInitialized;
         
-        if (isFirebaseActive && typeof login !== 'undefined') {
-            // Modo Firebase
-            await login(email, password);
+        if (isFirebaseActive && typeof loginFirebase !== 'undefined') {
+            // Modo Firebase Cloud
+            console.log('🌐 Tentando login via Firebase...');
+            await loginFirebase(email, password);
+            console.log('✅ Login Firebase bem-sucedido');
         } else if (typeof loginLocal !== 'undefined') {
-            // Modo Local
+            // Modo Local (fallback)
+            console.log('📦 Usando login local...');
             await loginLocal(email, password);
-            // Recarregar a página para inicializar o app corretamente com o usuário logado
+            console.log('✅ Login local bem-sucedido');
+            // Recarregar a página para inicializar o app corretamente
             window.location.reload();
             return;
         } else {
@@ -83,18 +115,33 @@ async function handleLogin(event) {
         }
         
     } catch (error) {
-        console.error('Erro no login:', error);
-        showToast(error.message || 'Erro ao entrar', 'error');
+        console.error('❌ Erro no login:', error);
+        
+        // Se Firebase falhar, tentar local como fallback
+        if (error.code && error.code.startsWith('auth/') && typeof loginLocal !== 'undefined') {
+            console.log('⚠️ Firebase falhou, tentando local...');
+            try {
+                await loginLocal(email, password);
+                console.log('✅ Login local bem-sucedido (fallback)');
+                window.location.reload();
+                return;
+            } catch (localError) {
+                console.error('❌ Login local também falhou:', localError);
+            }
+        }
+        
+        showToast(error.message || 'Erro ao entrar. Verifique suas credenciais.', 'error');
     } finally {
         hideLoading();
     }
 }
 
-// Handler de cadastro
+/**
+ * Handler de cadastro - Sistema Híbrido
+ */
 async function handleRegister(event) {
     event.preventDefault();
     
-    const type = document.getElementById('regType').value;
     const nome = document.getElementById('regNome').value.trim();
     const email = document.getElementById('regEmail').value.trim();
     const contato = document.getElementById('regContato').value.trim();
@@ -141,15 +188,32 @@ async function handleRegister(event) {
     showLoading('Criando empresa...');
     
     try {
-        // Tentar modo local primeiro
+        // Verificar se Firebase está disponível
         const isFirebaseActive = typeof firebaseInitialized !== 'undefined' && firebaseInitialized;
         
-        if (typeof cadastrarUsuarioLocal !== 'undefined' && !isFirebaseActive) {
+        if (isFirebaseActive && typeof cadastrarUsuarioFirebase !== 'undefined') {
+            // Modo Firebase Cloud
+            console.log('🌐 Cadastrando via Firebase...');
+            await cadastrarUsuarioFirebase(nome, email, password, extraData);
+            console.log('✅ Cadastro Firebase bem-sucedido');
+            
+            // Fazer login automático
+            await loginFirebase(email, password);
+            
+        } else if (typeof cadastrarUsuarioLocal !== 'undefined') {
+            // Modo Local (fallback)
+            console.log('📦 Cadastrando localmente...');
             await cadastrarUsuarioLocal(nome, email, contato, loginUsuario, password, extraData);
-            showToast('Cadastro realizado com sucesso!', 'success');
+            console.log('✅ Cadastro local bem-sucedido');
+            
+            showToast('Cadastro realizado! Faça login para continuar.', 'success');
+            
+            // Voltar para tela de login
+            setTimeout(() => {
+                showLogin();
+            }, 1500);
         } else {
-            // Modo Firebase
-            await cadastrarUsuario(nome, email, contato, loginUsuario, password, extraData);
+            throw new Error('Nenhum sistema de cadastro disponível');
         }
         
         // Limpar formulario

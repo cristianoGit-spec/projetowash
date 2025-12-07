@@ -1,15 +1,18 @@
 // ============================================================================
 // SISTEMA QUATRO CANTOS - JAVASCRIPT PRINCIPAL
 // Arquivo: app.js
-// Descricao: Funcoes principais do sistema integrado com Firebase
+// Descricao: Funcoes principais do sistema (100% frontend)
 // ============================================================================
 
 // Constantes e Configuracoes
-// Detecta se está rodando localmente ou em produção
-const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_BASE_URL = isLocalhost 
-    ? 'http://localhost:5000/api' 
-    : 'https://projetowash.onrender.com/api'; // URL de produção (Render)
+const isLocalhost = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1' ||
+                    window.location.hostname === '';
+const isProduction = window.location.hostname.includes('netlify.app');
+
+// Sistema funciona 100% no frontend (localStorage)
+// Dados armazenados localmente no navegador
+// Compatível com Netlify e hospedagem estática
 
 // ============================================================================
 // FUNCOES DE MODAL

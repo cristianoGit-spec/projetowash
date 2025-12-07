@@ -1,12 +1,19 @@
-// Modo Local/Demo - Autenticacao Simulada (SEM criptografia)
-// Use este arquivo APENAS para testes locais sem Firebase
-console.log('🔓 local-auth.js v5.0 carregado (modo simples - sem bcrypt)');
+// ============================================================================
+// SISTEMA LOCAL - AUTENTICAÇÃO FALLBACK (v15.0)
+// ============================================================================
+// Este arquivo é usado como FALLBACK quando Firebase não está disponível
+// Modo híbrido: Firebase prioritário, localStorage como backup
+// ============================================================================
 
+console.log('💾 local-auth.js v15.0 carregado - Modo Fallback Híbrido');
+
+// Variáveis globais locais
 let localUsers = [];
 let localCurrentUser = null;
 let localIsAdmin = false;
+let localIsSuperAdmin = false;
 
-// Senhas padrão em texto simples
+// Senhas padrão em texto simples (modo desenvolvimento)
 const DEFAULT_PASSWORDS = {
     superadmin: 'admin@2025',
     admin: 'admin123',
@@ -14,37 +21,42 @@ const DEFAULT_PASSWORDS = {
     superacao: 'super123'
 };
 
-// Carregar usuarios do localStorage
+// ============================================================================
+// FUNÇÕES DE PERSISTÊNCIA LOCAL
+// ============================================================================
+
+/**
+ * Carregar usuários do localStorage
+ */
 function loadLocalUsers() {
     const stored = localStorage.getItem('localUsers');
     if (stored) {
         localUsers = JSON.parse(stored);
         
-        // Garantir que o super admin exista e esteja correto
+        // Garantir que o super admin exista
         const superAdminIndex = localUsers.findIndex(u => u.email === 'superadmin@quatrocantos.com');
         const defaultSuperAdmin = {
             uid: 'superadmin-master-001',
             nome: 'Super Administrador',
             nomeEmpresa: 'Quatro Cantos - Administração',
             email: 'superadmin@quatrocantos.com',
-            senha: DEFAULT_PASSWORDS.superadmin, // admin@2025
+            senha: DEFAULT_PASSWORDS.superadmin,
             role: 'superadmin',
             segmento: 'construcao',
             companyId: 'superadmin-master',
             ativo: true,
-            dataCadastro: new Date().toISOString()
+            dataCadastro: new Date().toISOString(),
+            allowedModules: ['dashboard', 'admin', 'operacional', 'estoque-entrada', 'estoque-saida', 'financeiro', 'rh', 'visualizar', 'historico']
         };
 
         if (superAdminIndex === -1) {
-            // Super admin não existe, adicionar
-            localUsers.unshift(defaultSuperAdmin); // Adiciona no início
+            localUsers.unshift(defaultSuperAdmin);
             saveLocalUsers();
-            console.log('Super admin criado:', defaultSuperAdmin.email);
+            console.log('✅ Super admin criado:', defaultSuperAdmin.email);
         } else {
-            // Super admin existe, garantir que está correto
             localUsers[superAdminIndex] = defaultSuperAdmin;
             saveLocalUsers();
-            console.log('Super admin atualizado:', defaultSuperAdmin.email);
+            console.log('✅ Super admin atualizado');
         }
         
         // Garantir que o admin padrao exista e tenha os campos novos
@@ -181,49 +193,57 @@ function saveLocalCurrentUser() {
     }
 }
 
-// Login local (SEM criptografia - modo simples)
+/**
+ * Login local (Sistema híbrido - fallback)
+ * @param {string} emailOrLogin - Email ou login do usuário
+ * @param {string} password - Senha em texto simples
+ * @returns {Promise<Object>} - Dados do usuário autenticado
+ */
 async function loginLocal(emailOrLogin, password) {
-    console.log('🔓 Tentando login:', emailOrLogin);
+    console.log('🔓 Tentando login local:', emailOrLogin);
     console.log('📊 Total de usuários:', localUsers.length);
 
-    // Buscar usuário por email ou login
-    const user = localUsers.find(u => {
-        const matchEmail = u.email && u.email.toLowerCase().trim() === emailOrLogin.toLowerCase().trim();
-        const matchLogin = u.loginUsuario && u.loginUsuario.toLowerCase().trim() === emailOrLogin.toLowerCase().trim();
-        return matchEmail || matchLogin;
-    });
-
+    // Buscar usuário por email ou loginUsuario
+    const user = localUsers.find(u => 
+        u.email === emailOrLogin || u.loginUsuario === emailOrLogin
+    );
+    
     if (!user) {
         console.error('❌ Usuário não encontrado:', emailOrLogin);
-        throw new Error('Usuário ou senha incorretos');
+        throw new Error('Usuário não encontrado');
     }
-
-    // Verificar senha (comparação direta - sem criptografia)
-    const senhaCorreta = user.senha === password;
-
-    if (!senhaCorreta) {
+    
+    console.log('👤 Usuário encontrado:', user.nome);
+    
+    // Verificar senha (texto simples - modo desenvolvimento)
+    if (user.senha !== password) {
         console.error('❌ Senha incorreta');
-        throw new Error('Usuário ou senha incorretos');
+        throw new Error('Senha incorreta');
     }
-
+    
     if (!user.ativo) {
         console.error('⛔ Usuário inativo');
-        throw new Error('Usuário inativo');
+        throw new Error('Usuário inativo. Entre em contato com o administrador.');
     }
-
-    console.log('✅ Login bem-sucedido!');
-    console.log('  - Email:', user.email || user.loginUsuario);
-    console.log('  - Role:', user.role);
-    console.log('  - Nome:', user.nome);
-
+    
+    // Login bem-sucedido
     localCurrentUser = user;
     localIsAdmin = user.role === 'admin' || user.role === 'superadmin';
+    localIsSuperAdmin = user.role === 'superadmin';
     saveLocalCurrentUser();
-
+    
+    console.log('✅ Login local bem-sucedido!');
+    console.log('👤 Usuário:', user.nome);
+    console.log('🏢 Empresa:', user.nomeEmpresa);
+    console.log('🔑 Role:', user.role);
+    console.log('🆔 CompanyId:', user.companyId);
+    
     return user;
 }
 
-// Cadastro local com senha criptografada
+/**
+ * Cadastro local com senha em texto simples
+ */
 async function cadastrarUsuarioLocal(nome, email, contato, loginUsuario, senha, extraData) {
     // Verificar se email ja existe
     if (localUsers.find(u => u.email === email)) {

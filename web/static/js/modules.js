@@ -14,36 +14,36 @@ console.log('📦 Modules Loader v2.0 - Carregando módulos individuais...');
 // ============================================================================
 const AVAILABLE_MODULES = {
     'dashboard': {
-        path: '/static/js/dashboard.js',
+        path: './static/js/dashboard.js',
         loadFunction: 'loadDashboard',
         isSpecial: true // Dashboard não usa modal, renderiza na seção principal
     },
     'operacional': {
-        path: '/static/js/modules/operacional.js',
+        path: './static/js/modules/operacional.js',
         loadFunction: 'loadOperacionalModule'
     },
     'estoque-entrada': {
-        path: '/static/js/modules/estoque_entrada.js',
+        path: './static/js/modules/estoque_entrada.js',
         loadFunction: 'loadEstoqueEntradaModule'
     },
     'estoque-saida': {
-        path: '/static/js/modules/estoque_saida.js',
+        path: './static/js/modules/estoque_saida.js',
         loadFunction: 'loadEstoqueSaidaModule'
     },
     'financeiro': {
-        path: '/static/js/modules/financeiro.js',
+        path: './static/js/modules/financeiro.js',
         loadFunction: 'loadFinanceiroModule'
     },
     'rh': {
-        path: '/static/js/modules/rh.js',
+        path: './static/js/modules/rh.js',
         loadFunction: 'loadRHModule'
     },
     'visualizar': {
-        path: '/static/js/modules/visualizar_estoque.js',
+        path: './static/js/modules/visualizar_estoque.js',
         loadFunction: 'loadVisualizarModule'
     },
     'historico': {
-        path: '/static/js/modules/historico.js',
+        path: './static/js/modules/historico.js',
         loadFunction: 'loadHistoricoModule'
     }
 };
@@ -75,7 +75,7 @@ async function loadModule(moduleName) {
 
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = moduleConfig.path + '?v=9'; // Cache bust v9
+        script.src = moduleConfig.path + '?v=13'; // Cache bust v13
         script.async = false; // Carrega em ordem
 
         script.onload = () => {

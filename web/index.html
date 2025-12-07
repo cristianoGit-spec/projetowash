@@ -13,32 +13,33 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css?v=11">
-    <link rel="stylesheet" href="/static/css/segments.css?v=11">
-    <link rel="stylesheet" href="/static/css/admin.css?v=11">
+    <link rel="stylesheet" href="/static/css/style.css?v=15">
+    <link rel="stylesheet" href="/static/css/segments.css?v=15">
+    <link rel="stylesheet" href="/static/css/admin.css?v=15">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase -->
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    
+    <!-- Firebase SDK (Sistema Híbrido - Nuvem + Local) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
-    
     <!-- Segments Config -->
-    <script src="/static/js/segments-config.js?v=6"></script>
+    <script src="/static/js/segments-config.js?v=15"></script>
     
-    <!-- Limpeza de Cache (v13 - remover dados de criptografia antiga) -->
+    <!-- Sistema Híbrido v15 - Firebase + Local -->
     <script>
-        if (!localStorage.getItem('auth_restored_v13')) {
-            console.log('🔄 Restaurando sistema - removendo dados de criptografia...');
-            localStorage.removeItem('localUsers');
-            localStorage.removeItem('localCurrentUser');
-            localStorage.setItem('auth_restored_v13', 'true');
-            console.log('✅ Sistema restaurado para modo simples!');
+        // Migração limpa para sistema híbrido v15
+        if (!localStorage.getItem('system_hybrid_v15')) {
+            console.log('🔄 Migrando para sistema híbrido v15...');
+            // Mantém dados locais como backup
+            localStorage.setItem('system_hybrid_v15', 'true');
+            console.log('✅ Sistema híbrido v15 ativado!');
+            console.log('📡 Dados serão salvos no Firebase Cloud com backup local');
         }
     </script>
 </head>
@@ -623,28 +624,32 @@
 
     <!-- Configuração Global -->
     <script>
-        // Injeta a API Key do backend para uso nas requisições
-        // Se estiver rodando estático (Netlify), a variável não será substituída, então tratamos isso.
-        const RAW_API_KEY = "{{ api_key }}";
-        const SERVER_API_KEY = RAW_API_KEY.includes("{" + "{") ? "" : RAW_API_KEY;
+        // SISTEMA HÍBRIDO - Firebase Cloud + Fallback Local
+        // Versão 15.0 - Banco de dados na nuvem com acesso externo
+        const APP_VERSION = '15';
+        const IS_PRODUCTION = window.location.hostname.includes('netlify.app');
+        const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        // Sistema tentará usar Firebase primeiro, fallback para localStorage se falhar
+        console.log('🌐 Ambiente:', IS_PRODUCTION ? 'PRODUÇÃO (Netlify)' : IS_LOCALHOST ? 'LOCAL (Dev)' : 'OUTRO');
     </script>
 
-    <!-- JavaScript -->
-    <!-- MODO LOCAL/DEMO (ativado) -->
-    <script src="/static/js/local-auth.js?v=13"></script>
-    <script src="/static/js/local-firestore.js?v=8"></script>
+    <!-- JavaScript - Ordem: Firebase Config > Local Fallback > Auth > App -->
     
-    <!-- MODO FIREBASE (descomentar essas 2 linhas quando configurar Firebase) -->
-    <!-- <script src="/static/js/firebase-config.js?v=6"></script> -->
-    <!-- <script src="/static/js/firestore-service.js?v=6"></script> -->
+    <!-- 1. Configuração Firebase (Sistema Híbrido) -->
+    <script src="/static/js/firebase-config.js?v=15"></script>
     
-    <!-- Scripts comuns (sempre carregados) -->
-    <script src="/static/js/auth.js?v=10"></script>
-    <script src="/static/js/admin-module.js?v=9"></script>
-    <script src="/static/js/app.js?v=9"></script>
-    <script src="/static/js/modules.js?v=9"></script>
-    <script src="/static/js/dashboard.js?v=9"></script>
-    <script src="/static/js/pwa.js?v=9"></script>
+    <!-- 2. Fallback Local (se Firebase falhar) -->
+    <script src="/static/js/local-auth.js?v=15"></script>
+    <script src="/static/js/local-firestore.js?v=15"></script>
+    
+    <!-- 3. Scripts de Interface e Módulos -->
+    <script src="/static/js/auth.js?v=15"></script>
+    <script src="/static/js/admin-module.js?v=15"></script>
+    <script src="/static/js/app.js?v=15"></script>
+    <script src="/static/js/modules.js?v=15"></script>
+    <script src="/static/js/dashboard.js?v=15"></script>
+    <script src="/static/js/pwa.js?v=15"></script>
     
     <!-- Inicialização do formulário de cadastro -->
     <script>
