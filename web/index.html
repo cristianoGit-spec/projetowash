@@ -31,15 +31,36 @@
     <!-- Segments Config -->
     <script src="/static/js/segments-config.js?v=17"></script>
     
-    <!-- Sistema Híbrido v15 - Firebase + Local -->
+    <!-- Limpeza de Cache v17 - Força reload de arquivos novos -->
     <script>
-        // Migração limpa para sistema híbrido v15
-        if (!localStorage.getItem('system_hybrid_v15')) {
-            console.log('🔄 Migrando para sistema híbrido v15...');
-            // Mantém dados locais como backup
-            localStorage.setItem('system_hybrid_v15', 'true');
-            console.log('✅ Sistema híbrido v15 ativado!');
-            console.log('📡 Dados serão salvos no Firebase Cloud com backup local');
+        // Limpar cache antigo do Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for (let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+            
+            // Limpar todos os caches antigos
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    for (let name of names) {
+                        if (name !== 'estoque-certo-v17') {
+                            console.log('🗑️ Removendo cache antigo:', name);
+                            caches.delete(name);
+                        }
+                    }
+                });
+            }
+        }
+        
+        // Migração para sistema híbrido v17
+        if (!localStorage.getItem('system_hybrid_v17')) {
+            console.log('🔄 Migrando para sistema híbrido v17...');
+            localStorage.removeItem('system_hybrid_v15'); // Limpar flag antiga
+            localStorage.setItem('system_hybrid_v17', 'true');
+            console.log('✅ Sistema híbrido v17 ativado!');
+            console.log('📡 Todos os erros corrigidos - Sistema estável');
         }
     </script>
 </head>

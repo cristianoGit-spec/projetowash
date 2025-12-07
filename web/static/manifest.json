@@ -2,7 +2,7 @@
   "name": "Quatro Cantos - Sistema de Gestão",
   "short_name": "Quatro Cantos",
   "description": "Sistema completo de gestao empresarial",
-  "start_url": "/",
+  "start_url": "/?v=17",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
