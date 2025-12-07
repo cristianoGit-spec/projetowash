@@ -3372,3 +3372,94 @@ select {
     font-size: 0.85em;
 }
 
+/* ============================================================================
+   UTILITY CLASSES - ALINHAMENTO DE TEXTO
+   ============================================================================ */
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+/* ============================================================================
+   MELHORIAS NA TABELA DE HISTÓRICO
+   ============================================================================ */
+
+.table-container table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table-container table tbody tr:hover {
+    background: #f8fafc;
+    transform: translateX(3px);
+}
+
+.table-container table tbody td {
+    vertical-align: middle;
+}
+
+.table-container table tbody td strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.card-footer {
+    font-size: 0.875rem;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Status badges melhorados */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+.status-badge.inactive {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+}
+
+/* Responsividade do histórico */
+@media (max-width: 768px) {
+    .card-header > div {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    
+    .card-footer {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    
+    .table-container {
+        -webkit-overflow-scrolling: touch;
+    }
+}

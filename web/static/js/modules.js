@@ -75,7 +75,7 @@ async function loadModule(moduleName) {
 
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = moduleConfig.path + '?v=16'; // Cache bust v16 - FIX: RH Híbrido Firebase+LocalStorage
+        script.src = moduleConfig.path + '?v=17'; // Cache bust v17 - FIX: Histórico valores integrados
         script.async = false; // Carrega em ordem
 
         script.onload = () => {

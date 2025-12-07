@@ -68,7 +68,7 @@ async function cadastrarProdutoFirestoreLocal(codigo, nome, quantidade, data, fo
     
     localEstoque.push(produto);
     
-    // Registrar movimentacao
+    // Registrar movimentacao com campos consistentes
     localMovimentacoes.push({
         id: 'mov-' + Date.now(),
         companyId: localCurrentUser ? localCurrentUser.companyId : 'comp-default',
@@ -81,6 +81,7 @@ async function cadastrarProdutoFirestoreLocal(codigo, nome, quantidade, data, fo
         valorTotal: quantidade * valor,
         usuarioId: localCurrentUser?.uid || 'sistema',
         usuarioNome: localCurrentUser?.nome || 'Sistema',
+        usuario: localCurrentUser?.nome || 'Sistema', // Alias para compatibilidade
         timestamp: new Date().toISOString()
     });
     
@@ -102,7 +103,10 @@ async function registrarSaidaProdutoLocal(produtoId, quantidadeSaida, valorVenda
     produto.quantidade -= quantidadeSaida;
     produto.atualizadoEm = new Date().toISOString();
     
-    // Registrar movimentacao
+    // Calcular valor total
+    const valorTotal = quantidadeSaida * valorVenda;
+    
+    // Registrar movimentacao com TODOS os campos necessários
     localMovimentacoes.push({
         id: 'mov-' + Date.now(),
         companyId: localCurrentUser ? localCurrentUser.companyId : 'comp-default',
@@ -111,10 +115,13 @@ async function registrarSaidaProdutoLocal(produtoId, quantidadeSaida, valorVenda
         produtoId: produto.id,
         produtoNome: produto.nome,
         quantidade: quantidadeSaida,
+        quantidadeVendida: quantidadeSaida, // Alias para compatibilidade
         valorUnitario: valorVenda,
-        valorTotal: quantidadeSaida * valorVenda,
+        valorVenda: valorVenda, // Campo principal para histórico
+        valorTotal: valorTotal,
         usuarioId: localCurrentUser?.uid || 'sistema',
         usuarioNome: localCurrentUser?.nome || 'Sistema',
+        usuario: localCurrentUser?.nome || 'Sistema', // Alias para compatibilidade
         timestamp: new Date().toISOString()
     });
     
