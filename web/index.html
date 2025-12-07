@@ -13,9 +13,9 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css?v=15">
-    <link rel="stylesheet" href="/static/css/segments.css?v=15">
-    <link rel="stylesheet" href="/static/css/admin.css?v=15">
+    <link rel="stylesheet" href="/static/css/style.css?v=16">
+    <link rel="stylesheet" href="/static/css/segments.css?v=16">
+    <link rel="stylesheet" href="/static/css/admin.css?v=16">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -503,52 +503,87 @@
                 <!-- Dashboard Section -->
                 <section id="dashboardSection" class="dashboard-section">
                     <div class="welcome-header">
-                        <h2>Dashboard</h2>
-                        <p>Visao geral do sistema</p>
+                        <div>
+                            <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                            <p>Visão geral do sistema</p>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn-refresh" onclick="loadDashboard()" title="Atualizar dados">
+                                <i class="fas fa-sync-alt"></i> Atualizar
+                            </button>
+                        </div>
                     </div>
                     
                     <!-- Alertas de Estoque Baixo -->
                     <div id="stockAlerts" class="hidden"></div>
                     
-                    <!-- Cards de Estatisticas -->
+                    <!-- Cards de Estatísticas com Gradientes -->
                     <div class="stats-grid">
-                        <div class="stat-card blue">
-                            <div class="stat-icon">
-                                <i class="fas fa-boxes"></i>
+                        <div class="stat-card stat-gradient-blue">
+                            <div class="stat-content">
+                                <div class="stat-icon-modern">
+                                    <i class="fas fa-boxes"></i>
+                                </div>
+                                <div class="stat-info-modern">
+                                    <h3 id="statTotalProdutos">0</h3>
+                                    <p>TOTAL DE PRODUTOS</p>
+                                    <small class="stat-subtitle">Cadastrados no estoque</small>
+                                </div>
                             </div>
-                            <div class="stat-info">
-                                <h3 id="statTotalProdutos">0</h3>
-                                <p>Total de Produtos</p>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card green">
-                            <div class="stat-icon">
-                                <i class="fas fa-cubes"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="statTotalItens">0</h3>
-                                <p>Total de Itens</p>
+                            <div class="stat-footer">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>Atualizado agora</span>
                             </div>
                         </div>
                         
-                        <div class="stat-card purple">
-                            <div class="stat-icon">
-                                <i class="fas fa-dollar-sign"></i>
+                        <div class="stat-card stat-gradient-green">
+                            <div class="stat-content">
+                                <div class="stat-icon-modern">
+                                    <i class="fas fa-cubes"></i>
+                                </div>
+                                <div class="stat-info-modern">
+                                    <h3 id="statTotalItens">0</h3>
+                                    <p>TOTAL DE ITENS</p>
+                                    <small class="stat-subtitle">Unidades disponíveis</small>
+                                </div>
                             </div>
-                            <div class="stat-info">
-                                <h3 id="statValorTotal">R$ 0,00</h3>
-                                <p>Valor em Estoque</p>
+                            <div class="stat-footer">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Em estoque</span>
                             </div>
                         </div>
                         
-                        <div class="stat-card orange">
-                            <div class="stat-icon">
-                                <i class="fas fa-chart-line"></i>
+                        <div class="stat-card stat-gradient-purple">
+                            <div class="stat-content">
+                                <div class="stat-icon-modern">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="stat-info-modern">
+                                    <h3 id="statValorTotal">R$ 0,00</h3>
+                                    <p>VALOR EM ESTOQUE</p>
+                                    <small class="stat-subtitle">Capital investido</small>
+                                </div>
                             </div>
-                            <div class="stat-info">
-                                <h3 id="statVendasMes">R$ 0,00</h3>
-                                <p>Vendas do Mes</p>
+                            <div class="stat-footer">
+                                <i class="fas fa-wallet"></i>
+                                <span>Patrimônio</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card stat-gradient-orange">
+                            <div class="stat-content">
+                                <div class="stat-icon-modern">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="stat-info-modern">
+                                    <h3 id="statVendasMes">R$ 0,00</h3>
+                                    <p>VENDAS DO MÊS</p>
+                                    <small class="stat-subtitle">Receita mensal</small>
+                                </div>
+                            </div>
+                            <div class="stat-footer">
+                                <i class="fas fa-trending-up"></i>
+                                <span>Dezembro 2025</span>
                             </div>
                         </div>
                     </div>

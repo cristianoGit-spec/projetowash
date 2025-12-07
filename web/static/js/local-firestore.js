@@ -158,18 +158,30 @@ async function salvarFolhaPagamentoLocal(dados) {
 async function buscarEstatisticasLocal() {
     const hoje = new Date();
     const seteDiasAtras = new Date(hoje.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
     
     // Filtrar por empresa
     const estoqueFiltrado = localCurrentUser ? localEstoque.filter(p => p.companyId === localCurrentUser.companyId) : localEstoque;
     const movimentacoesFiltradas = localCurrentUser ? localMovimentacoes.filter(m => m.companyId === localCurrentUser.companyId) : localMovimentacoes;
     
-    // Total de produtos
+    // Total de produtos únicos
     const totalProdutos = estoqueFiltrado.length;
     
-    // Valor total em estoque
-    const valorTotal = estoqueFiltrado.reduce((sum, p) => sum + (p.quantidade * p.valor), 0);
+    // Total de itens em estoque (soma de quantidades)
+    const totalItens = estoqueFiltrado.reduce((sum, p) => sum + (p.quantidade || 0), 0);
     
-    // Movimentacoes dos ultimos 7 dias
+    // Valor total em estoque
+    const valorTotal = estoqueFiltrado.reduce((sum, p) => sum + ((p.quantidade || 0) * (p.valor || 0)), 0);
+    
+    // Vendas do mês atual (saídas)
+    const vendasMes = movimentacoesFiltradas
+        .filter(m => {
+            const data = new Date(m.timestamp);
+            return m.tipo === 'saida' && data >= inicioMes;
+        })
+        .reduce((sum, m) => sum + ((m.quantidade || m.quantidadeVendida || 0) * (m.valorVenda || m.valorUnitario || 0)), 0);
+    
+    // Movimentações dos últimos 7 dias
     const movimentacoesRecentes = movimentacoesFiltradas.filter(m => {
         const data = new Date(m.timestamp);
         return data >= seteDiasAtras;
@@ -180,7 +192,9 @@ async function buscarEstatisticasLocal() {
     
     return {
         totalProdutos,
+        totalItens,
         valorTotal,
+        vendasMes,
         entradasRecentes,
         saidasRecentes,
         movimentacoes: movimentacoesFiltradas.slice(-10).reverse()
