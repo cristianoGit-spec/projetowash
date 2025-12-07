@@ -294,6 +294,21 @@ async function logoutFirebase() {
         throw error;
     }
 }
+
+/**
+ * Cadastrar novo usuário no Firebase com empresa
+ */
+async function cadastrarUsuarioFirebase(email, senha, nome, contato, loginUsuario, extraData = {}) {
+    if (!firebaseInitialized || !auth || !db) {
+        throw new Error("Firebase não disponível");
+    }
+    
+    showLoading('Criando conta...');
+    
+    try {
+        // Criar usuário no Authentication
+        const userCredential = await auth.createUserWithEmailAndPassword(email, senha);
+        const user = userCredential.user;
         
         // Atualizar display name
         await user.updateProfile({
