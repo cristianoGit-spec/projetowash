@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Quatro Cantos - Documentação</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-bg: #1f2937;
+            --light-bg: #f9fafb;
+            --text-dark: #111827;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --code-bg: #f3f4f6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: #ffffff;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav {
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+        }
+
+        .nav a {
+            display: inline-block;
+            padding: 1rem 0;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .section-subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-inline {
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: var(--danger-color);
+        }
+
+        /* Steps */
+        .steps {
+            counter-reset: step-counter;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 4rem;
+            margin-bottom: 2rem;
+            counter-increment: step-counter;
+        }
+
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .badge-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .badge-info {
+            background-color: #06b6d4;
+            color: white;
+        }
+
+        /* Alert boxes */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background-color: #dbeafe;
+            border-color: var(--primary-color);
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background-color: #fef3c7;
+            border-color: var(--warning-color);
+            color: #92400e;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            border-color: var(--success-color);
+            color: #065f46;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: var(--light-bg);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .footer p {
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav .container {
+                gap: 1rem;
+            }
+
+            .step {
+                padding-left: 3rem;
+            }
+
+            .step::before {
+                width: 2rem;
+                height: 2rem;
+                font-size: 1rem;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* List styling */
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        strong {
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1>Sistema Quatro Cantos</h1>
+            <p>Sistema de Gestão Empresarial - Documentação Completa</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <a href="#visao-geral" class="active">Visão Geral</a>
+            <a href="#instalacao">Instalação</a>
+            <a href="#modulos">Módulos</a>
+            <a href="#banco-dados">Banco de Dados</a>
+            <a href="#uso">Como Usar</a>
+            <a href="#tecnologias">Tecnologias</a>
+            <a href="fluxograma.html" style="color: var(--success-color); font-weight: 600;">Fluxograma</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Visão Geral -->
+        <section id="visao-geral" class="section">
+            <h2 class="section-title">Visão Geral</h2>
+            
+            <p style="font-size: 1.1rem; margin-bottom: 2rem; color: var(--text-light);">
+                O Sistema Quatro Cantos é uma solução completa de gestão empresarial desenvolvida em Python, 
+                projetada para gerenciar operações, estoque, finanças e recursos humanos de forma integrada e eficiente.
+            </p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">OP</div>
+                    <h3 class="card-title">Módulo Operacional</h3>
+                    <p class="card-description">
+                        Cálculo de capacidade produtiva baseado em turnos de trabalho, 
+                        análise de ociosidade e percentual de utilização da fábrica.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">ES</div>
+                    <h3 class="card-title">Gestão de Estoque</h3>
+                    <p class="card-description">
+                        Controle completo de entrada e saída de produtos com rastreabilidade, 
+                        validação de quantidades e integração com banco de dados.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">FN</div>
+                    <h3 class="card-title">Módulo Financeiro</h3>
+                    <p class="card-description">
+                        Análise de custos, precificação com margem de lucro, 
+                        projeções de faturamento e cálculo de indicadores como ROI e ponto de equilíbrio.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">RH</div>
+                    <h3 class="card-title">Recursos Humanos</h3>
+                    <p class="card-description">
+                        Cálculo de folha de pagamento com INSS e IR progressivos, 
+                        gestão de horas extras e hierarquia de cargos.
+                    </p>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Importante:</strong> Este sistema foi desenvolvido com foco em boas práticas de programação, 
+                incluindo separação de lógica de negócio, validação de dados e documentação completa do código.
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, var(--success-color), #059669); color: white; border: none; margin-top: 2rem;">
+                <h3 class="card-title" style="color: white;">Visualize o Fluxo do Sistema</h3>
+                <p class="card-description" style="color: rgba(255,255,255,0.9); margin-bottom: 1rem;">
+                    Acesse o fluxograma interativo para entender visualmente como o sistema funciona, 
+                    o fluxo de dados entre os módulos e a arquitetura completa.
+                </p>
+                <a href="fluxograma.html" style="display: inline-block; background: white; color: var(--success-color); 
+                   padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; 
+                   transition: all 0.3s ease;">
+                    Acessar Fluxograma Interativo
+                </a>
+            </div>
+        </section>
+
+        <!-- Instalação -->
+        <section id="instalacao" class="section">
+            <h2 class="section-title">Instalação e Configuração</h2>
+
+            <div class="steps">
+                <div class="step">
+                    <h3 class="step-title">Clonar o Repositório</h3>
+                    <p class="step-description">
+                        Faça o download do código fonte do GitHub para o seu computador.
+                    </p>
+                    <div class="code-block">git clone https://github.com/gabrielamnss1/Quatro-Cantos.git
+cd Quatro-Cantos</div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Criar Ambiente Virtual</h3>
+                    <p class="step-description">
+                        Crie um ambiente virtual Python isolado para o projeto.
+                    </p>
+                    <div class="code-block">python -m venv venv</div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Ativar o Ambiente Virtual</h3>
+                    <p class="step-description">
+                        Ative o ambiente virtual de acordo com seu sistema operacional.
+                    </p>
+                    <div class="code-block"># Windows
+venv\Scripts\activate
+
+# Linux/Mac
+source venv/bin/activate</div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Instalar Dependências</h3>
+                    <p class="step-description">
+                        Instale todas as bibliotecas necessárias usando o pip.
+                    </p>
+                    <div class="code-block">pip install sqlalchemy python-dotenv bcrypt</div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Configurar Banco de Dados (Opcional)</h3>
+                    <p class="step-description">
+                        Crie um arquivo <span class="code-inline">.env</span> na raiz do projeto para configurar o banco de dados.
+                    </p>
+                    <div class="code-block"># Arquivo .env
+DATABASE_URL=sqlite:///dados.db
+
+# Para PostgreSQL
+# DATABASE_URL=postgresql://usuario:senha@localhost/nome_banco</div>
+                    <div class="alert alert-info">
+                        <strong>Nota:</strong> Se o arquivo .env não for criado, o sistema usará SQLite automaticamente.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Executar o Sistema</h3>
+                    <p class="step-description">
+                        Inicie o sistema executando o arquivo principal.
+                    </p>
+                    <div class="code-block">python main.py</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Módulos -->
+        <section id="modulos" class="section">
+            <h2 class="section-title">Módulos do Sistema</h2>
+
+            <h3 class="section-subtitle">1. Módulo Operacional</h3>
+            <p><strong>Arquivo:</strong> <span class="code-inline">operacional.py</span></p>
+            <p style="margin-bottom: 1rem;">
+                Calcula a capacidade produtiva da fábrica com base no número de turnos ativos (Manhã, Tarde e/ou Noite).
+            </p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Funcionalidade</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cálculo de Capacidade</td>
+                            <td>1.666 unidades por turno, multiplicado pelo número de turnos ativos</td>
+                        </tr>
+                        <tr>
+                            <td>Projeções</td>
+                            <td>Capacidade diária, mensal (30 dias) e anual (12 meses)</td>
+                        </tr>
+                        <tr>
+                            <td>Análise de Ociosidade</td>
+                            <td>Calcula unidades ociosas e percentual de uso da capacidade máxima</td>
+                        </tr>
+                        <tr>
+                            <td>Validação</td>
+                            <td>Aceita apenas valores entre 1 e 3 turnos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Exemplo de Uso:</strong> Com 2 turnos ativos, a capacidade será de 3.332 unidades/dia, 
+                99.960 unidades/mês e 1.199.520 unidades/ano, representando 66,67% da capacidade máxima.
+            </div>
+
+            <h3 class="section-subtitle">2. Gestão de Estoque</h3>
+            
+            <h4 style="font-size: 1.2rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">
+                2.1 Entrada de Produtos
+            </h4>
+            <p><strong>Arquivo:</strong> <span class="code-inline">estoque_entrada.py</span></p>
+            <p style="margin-bottom: 1rem;">
+                Registra a entrada de novos produtos no estoque com validação completa.
+            </p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Campo</th>
+                            <th>Tipo</th>
+                            <th>Validação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nome do Produto</td>
+                            <td>String</td>
+                            <td>Mínimo 3 caracteres</td>
+                        </tr>
+                        <tr>
+                            <td>Quantidade</td>
+                            <td>Integer</td>
+                            <td>Maior que zero</td>
+                        </tr>
+                        <tr>
+                            <td>Preço Unitário</td>
+                            <td>Float</td>
+                            <td>Maior que zero</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 style="font-size: 1.2rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">
+                2.2 Saída de Produtos
+            </h4>
+            <p><strong>Arquivo:</strong> <span class="code-inline">estoque_saida.py</span></p>
+            <p style="margin-bottom: 1rem;">
+                Registra vendas e saídas de produtos com verificação de disponibilidade.
+            </p>
+
+            <div class="alert alert-warning">
+                <strong>Atenção:</strong> O sistema verifica se há estoque suficiente antes de permitir a saída. 
+                Tentativas de retirar mais do que o disponível resultarão em erro.
+            </div>
+
+            <h3 class="section-subtitle">3. Módulo Financeiro</h3>
+            <p><strong>Arquivo:</strong> <span class="code-inline">financeiro.py</span></p>
+            <p style="margin-bottom: 1rem;">
+                Realiza análise financeira completa com cálculo de custos, precificação e projeções de lucro.
+            </p>
+
+            <h4 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">
+                Custos Considerados
+            </h4>
+            <ul>
+                <li>Conta de Água</li>
+                <li>Conta de Luz (Energia Elétrica)</li>
+                <li>Impostos Gerais (Taxas, alvarás, etc.)</li>
+                <li>Folha de Pagamento Completa</li>
+            </ul>
+
+            <h4 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">
+                Indicadores Calculados
+            </h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Indicador</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Custo por Unidade</td>
+                            <td>Custo total dividido pelo volume de movimentação</td>
+                        </tr>
+                        <tr>
+                            <td>Preço de Venda</td>
+                            <td>Custo unitário + 50% de margem de lucro</td>
+                        </tr>
+                        <tr>
+                            <td>ROI (Return on Investment)</td>
+                            <td>Retorno sobre o investimento em percentual</td>
+                        </tr>
+                        <tr>
+                            <td>Ponto de Equilíbrio</td>
+                            <td>Quantidade necessária para cobrir custos</td>
+                        </tr>
+                        <tr>
+                            <td>Projeção Anual</td>
+                            <td>Receita e lucro projetados para 12 meses</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="section-subtitle">4. Módulo de Recursos Humanos</h3>
+            <p><strong>Arquivo:</strong> <span class="code-inline">rh.py</span></p>
+            <p style="margin-bottom: 1rem;">
+                Calcula a folha de pagamento com descontos de INSS e IR de acordo com as tabelas progressivas de 2025.
+            </p>
+
+            <h4 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">
+                Hierarquia de Cargos
+            </h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cargo</th>
+                            <th>Valor/Hora</th>
+                            <th>Horas Extras</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Operário</td>
+                            <td>R$ 15,00</td>
+                            <td>Sim (2x)</td>
+                        </tr>
+                        <tr>
+                            <td>Supervisor</td>
+                            <td>R$ 40,00</td>
+                            <td>Sim (2x)</td>
+                        </tr>
+                        <tr>
+                            <td>Gerente</td>
+                            <td>R$ 60,00</td>
+                            <td>Não</td>
+                        </tr>
+                        <tr>
+                            <td>Diretor</td>
+                            <td>R$ 80,00</td>
+                            <td>Não</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">
+                Tabela INSS 2025 (Progressiva)
+            </h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Faixa Salarial</th>
+                            <th>Alíquota</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Até R$ 1.412,00</td>
+                            <td>7,5%</td>
+                        </tr>
+                        <tr>
+                            <td>R$ 1.412,01 a R$ 2.666,68</td>
+                            <td>9%</td>
+                        </tr>
+                        <tr>
+                            <td>R$ 2.666,69 a R$ 4.000,03</td>
+                            <td>12%</td>
+                        </tr>
+                        <tr>
+                            <td>Acima de R$ 4.000,04</td>
+                            <td>14% (teto: R$ 908,85)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">
+                Tabela IR 2025 (Progressiva)
+            </h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Faixa Salarial</th>
+                            <th>Alíquota</th>
+                            <th>Parcela a Deduzir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Até R$ 2.259,20</td>
+                            <td>Isento</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>R$ 2.259,21 a R$ 2.826,65</td>
+                            <td>7,5%</td>
+                            <td>R$ 169,44</td>
+                        </tr>
+                        <tr>
+                            <td>R$ 2.826,66 a R$ 3.751,05</td>
+                            <td>15%</td>
+                            <td>R$ 381,44</td>
+                        </tr>
+                        <tr>
+                            <td>R$ 3.751,06 a R$ 4.664,68</td>
+                            <td>22,5%</td>
+                            <td>R$ 662,77</td>
+                        </tr>
+                        <tr>
+                            <td>Acima de R$ 4.664,68</td>
+                            <td>27,5%</td>
+                            <td>R$ 896,00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Observação:</strong> O cálculo do IR é feito sobre a base de cálculo (salário bruto - INSS).
+                Horas extras são pagas com valor dobrado (2x o valor da hora normal).
+            </div>
+        </section>
+
+        <!-- Banco de Dados -->
+        <section id="banco-dados" class="section">
+            <h2 class="section-title">Banco de Dados</h2>
+            <p><strong>Arquivo:</strong> <span class="code-inline">database.py</span></p>
+
+            <p style="margin-bottom: 2rem;">
+                O sistema utiliza SQLAlchemy ORM (Object-Relational Mapping) para gerenciar o banco de dados, 
+                permitindo trabalhar com dados usando objetos Python ao invés de SQL puro.
+            </p>
+
+            <h3 class="section-subtitle">Estrutura das Tabelas</h3>
+
+            <h4 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">
+                Tabela: produtos
+            </h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Campo</th>
+                            <th>Tipo</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>id</td>
+                            <td>Integer (PK)</td>
+                            <td>Chave primária, auto-incremento</td>
+                        </tr>
+                        <tr>
+                            <td>nome</td>
+                            <td>String(100)</td>
+                            <td>Nome do produto</td>
+                        </tr>
+                        <tr>
+                            <td>quantidade</td>
+                            <td>Integer</td>
+                            <td>Quantidade em estoque</td>
+                        </tr>
+                        <tr>
+                            <td>preco</td>
+                            <td>Float</td>
+                            <td>Preço unitário do produto</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem;">
+                Tabela: funcionarios
+            </h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Campo</th>
+                            <th>Tipo</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>id</td>
+                            <td>Integer (PK)</td>
+                            <td>Chave primária, auto-incremento</td>
+                        </tr>
+                        <tr>
+                            <td>nome</td>
+                            <td>String(100)</td>
+                            <td>Nome completo do funcionário</td>
+                        </tr>
+                        <tr>
+                            <td>cargo</td>
+                            <td>String(50)</td>
+                            <td>Cargo: Operário, Supervisor, Gerente ou Diretor</td>
+                        </tr>
+                        <tr>
+                            <td>salario</td>
+                            <td>Float</td>
+                            <td>Salário líquido do funcionário</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="section-subtitle">Configuração do Banco</h3>
+            <p style="margin-bottom: 1rem;">
+                O banco de dados é configurado através de variável de ambiente, permitindo usar diferentes SGBDs:
+            </p>
+
+            <div class="code-block"># SQLite (padrão - arquivo local)
+DATABASE_URL=sqlite:///dados.db
+
+# PostgreSQL (produção)
+DATABASE_URL=postgresql://usuario:senha@localhost:5432/nome_banco
+
+# MySQL
+DATABASE_URL=mysql://usuario:senha@localhost:3306/nome_banco</div>
+
+            <div class="alert alert-success">
+                <strong>Vantagem do ORM:</strong> O SQLAlchemy permite trocar de banco de dados alterando apenas 
+                a URL de conexão, sem precisar modificar nenhum código do sistema.
+            </div>
+        </section>
+
+        <!-- Como Usar -->
+        <section id="uso" class="section">
+            <h2 class="section-title">Como Usar o Sistema</h2>
+
+            <div class="alert alert-info">
+                <strong>Pré-requisito:</strong> Certifique-se de que o ambiente virtual está ativado e todas as 
+                dependências foram instaladas antes de executar o sistema.
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <h3 class="step-title">Iniciar o Sistema</h3>
+                    <p class="step-description">Execute o arquivo principal do sistema.</p>
+                    <div class="code-block">python main.py</div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Menu Principal</h3>
+                    <p class="step-description">
+                        O sistema exibirá um menu com todas as opções disponíveis:
+                    </p>
+                    <div class="code-block">==================================================
+    SISTEMA DE GESTAO - QUATRO CANTOS
+==================================================
+
+    [1] Modulo Operacional - Capacidade Produtiva
+    [2] Estoque - Entrada de Produtos
+    [3] Estoque - Saida de Produtos
+    [4] Modulo Financeiro - Custos e Lucros
+    [5] RH - Folha de Pagamento
+    [0] Sair do Sistema
+
+==================================================</div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Selecionar Módulo</h3>
+                    <p class="step-description">
+                        Digite o número correspondente ao módulo desejado e pressione Enter.
+                    </p>
+                    <div class="alert alert-warning">
+                        <strong>Dica:</strong> Digite apenas o número da opção. Valores inválidos exibirão 
+                        uma mensagem de erro e retornarão ao menu principal.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Inserir Dados</h3>
+                    <p class="step-description">
+                        Cada módulo solicitará diferentes informações. Siga as instruções na tela e 
+                        digite os valores quando solicitado.
+                    </p>
+                    <ul>
+                        <li><strong>Números inteiros:</strong> Digite apenas números sem casas decimais (ex: 3)</li>
+                        <li><strong>Valores monetários:</strong> Use ponto como separador decimal (ex: 1500.50)</li>
+                        <li><strong>Texto:</strong> Digite normalmente, respeitando o mínimo de caracteres quando especificado</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Visualizar Resultados</h3>
+                    <p class="step-description">
+                        O sistema processará os dados e exibirá os resultados formatados na tela, 
+                        incluindo tabelas, totalizações e análises.
+                    </p>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Retornar ao Menu</h3>
+                    <p class="step-description">
+                        Após visualizar os resultados, pressione Enter para retornar ao menu principal 
+                        e selecionar outro módulo ou sair do sistema.
+                    </p>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">Exemplos de Uso</h3>
+
+            <div class="card">
+                <h4 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">
+                    Exemplo 1: Calcular Capacidade Produtiva
+                </h4>
+                <ol>
+                    <li>Execute o sistema: <span class="code-inline">python main.py</span></li>
+                    <li>Digite <strong>1</strong> para acessar o Módulo Operacional</li>
+                    <li>Quando solicitado, digite o número de turnos (ex: <strong>2</strong>)</li>
+                    <li>O sistema exibirá:
+                        <ul>
+                            <li>Capacidade diária: 3.332 unidades</li>
+                            <li>Capacidade mensal: 99.960 unidades</li>
+                            <li>Capacidade anual: 1.199.520 unidades</li>
+                            <li>Percentual de uso: 66,67%</li>
+                            <li>Unidades ociosas: 1.666 por dia</li>
+                        </ul>
+                    </li>
+                    <li>Pressione Enter para retornar ao menu</li>
+                </ol>
+            </div>
+
+            <div class="card" style="margin-top: 1.5rem;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">
+                    Exemplo 2: Registrar Entrada de Produto
+                </h4>
+                <ol>
+                    <li>No menu principal, digite <strong>2</strong> para Estoque - Entrada</li>
+                    <li>Nome do produto: <strong>Tijolo Refratário</strong></li>
+                    <li>Quantidade: <strong>1000</strong></li>
+                    <li>Preço unitário: <strong>5.50</strong></li>
+                    <li>O sistema salvará no banco de dados e confirmará o registro</li>
+                    <li>Pressione Enter para retornar ao menu</li>
+                </ol>
+            </div>
+
+            <div class="card" style="margin-top: 1.5rem;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">
+                    Exemplo 3: Calcular Folha de Pagamento
+                </h4>
+                <ol>
+                    <li>No menu principal, digite <strong>5</strong> para RH - Folha de Pagamento</li>
+                    <li>Número de funcionários: <strong>3</strong></li>
+                    <li>Para cada funcionário, informe:
+                        <ul>
+                            <li>Nome: <strong>João Silva</strong></li>
+                            <li>Cargo: <strong>Operário</strong></li>
+                            <li>Horas extras: <strong>10</strong></li>
+                        </ul>
+                    </li>
+                    <li>O sistema calculará automaticamente:
+                        <ul>
+                            <li>Salário bruto (160h × valor/hora + horas extras)</li>
+                            <li>Desconto INSS (tabela progressiva)</li>
+                            <li>Desconto IR (tabela progressiva)</li>
+                            <li>Salário líquido</li>
+                        </ul>
+                    </li>
+                    <li>Exibirá relatório completo com todos os funcionários e totalizações</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Tecnologias -->
+        <section id="tecnologias" class="section">
+            <h2 class="section-title">Tecnologias Utilizadas</h2>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3 class="card-title">Python 3.x</h3>
+                    <span class="badge badge-primary">Linguagem</span>
+                    <p class="card-description">
+                        Linguagem de programação principal do projeto, escolhida por sua simplicidade, 
+                        legibilidade e vasto ecossistema de bibliotecas.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">SQLAlchemy</h3>
+                    <span class="badge badge-info">ORM</span>
+                    <p class="card-description">
+                        Biblioteca ORM (Object-Relational Mapping) que permite trabalhar com bancos de dados 
+                        usando objetos Python, abstraindo SQL complexo.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">SQLite / PostgreSQL</h3>
+                    <span class="badge badge-success">Banco de Dados</span>
+                    <p class="card-description">
+                        SQLite para desenvolvimento local (arquivo único) e PostgreSQL para produção 
+                        (escalável e robusto).
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">python-dotenv</h3>
+                    <span class="badge badge-warning">Configuração</span>
+                    <p class="card-description">
+                        Gerencia variáveis de ambiente através de arquivo .env, permitindo configurar 
+                        o sistema sem alterar código.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">bcrypt</h3>
+                    <span class="badge badge-danger">Segurança</span>
+                    <p class="card-description">
+                        Biblioteca para hash seguro de senhas, utilizando salt automático e algoritmo 
+                        resistente a ataques de força bruta.
+                    </p>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">Conceitos de Programação Aplicados</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Conceito</th>
+                            <th>Aplicação no Sistema</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>POO (Programação Orientada a Objetos)</td>
+                            <td>Modelos de banco de dados como classes</td>
+                        </tr>
+                        <tr>
+                            <td>Funções Puras</td>
+                            <td>Separação de lógica de negócio da interface</td>
+                        </tr>
+                        <tr>
+                            <td>Validação de Dados</td>
+                            <td>Try/except, verificações de tipo e range</td>
+                        </tr>
+                        <tr>
+                            <td>Tratamento de Exceções</td>
+                            <td>Captura e tratamento de erros de entrada</td>
+                        </tr>
+                        <tr>
+                            <td>Estruturas Condicionais</td>
+                            <td>If/elif/else para lógica de decisão</td>
+                        </tr>
+                        <tr>
+                            <td>Estruturas de Repetição</td>
+                            <td>Loops for e while para processar múltiplos itens</td>
+                        </tr>
+                        <tr>
+                            <td>Manipulação de Coleções</td>
+                            <td>Listas e dicionários para armazenar dados</td>
+                        </tr>
+                        <tr>
+                            <td>Formatação de Strings</td>
+                            <td>F-strings para output formatado</td>
+                        </tr>
+                        <tr>
+                            <td>Modularização</td>
+                            <td>Separação em múltiplos arquivos por funcionalidade</td>
+                        </tr>
+                        <tr>
+                            <td>Documentação</td>
+                            <td>Comentários extensivos e docstrings</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="section-subtitle">Arquitetura do Sistema</h3>
+
+            <div class="code-block">Quatro-Cantos/
+│
+├── src/
+│   ├── main.py                 # Arquivo principal e menu
+│   ├── database.py             # Configuração do banco e modelos
+│   ├── auth_utils.py           # Utilitários de autenticação
+│   ├── operacional.py          # Módulo operacional
+│   ├── estoque_entrada.py      # Entrada de produtos
+│   ├── estoque_saida.py        # Saída de produtos
+│   ├── financeiro.py           # Módulo financeiro
+│   └── rh.py                   # Recursos humanos
+│
+├── docs/
+│   └── index.html              # Esta documentação
+│
+├── venv/                       # Ambiente virtual (não comitar)
+├── dados.db                    # Banco SQLite (gerado automaticamente)
+├── .env                        # Variáveis de ambiente (não comitar)
+├── .gitignore                  # Arquivos ignorados pelo Git
+└── README.md                   # Informações básicas do projeto</div>
+
+            <div class="alert alert-info">
+                <strong>Boas Práticas:</strong> O código segue PEP 8 (guia de estilo Python), utiliza 
+                nomes descritivos para variáveis e funções, e possui documentação inline extensiva para 
+                facilitar manutenção e aprendizado.
+            </div>
+        </section>
+
+        <!-- Segurança -->
+        <section class="section">
+            <h2 class="section-title">Segurança e Boas Práticas</h2>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3 class="card-title">Hash de Senhas</h3>
+                    <p class="card-description">
+                        Utiliza bcrypt para armazenar senhas de forma segura, com salt automático 
+                        e algoritmo lento para prevenir ataques de força bruta.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Validação de Entrada</h3>
+                    <p class="card-description">
+                        Todas as entradas do usuário são validadas quanto a tipo, range e formato 
+                        antes de serem processadas ou armazenadas no banco.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Variáveis de Ambiente</h3>
+                    <p class="card-description">
+                        Credenciais e configurações sensíveis são armazenadas em arquivo .env, 
+                        que não é versionado no Git (.gitignore).
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">ORM (Proteção contra SQL Injection)</h3>
+                    <p class="card-description">
+                        Uso de SQLAlchemy ORM previne ataques de SQL injection, pois as queries 
+                        são parametrizadas automaticamente.
+                    </p>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Importante:</strong> Nunca compartilhe o arquivo .env com credenciais reais. 
+                Sempre use senhas fortes e rotacione-as periodicamente em ambiente de produção.
+            </div>
+        </section>
+
+        <!-- Suporte -->
+        <section class="section">
+            <h2 class="section-title">Suporte e Contribuição</h2>
+
+            <h3 class="section-subtitle">Reportar Problemas</h3>
+            <p>
+                Encontrou um bug ou tem uma sugestão? Abra uma issue no repositório do GitHub:
+            </p>
+            <div class="code-block">https://github.com/gabrielamnss1/Quatro-Cantos/issues</div>
+
+            <h3 class="section-subtitle">Contribuir com o Projeto</h3>
+            <div class="steps">
+                <div class="step">
+                    <h3 class="step-title">Fork do Repositório</h3>
+                    <p class="step-description">Crie uma cópia do projeto na sua conta do GitHub.</p>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Clone o Fork</h3>
+                    <div class="code-block">git clone https://github.com/seu-usuario/Quatro-Cantos.git</div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Crie uma Branch</h3>
+                    <div class="code-block">git checkout -b feature/minha-contribuicao</div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Faça suas Alterações</h3>
+                    <p class="step-description">
+                        Implemente melhorias, correções ou novas funcionalidades seguindo o padrão do código.
+                    </p>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Commit e Push</h3>
+                    <div class="code-block">git add .
+git commit -m "Descrição clara da alteração"
+git push origin feature/minha-contribuicao</div>
+                </div>
+
+                <div class="step">
+                    <h3 class="step-title">Abra um Pull Request</h3>
+                    <p class="step-description">
+                        No GitHub, abra um Pull Request descrevendo suas alterações detalhadamente.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p><strong>Sistema Quatro Cantos</strong></p>
+            <p>Desenvolvido para gestão empresarial integrada</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                Documentação versão 1.0 - Atualizada em Dezembro de 2025
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

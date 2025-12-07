@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxograma - Sistema Quatro Cantos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-bg: #1f2937;
+            --light-bg: #f9fafb;
+            --text-dark: #111827;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: #ffffff;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .header-nav {
+            margin-top: 1rem;
+        }
+
+        .header-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 0.25rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .header-nav a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Flowchart Container */
+        .flowchart-container {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .flowchart {
+            min-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 2rem 0;
+        }
+
+        /* Flow elements */
+        .flow-box {
+            background: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem 2rem;
+            min-width: 250px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .flow-box.start {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            font-weight: 600;
+        }
+
+        .flow-box.end {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            font-weight: 600;
+        }
+
+        .flow-box.process {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+        }
+
+        .flow-box.decision {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            color: white;
+            border: none;
+            transform: rotate(45deg);
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flow-box.decision .content {
+            transform: rotate(-45deg);
+            max-width: 140px;
+        }
+
+        .flow-box.module {
+            background: white;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Arrows */
+        .flow-arrow {
+            width: 3px;
+            height: 40px;
+            background: var(--primary-color);
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid var(--primary-color);
+        }
+
+        .flow-arrow.horizontal {
+            width: 80px;
+            height: 3px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .flow-arrow.horizontal::after {
+            left: auto;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 12px solid var(--primary-color);
+        }
+
+        /* Module grid */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Labels */
+        .flow-label {
+            background: var(--light-bg);
+            color: var(--text-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            margin: 0.5rem;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .legend-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend-box.start { background: linear-gradient(135deg, var(--success-color), #059669); border-radius: 20px; }
+        .legend-box.process { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); }
+        .legend-box.decision { background: linear-gradient(135deg, var(--warning-color), #d97706); }
+        .legend-box.module { background: white; border: 3px solid var(--accent-color); }
+        .legend-box.end { background: linear-gradient(135deg, var(--danger-color), #dc2626); border-radius: 20px; }
+
+        .legend-text {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* Data Flow Section */
+        .data-flow {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .data-flow-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .data-flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+
+        .data-box {
+            background: white;
+            border: 2px solid var(--accent-color);
+            border-radius: 0.5rem;
+            padding: 1rem 1.5rem;
+            min-width: 150px;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-box.database {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border: none;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .footer p {
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .flowchart-container {
+                padding: 1rem;
+            }
+
+            .flow-box {
+                min-width: 200px;
+                padding: 1rem 1.5rem;
+            }
+
+            .flow-box.decision {
+                width: 160px;
+                height: 160px;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .legend {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .data-flow-diagram {
+                flex-direction: column;
+            }
+        }
+
+        /* Animation */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .flow-box:hover {
+            animation: pulse 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1>Fluxograma do Sistema Quatro Cantos</h1>
+            <p>Visualização completa do fluxo de execução e integração dos módulos</p>
+            <div class="header-nav">
+                <a href="index.html">Voltar para Documentação</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Legend -->
+        <section class="section">
+            <h2 class="section-title">Legenda</h2>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-box start"></div>
+                    <span class="legend-text">Início / Fim</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box process"></div>
+                    <span class="legend-text">Processo</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box decision"></div>
+                    <span class="legend-text">Decisão</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box module"></div>
+                    <span class="legend-text">Módulo do Sistema</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box database" style="border-radius: 0.25rem;"></div>
+                    <span class="legend-text">Banco de Dados</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Flowchart -->
+        <section class="section">
+            <h2 class="section-title">Fluxo Principal do Sistema</h2>
+            <div class="flowchart-container">
+                <div class="flowchart">
+                    <!-- Start -->
+                    <div class="flow-box start">
+                        <div class="flow-title">INÍCIO</div>
+                        <div class="flow-description">python main.py</div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- Initialize DB -->
+                    <div class="flow-box process">
+                        <div class="flow-title">Inicializar Banco de Dados</div>
+                        <div class="flow-description">init_db() - Criar tabelas se não existirem</div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- Display Menu -->
+                    <div class="flow-box process">
+                        <div class="flow-title">Exibir Menu Principal</div>
+                        <div class="flow-description">Opções: 1-Operacional, 2-Entrada, 3-Saída, 4-Financeiro, 5-RH, 0-Sair</div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- User Input -->
+                    <div class="flow-box process">
+                        <div class="flow-title">Capturar Escolha do Usuário</div>
+                        <div class="flow-description">input("Escolha uma opcao: ")</div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- Decision -->
+                    <div class="flow-box decision">
+                        <div class="content">
+                            <div class="flow-title">Validar Opção</div>
+                            <div class="flow-description">0 a 5?</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 2rem; align-items: center; width: 100%;">
+                        <div style="flex: 1; text-align: right;">
+                            <span class="flow-label">Inválida</span>
+                        </div>
+                        <div style="flex: 1; text-align: left;">
+                            <span class="flow-label">Válida</span>
+                        </div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- Decision - Exit -->
+                    <div class="flow-box decision">
+                        <div class="content">
+                            <div class="flow-title">Opção = 0?</div>
+                            <div class="flow-description">Sair</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 2rem; align-items: center; width: 100%;">
+                        <div style="flex: 1; text-align: right;">
+                            <span class="flow-label">Não - Processar</span>
+                        </div>
+                        <div style="flex: 1; text-align: left;">
+                            <span class="flow-label">Sim - Encerrar</span>
+                        </div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- Modules -->
+                    <div class="flow-box process">
+                        <div class="flow-title">Executar Módulo Selecionado</div>
+                        <div class="flow-description">Redirecionar para função específica</div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- Module Grid -->
+                    <div class="modules-grid">
+                        <div class="flow-box module">
+                            <div class="flow-title">1. Operacional</div>
+                            <div class="flow-description">calcular_capacidade()</div>
+                        </div>
+
+                        <div class="flow-box module">
+                            <div class="flow-title">2. Entrada Estoque</div>
+                            <div class="flow-description">adicionar_produto()</div>
+                        </div>
+
+                        <div class="flow-box module">
+                            <div class="flow-title">3. Saída Estoque</div>
+                            <div class="flow-description">registrar_saida()</div>
+                        </div>
+
+                        <div class="flow-box module">
+                            <div class="flow-title">4. Financeiro</div>
+                            <div class="flow-description">calcular_lucros()</div>
+                        </div>
+
+                        <div class="flow-box module">
+                            <div class="flow-title">5. RH</div>
+                            <div class="flow-description">calcular_folha_pagamento()</div>
+                        </div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- Process Module -->
+                    <div class="flow-box process">
+                        <div class="flow-title">Processar Dados do Módulo</div>
+                        <div class="flow-description">Validar inputs, executar cálculos, exibir resultados</div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- Wait -->
+                    <div class="flow-box process">
+                        <div class="flow-title">Aguardar Confirmação</div>
+                        <div class="flow-description">input("Pressione Enter...")</div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- Loop Back -->
+                    <div class="flow-box process">
+                        <div class="flow-title">Retornar ao Menu Principal</div>
+                        <div class="flow-description">Loop contínuo até escolher sair</div>
+                    </div>
+
+                    <div class="flow-arrow"></div>
+
+                    <!-- End -->
+                    <div class="flow-box end">
+                        <div class="flow-title">FIM</div>
+                        <div class="flow-description">Sistema encerrado</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Module Details -->
+        <section class="section">
+            <h2 class="section-title">Fluxo Detalhado dos Módulos</h2>
+
+            <!-- Operacional -->
+            <div class="data-flow">
+                <h3 class="data-flow-title">1. Módulo Operacional - Capacidade Produtiva</h3>
+                <div class="flowchart-container">
+                    <div class="flowchart">
+                        <div class="flow-box process">Input: Número de turnos (1-3)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Validar: 1 ≤ turnos ≤ 3</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Calcular: 1.666 unidades × turnos</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Projeções: Dia, Mês (×30), Ano (×12)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Análise: Ociosidade e % uso</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Exibir: Relatório formatado</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estoque Entrada -->
+            <div class="data-flow">
+                <h3 class="data-flow-title">2. Módulo Estoque - Entrada de Produtos</h3>
+                <div class="flowchart-container">
+                    <div class="flowchart">
+                        <div class="flow-box process">Input: Nome, Quantidade, Preço</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Validar: Nome ≥ 3 chars, Qtd > 0, Preço > 0</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Buscar produto no banco (por nome)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box decision">
+                            <div class="content">Produto existe?</div>
+                        </div>
+                        <div style="display: flex; gap: 2rem; width: 100%;">
+                            <div style="flex: 1;">
+                                <div class="flow-box process" style="margin: 1rem;">Atualizar quantidade</div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div class="flow-box process" style="margin: 1rem;">Criar novo produto</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box database">Salvar no Banco (commit)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Exibir: Confirmação</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estoque Saída -->
+            <div class="data-flow">
+                <h3 class="data-flow-title">3. Módulo Estoque - Saída de Produtos</h3>
+                <div class="flowchart-container">
+                    <div class="flowchart">
+                        <div class="flow-box database">Listar todos os produtos do banco</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Exibir: Tabela com ID, Nome, Qtd, Preço</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Input: ID do produto, Quantidade</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Buscar produto por ID</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box decision">
+                            <div class="content">Estoque suficiente?</div>
+                        </div>
+                        <div style="display: flex; gap: 2rem; width: 100%;">
+                            <div style="flex: 1;">
+                                <div class="flow-box process" style="margin: 1rem;">ERRO: Estoque insuficiente</div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div class="flow-box process" style="margin: 1rem;">Subtrair quantidade</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box database">Atualizar banco (commit)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Calcular: Total da venda</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Exibir: Comprovante</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financeiro -->
+            <div class="data-flow">
+                <h3 class="data-flow-title">4. Módulo Financeiro - Custos e Lucros</h3>
+                <div class="flowchart-container">
+                    <div class="flowchart">
+                        <div class="flow-box process">Input: Água, Luz, Impostos, Salários</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Validar: Valores ≥ 0</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Somar: Custo Total</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Calcular: Custo por unidade (÷1000)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Aplicar: Margem de 50%</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Calcular: Preço de Venda</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Projeções: Receita e Lucro (mensal × 12)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Indicadores: ROI, Ponto de Equilíbrio</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Exibir: Relatório Financeiro Completo</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RH -->
+            <div class="data-flow">
+                <h3 class="data-flow-title">5. Módulo RH - Folha de Pagamento</h3>
+                <div class="flowchart-container">
+                    <div class="flowchart">
+                        <div class="flow-box process">Input: Número de funcionários</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">LOOP: Para cada funcionário</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Input: Nome, Cargo, Horas Extras</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Buscar: Valor/hora do cargo</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Calcular: Salário Bruto (160h × valor)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box decision">
+                            <div class="content">Tem HE?</div>
+                        </div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Adicionar: HE × valor × 2</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Calcular: INSS (tabela progressiva)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Base IR: Bruto - INSS</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Calcular: IR (tabela progressiva)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Líquido: Bruto - INSS - IR</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Adicionar à lista de funcionários</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Ordenar: Por salário (maior → menor)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Totalizar: Bruto, INSS, IR, Líquido</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-box process">Exibir: Relatório da Folha</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Flow -->
+        <section class="section">
+            <h2 class="section-title">Fluxo de Dados e Integração</h2>
+            <div class="data-flow">
+                <div class="data-flow-diagram">
+                    <div class="data-box">Interface Console (main.py)</div>
+                    <div class="flow-arrow horizontal"></div>
+                    <div class="data-box">Módulos de Lógica (.py files)</div>
+                    <div class="flow-arrow horizontal"></div>
+                    <div class="data-box">SQLAlchemy ORM (database.py)</div>
+                    <div class="flow-arrow horizontal"></div>
+                    <div class="data-box database">Banco de Dados (SQLite/PostgreSQL)</div>
+                </div>
+            </div>
+
+            <div class="data-flow">
+                <h3 class="data-flow-title">Arquitetura do Sistema</h3>
+                <div class="flowchart-container">
+                    <div class="flowchart">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; width: 100%;">
+                            <div class="flow-box module">
+                                <div class="flow-title">Camada de Apresentação</div>
+                                <div class="flow-description">main.py - Menu e interface console</div>
+                            </div>
+                            <div class="flow-box module">
+                                <div class="flow-title">Camada de Lógica</div>
+                                <div class="flow-description">Módulos específicos (operacional, estoque, etc.)</div>
+                            </div>
+                            <div class="flow-box module">
+                                <div class="flow-title">Camada de Dados</div>
+                                <div class="flow-description">database.py - ORM e modelos</div>
+                            </div>
+                            <div class="flow-box module">
+                                <div class="flow-title">Camada de Segurança</div>
+                                <div class="flow-description">auth_utils.py - Hash e autenticação</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decision Tables -->
+        <section class="section">
+            <h2 class="section-title">Tabelas de Decisão</h2>
+            
+            <div class="data-flow">
+                <h3 class="data-flow-title">Tabela de Cargos - Módulo RH</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead style="background: var(--dark-bg); color: white;">
+                        <tr>
+                            <th style="padding: 1rem; text-align: left;">Cargo</th>
+                            <th style="padding: 1rem; text-align: left;">Valor/Hora</th>
+                            <th style="padding: 1rem; text-align: left;">Paga Hora Extra?</th>
+                            <th style="padding: 1rem; text-align: left;">Multiplicador HE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 1rem;">Operário</td>
+                            <td style="padding: 1rem;">R$ 15,00</td>
+                            <td style="padding: 1rem;">Sim</td>
+                            <td style="padding: 1rem;">2x</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 1rem;">Supervisor</td>
+                            <td style="padding: 1rem;">R$ 40,00</td>
+                            <td style="padding: 1rem;">Sim</td>
+                            <td style="padding: 1rem;">2x</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 1rem;">Gerente</td>
+                            <td style="padding: 1rem;">R$ 60,00</td>
+                            <td style="padding: 1rem;">Não</td>
+                            <td style="padding: 1rem;">-</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem;">Diretor</td>
+                            <td style="padding: 1rem;">R$ 80,00</td>
+                            <td style="padding: 1rem;">Não</td>
+                            <td style="padding: 1rem;">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="data-flow" style="margin-top: 2rem;">
+                <h3 class="data-flow-title">Validações de Entrada por Módulo</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead style="background: var(--dark-bg); color: white;">
+                        <tr>
+                            <th style="padding: 1rem; text-align: left;">Módulo</th>
+                            <th style="padding: 1rem; text-align: left;">Campo</th>
+                            <th style="padding: 1rem; text-align: left;">Tipo</th>
+                            <th style="padding: 1rem; text-align: left;">Validação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 1rem;">Operacional</td>
+                            <td style="padding: 1rem;">Turnos</td>
+                            <td style="padding: 1rem;">int</td>
+                            <td style="padding: 1rem;">1 ≤ valor ≤ 3</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 1rem;">Estoque Entrada</td>
+                            <td style="padding: 1rem;">Nome</td>
+                            <td style="padding: 1rem;">string</td>
+                            <td style="padding: 1rem;">len ≥ 3</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 1rem;">Estoque Entrada</td>
+                            <td style="padding: 1rem;">Quantidade</td>
+                            <td style="padding: 1rem;">int</td>
+                            <td style="padding: 1rem;">valor > 0</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 1rem;">Estoque Saída</td>
+                            <td style="padding: 1rem;">Quantidade</td>
+                            <td style="padding: 1rem;">int</td>
+                            <td style="padding: 1rem;">valor ≤ estoque</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 1rem;">Financeiro</td>
+                            <td style="padding: 1rem;">Custos</td>
+                            <td style="padding: 1rem;">float</td>
+                            <td style="padding: 1rem;">valor ≥ 0</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem;">RH</td>
+                            <td style="padding: 1rem;">Horas Extras</td>
+                            <td style="padding: 1rem;">int</td>
+                            <td style="padding: 1rem;">valor ≥ 0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p><strong>Sistema Quatro Cantos - Fluxograma</strong></p>
+            <p>Documentação visual do fluxo de execução do sistema</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                Versão 1.0 - Atualizada em Dezembro de 2025
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

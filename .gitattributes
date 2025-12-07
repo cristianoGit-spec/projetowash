@@ -1,0 +1,31 @@
+# Git attributes para normalização de line endings
+* text=auto
+
+# Arquivos web - LF
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+
+# Arquivos Python - LF
+*.py text eol=lf
+
+# Arquivos de configuração - LF
+.gitignore text eol=lf
+.gitattributes text eol=lf
+netlify.toml text eol=lf
+_redirects text eol=lf
+_headers text eol=lf
+
+# Arquivos binários
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
