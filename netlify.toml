@@ -1,16 +1,12 @@
 # ============================================================================
-# CONFIGURACAO NETLIFY - DEPLOY AUTOMATICO VIA GITHUB
+# CONFIGURACAO NETLIFY - SITE ESTATICO
 # Sistema Quatro Cantos - Gestão Empresarial
 # Repository: https://github.com/cristiano-superacao/projetowash
 # ============================================================================
 
 [build]
-  # Diretório a ser publicado
+  # Sem comando de build - apenas servir arquivos estáticos
   publish = "web"
-
-# Auto-publicacao a partir do branch main
-[build.environment]
-  NODE_VERSION = "18"
 
 # Redirecionar todas as rotas para index.html (SPA - Single Page Application)
 
