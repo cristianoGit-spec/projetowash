@@ -1,12 +1,38 @@
 # ============================================================================
-# CONFIGURACAO NETLIFY - DEPLOY AUTOMATICO
+# CONFIGURACAO NETLIFY - DEPLOY AUTOMATICO VIA GITHUB
 # Sistema Quatro Cantos - Gestão Empresarial
+# Repository: https://github.com/cristiano-superacao/projetowash
 # ============================================================================
 
 [build]
-  command = "echo 'Build concluido - Frontend estatico pronto para deploy'"
+  # Comando de build (não necessário para site estático)
+  command = "echo 'Deploy do Sistema Quatro Cantos - Build completo!'"
+  
+  # Diretório a ser publicado
   publish = "web"
-  functions = "netlify/functions"
+  
+  # Ignorar builds se não houver mudanças importantes
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- web/"
+
+# Auto-publicacao a partir do branch main
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
+
+# Configuração de produção
+[context.production]
+  publish = "web"
+  command = "echo 'Production build - Sistema Quatro Cantos online!'"
+
+# Configuração de deploy previews (pull requests)
+[context.deploy-preview]
+  publish = "web"
+  command = "echo 'Preview build - Testando mudanças'"
+
+# Configuração de branch deploys
+[context.branch-deploy]
+  publish = "web"
+  command = "echo 'Branch deploy'"
 
 # Redirecionar todas as rotas para index.html (SPA - Single Page Application)
 [[redirects]]
