@@ -107,8 +107,7 @@ async function handleLogin(event) {
             console.log('📦 Usando login local...');
             await loginLocal(email, password);
             console.log('✅ Login local bem-sucedido');
-            // Recarregar a página para inicializar o app corretamente
-            window.location.reload();
+            // Não recarregar - showApp já foi chamado
             return;
         } else {
             throw new Error('Nenhum sistema de autenticação disponível');
@@ -123,7 +122,7 @@ async function handleLogin(event) {
             try {
                 await loginLocal(email, password);
                 console.log('✅ Login local bem-sucedido (fallback)');
-                window.location.reload();
+                // Não recarregar - showApp já foi chamado
                 return;
             } catch (localError) {
                 console.error('❌ Login local também falhou:', localError);

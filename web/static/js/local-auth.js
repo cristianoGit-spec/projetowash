@@ -238,6 +238,16 @@ async function loginLocal(emailOrLogin, password) {
     console.log('🔑 Role:', user.role);
     console.log('🆔 CompanyId:', user.companyId);
     
+    // Mostrar app e dashboard
+    showApp();
+    setTimeout(() => {
+        if (typeof showModule === 'function') {
+            showModule('dashboard');
+        } else if (typeof loadDashboard === 'function') {
+            loadDashboard();
+        }
+    }, 100);
+    
     return user;
 }
 
