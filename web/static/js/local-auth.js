@@ -52,11 +52,9 @@ function loadLocalUsers() {
         if (superAdminIndex === -1) {
             localUsers.unshift(defaultSuperAdmin);
             saveLocalUsers();
-            console.log('✅ Super admin criado:', defaultSuperAdmin.email);
         } else {
             localUsers[superAdminIndex] = defaultSuperAdmin;
             saveLocalUsers();
-            console.log('✅ Super admin atualizado');
         }
         
         // Garantir que o admin padrao exista e tenha os campos novos
@@ -219,8 +217,6 @@ async function loginLocal(emailOrLogin, password) {
     localIsAdmin = user.role === 'admin' || user.role === 'superadmin';
     localIsSuperAdmin = user.role === 'superadmin';
     saveLocalCurrentUser();
-    
-    console.log('✅ Login realizado:', user.nome);
     
     // Mostrar app e dashboard
     showApp();

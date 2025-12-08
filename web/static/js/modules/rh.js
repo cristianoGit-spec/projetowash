@@ -406,42 +406,6 @@ function exibirResultadoRH(data) {
     // Scroll para o resultado
     resultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
-                    </tr>
-                    <tr style="font-weight: bold;">
-                        <td>Total Bruto:</td>
-                        <td>${formatCurrency(data.totais.total_bruto)}</td>
-                    </tr>
-                    <tr>
-                        <td>Total INSS:</td>
-                        <td>${formatCurrency(data.totais.total_inss)}</td>
-                    </tr>
-                    <tr>
-                        <td>Total IR:</td>
-                        <td>${formatCurrency(data.totais.total_ir)}</td>
-                    </tr>
-                    <tr style="font-weight: bold; background: #e8f5e9;">
-                        <td>Total Líquido:</td>
-                        <td>${formatCurrency(data.totais.total_liquido)}</td>
-                    </tr>
-                    <tr>
-                        <td>Encargos Patronais (27,65%):</td>
-                        <td>${formatCurrency(data.totais.encargos_patronais)}</td>
-                    </tr>
-                    <tr style="font-weight: bold; background: #fff3e0;">
-                        <td>Custo Total para Empresa:</td>
-                        <td>${formatCurrency(data.totais.custo_total_empresa)}</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    `;
-    
-    resultado.innerHTML = html;
-    resultado.classList.remove('hidden');
-    
-    // Scroll para o resultado
-    resultado.scrollIntoView({ behavior: 'smooth' });
-}
 
 async function exportarFolhaPDF() {
     if (!lastCalculatedFolha) {
