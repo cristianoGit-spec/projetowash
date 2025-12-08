@@ -160,10 +160,6 @@ function loadLocalCurrentUser() {
     if (stored) {
         localCurrentUser = JSON.parse(stored);
         localIsAdmin = localCurrentUser.role === 'admin' || localCurrentUser.role === 'superadmin';
-        console.log('👤 Usuário carregado do localStorage:', localCurrentUser.email);
-        console.log('🏢 Empresa:', localCurrentUser.nomeEmpresa);
-        console.log('🆔 CompanyId:', localCurrentUser.companyId);
-        // updateUserInfoUI(); // Removido: app.js showApp() já faz isso
         showApp();
         // Aguardar um momento para garantir que o DOM foi atualizado
         setTimeout(() => {
@@ -200,29 +196,21 @@ function saveLocalCurrentUser() {
  * @returns {Promise<Object>} - Dados do usuário autenticado
  */
 async function loginLocal(emailOrLogin, password) {
-    console.log('🔓 Tentando login local:', emailOrLogin);
-    console.log('📊 Total de usuários:', localUsers.length);
-
     // Buscar usuário por email ou loginUsuario
     const user = localUsers.find(u => 
         u.email === emailOrLogin || u.loginUsuario === emailOrLogin
     );
     
     if (!user) {
-        console.error('❌ Usuário não encontrado:', emailOrLogin);
         throw new Error('Usuário não encontrado');
     }
     
-    console.log('👤 Usuário encontrado:', user.nome);
-    
     // Verificar senha (texto simples - modo desenvolvimento)
     if (user.senha !== password) {
-        console.error('❌ Senha incorreta');
         throw new Error('Senha incorreta');
     }
     
     if (!user.ativo) {
-        console.error('⛔ Usuário inativo');
         throw new Error('Usuário inativo. Entre em contato com o administrador.');
     }
     
@@ -232,11 +220,7 @@ async function loginLocal(emailOrLogin, password) {
     localIsSuperAdmin = user.role === 'superadmin';
     saveLocalCurrentUser();
     
-    console.log('✅ Login local bem-sucedido!');
-    console.log('👤 Usuário:', user.nome);
-    console.log('🏢 Empresa:', user.nomeEmpresa);
-    console.log('🔑 Role:', user.role);
-    console.log('🆔 CompanyId:', user.companyId);
+    console.log('✅ Login realizado:', user.nome);
     
     // Mostrar app e dashboard
     showApp();
@@ -400,15 +384,4 @@ function resetLocalStorage() {
 document.addEventListener('DOMContentLoaded', () => {
     loadLocalUsers();
     loadLocalCurrentUser();
-    
-    console.log('Modo Local/Demo ativado!');
-    console.log('Usuario admin padrao: admin@local.com');
-
-    console.log('💡 Para ver senhas, clique em "Esqueci minha senha"');
-    
-    console.log('Usuários carregados:', localUsers.length);
-    console.log(' Lista de usuários:');
-    localUsers.forEach(u => {
-        console.log(`  - ${u.email || u.loginUsuario} (${u.role})`);
-    });
 });

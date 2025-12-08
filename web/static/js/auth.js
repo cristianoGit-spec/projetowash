@@ -99,15 +99,10 @@ async function handleLogin(event) {
         
         if (isFirebaseActive && typeof loginFirebase !== 'undefined') {
             // Modo Firebase Cloud
-            console.log('🌐 Tentando login via Firebase...');
             await loginFirebase(email, password);
-            console.log('✅ Login Firebase bem-sucedido');
         } else if (typeof loginLocal !== 'undefined') {
             // Modo Local (fallback)
-            console.log('📦 Usando login local...');
             await loginLocal(email, password);
-            console.log('✅ Login local bem-sucedido');
-            // Não recarregar - showApp já foi chamado
             return;
         } else {
             throw new Error('Nenhum sistema de autenticação disponível');
@@ -118,14 +113,10 @@ async function handleLogin(event) {
         
         // Se Firebase falhar, tentar local como fallback
         if (error.code && error.code.startsWith('auth/') && typeof loginLocal !== 'undefined') {
-            console.log('⚠️ Firebase falhou, tentando local...');
             try {
                 await loginLocal(email, password);
-                console.log('✅ Login local bem-sucedido (fallback)');
-                // Não recarregar - showApp já foi chamado
                 return;
             } catch (localError) {
-                console.error('❌ Login local também falhou:', localError);
             }
         }
         

@@ -131,17 +131,6 @@ function closeModule() {
     showModule('dashboard');
 }
 
-// Fechar modal ao clicar fora
-document.addEventListener('DOMContentLoaded', () => {
-    const modalContainer = document.getElementById('modalContainer');
-    
-    modalContainer.addEventListener('click', (e) => {
-        if (e.target === modalContainer) {
-            closeModule();
-        }
-    });
-});
-
 // ============================================================================
 // FUNCOES DE NOTIFICACAO
 // ============================================================================
@@ -359,10 +348,6 @@ function showApp() {
         ? localCurrentUser 
         : (typeof currentUser !== 'undefined' ? currentUser : null);
         
-    console.log('🔐 showApp() - Usuário logado:', user);
-    console.log('🏢 Nome da Empresa:', user?.nomeEmpresa);
-    console.log('🆔 ID da Empresa:', user?.companyId);
-        
     const userName = user ? (user.email || user.nome || user.displayName || 'Usuario') : 'Usuario';
     
     const userDisplayElement = document.getElementById('userEmail');
@@ -376,34 +361,16 @@ function showApp() {
         const companyIdEl = document.getElementById('companyId');
         const userCompanyInfoEl = document.getElementById('userCompanyInfo');
         
-        console.log('📋 Elementos encontrados:', {
-            companyNameEl: !!companyNameEl,
-            companyIdEl: !!companyIdEl,
-            userCompanyInfoEl: !!userCompanyInfoEl
-        });
-        
         if (companyNameEl) {
-            const nomeEmpresa = user.nomeEmpresa || 'Sem empresa';
-            companyNameEl.textContent = nomeEmpresa;
-            console.log('✅ Nome da empresa atualizado:', nomeEmpresa);
-        } else {
-            console.warn('⚠️ Elemento companyName não encontrado');
-        }
+            companyNameEl.textContent = user.nomeEmpresa || 'Sem empresa';
+        } 
         
         if (companyIdEl) {
-            const companyId = user.companyId || 'N/A';
-            companyIdEl.textContent = `ID: ${companyId}`;
-            console.log('✅ ID da empresa atualizado:', companyId);
-        } else {
-            console.warn('⚠️ Elemento companyId não encontrado');
-        }
+            companyIdEl.textContent = `ID: ${user.companyId || 'N/A'}`;
+        } 
         
         if (userCompanyInfoEl) {
-            const infoEmpresa = user.nomeEmpresa || 'Empresa não informada';
-            userCompanyInfoEl.textContent = infoEmpresa;
-            console.log('✅ Info da empresa atualizada:', infoEmpresa);
-        } else {
-            console.warn('⚠️ Elemento userCompanyInfo não encontrado');
+            userCompanyInfoEl.textContent = user.nomeEmpresa || 'Empresa não informada';
         }
     }
     
@@ -649,15 +616,23 @@ function atualizarDashboardSeAtivo() {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Sistema Quatro Cantos v2.0 iniciado');
+    console.log('✅ Sistema Quatro Cantos v2.0 iniciado');
+    
+    // Configurar modal para fechar ao clicar fora
+    const modalContainer = document.getElementById('modalContainer');
+    if (modalContainer) {
+        modalContainer.addEventListener('click', (e) => {
+            if (e.target === modalContainer) {
+                closeModule();
+            }
+        });
+    }
     
     // Verificar modo de operacao
-    if (typeof localCurrentUser !== 'undefined') {
-        console.log('Modo Local/Demo ativado');
-        console.log('Usuario admin padrao: admin@local.com / admin123');
+    if (typeof localCurrentUser !== 'undefined' && localCurrentUser) {
+        console.log('📦 Modo Local/Demo ativado');
     } else {
-        console.log('Modo Firebase ativado');
-        console.log('Aguardando autenticacao...');
+        console.log('☁️ Modo Firebase ativado');
     }
 });
 
