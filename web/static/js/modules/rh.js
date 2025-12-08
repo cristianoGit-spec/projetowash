@@ -333,7 +333,6 @@ async function calcularFolhaPagamento() {
         hideLoading();
     }
 }
-}
 
 function exibirResultadoRH(data) {
     const resultado = document.getElementById('resultadoRH');
