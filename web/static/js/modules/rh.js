@@ -2,6 +2,8 @@
 // MÓDULO RH (SISTEMA HÍBRIDO - FIREBASE + LOCALSTORAGE)
 // ============================================================================
 
+console.log('📋 Módulo RH carregado - v18');
+
 let funcionariosCache = []; // Cache local para pesquisa e cálculo
 let lastCalculatedFolha = null; // Cache para exportação PDF
 

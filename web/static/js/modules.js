@@ -75,7 +75,7 @@ async function loadModule(moduleName) {
 
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = moduleConfig.path + '?v=17'; // Cache bust v17 - FIX: Histórico valores integrados
+        script.src = moduleConfig.path + '?v=18'; // Cache bust v18 - Layout cards + INSS/IR
         script.async = false; // Carrega em ordem
 
         script.onload = () => {
