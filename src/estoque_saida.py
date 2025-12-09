@@ -21,12 +21,14 @@ from sqlalchemy import func
 # FUNÇÕES DE LÓGICA PURA (PARA API E CLI)
 # ============================================================================
 
+
 def registrar_saida_produto(db_session, nome_buscado, qtd_desejada):
     """
     Registra a saída de um produto do estoque (Lógica Pura).
 
     Retorna:
-        dict: Resultado da operação com status, tipo de atendimento, valores, etc.
+        dict: Resultado da operação com status, tipo de atendimento,
+              valores, etc.
     """
     if not nome_buscado:
         raise ValueError("Nome do produto é obrigatório")
@@ -34,7 +36,9 @@ def registrar_saida_produto(db_session, nome_buscado, qtd_desejada):
         raise ValueError("Quantidade deve ser maior que zero")
 
     # Busca case-insensitive
-    produto = db_session.query(Produto).filter(func.lower(Produto.nome) == nome_buscado.lower()).first()
+    produto = db_session.query(Produto).filter(
+        func.lower(Produto.nome) == nome_buscado.lower()
+    ).first()
 
     if not produto:
         return {
@@ -44,7 +48,7 @@ def registrar_saida_produto(db_session, nome_buscado, qtd_desejada):
         }
 
     saldo_atual = produto.quantidade
-    valor_unitario = produto.valor
+    valor_unitario = produto.valor_unitario
 
     resultado = {
         "produto": produto,
