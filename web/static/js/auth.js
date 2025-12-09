@@ -133,7 +133,24 @@ async function handleLogin(event) {
         
     } catch (error) {
         console.error('❌ Erro no login:', error);
-        showToast(error.message || 'Erro ao entrar. Verifique suas credenciais.', 'error');
+        
+        // Mensagem personalizada para usuário não encontrado
+        let mensagem = error.message || 'Erro ao entrar. Verifique suas credenciais.';
+        
+        if (mensagem.includes('Usuário') && mensagem.includes('não encontrado')) {
+            // Exibir mensagem mais amigável
+            showToast('❌ Email não cadastrado! Crie uma conta ou use um usuário demo.', 'error');
+            
+            // Destacar visualmente o link "Criar conta"
+            setTimeout(() => {
+                const authLinks = document.querySelector('.auth-links');
+                if (authLinks) {
+                    authLinks.style.animation = 'pulse 1s ease-in-out 3';
+                }
+            }, 500);
+        } else {
+            showToast(mensagem, 'error');
+        }
     } finally {
         hideLoading();
     }
@@ -209,23 +226,24 @@ async function handleRegister(event) {
             await cadastrarUsuarioLocal(nome, email, contato, loginUsuario, password, extraData);
             console.log('✅ Cadastro local bem-sucedido');
             
-            showToast('Cadastro realizado! Faça login para continuar.', 'success');
+            showToast('✅ Cadastro realizado com sucesso! Redirecionando...', 'success');
             
-            // Voltar para tela de login
-            setTimeout(() => {
-                showLogin();
+            // Fazer login automático
+            setTimeout(async () => {
+                try {
+                    await loginLocal(email, password);
+                } catch (loginError) {
+                    console.warn('Erro no login automático:', loginError);
+                    showLogin();
+                }
             }, 1500);
+            
         } else {
             throw new Error('Nenhum sistema de cadastro disponível');
         }
         
         // Limpar formulario
         document.querySelector('.auth-form').reset();
-        
-        // Voltar para login
-        setTimeout(() => {
-            showLogin();
-        }, 2000);
         
     } catch (error) {
         console.error('Erro no cadastro:', error);

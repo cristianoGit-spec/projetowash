@@ -211,7 +211,13 @@ async function loginLocal(emailOrLogin, password) {
     if (!user) {
         console.error('❌ Usuário não encontrado:', emailOrLogin);
         console.log('📋 Usuários disponíveis:', localUsers.map(u => ({ email: u.email, login: u.loginUsuario })));
-        throw new Error('Usuário não encontrado');
+        
+        // Mensagem mais amigável
+        const sugestao = localUsers.length > 0 
+            ? '\n\nUsuários disponíveis:\n• ' + localUsers.map(u => u.email).join('\n• ')
+            : '\n\nNenhum usuário cadastrado. Crie uma conta primeiro.';
+        
+        throw new Error(`Usuário "${emailOrLogin}" não encontrado.${sugestao}`);
     }
     
     console.log('✅ Usuário encontrado:', user.email);

@@ -13,9 +13,9 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css?v=18">
-    <link rel="stylesheet" href="/static/css/admin.css?v=18">
-    <link rel="stylesheet" href="/static/css/admin.css?v=17">
+    <link rel="stylesheet" href="/static/css/style.css?v=21">
+    <link rel="stylesheet" href="/static/css/admin.css?v=21">
+    <link rel="stylesheet" href="/static/css/admin.css?v=21">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -54,13 +54,13 @@
             }
         }
         
-        // Migração para sistema híbrido v20
-        if (!localStorage.getItem('system_hybrid_v20')) {
-            console.log('🔄 Migrando para sistema híbrido v20...');
-            localStorage.removeItem('system_hybrid_v19'); // Limpar flag antiga
-            localStorage.setItem('system_hybrid_v20', 'true');
-            console.log('✅ Sistema híbrido v20 ativado!');
-            console.log('📡 Dashboard integrado - Dados sendo exibidos corretamente');
+        // Migração para sistema híbrido v21
+        if (!localStorage.getItem('system_hybrid_v21')) {
+            console.log('🔄 Migrando para sistema híbrido v21...');
+            localStorage.removeItem('system_hybrid_v20'); // Limpar flag antiga
+            localStorage.setItem('system_hybrid_v21', 'true');
+            console.log('✅ Sistema híbrido v21 ativado!');
+            console.log('📡 Mensagens de erro melhoradas + Login automático após cadastro');
         }
     </script>
 </head>
@@ -693,19 +693,19 @@
     <!-- JavaScript - Ordem: Firebase Config > Local Fallback > Auth > App -->
     
     <!-- 1. Configuração Firebase (Sistema Híbrido) -->
-    <script src="/static/js/firebase-config.js?v=20"></script>
+    <script src="/static/js/firebase-config.js?v=21"></script>
     
     <!-- 2. Fallback Local (se Firebase falhar) -->
-    <script src="/static/js/local-auth.js?v=20"></script>
-    <script src="/static/js/local-firestore.js?v=20"></script>
+    <script src="/static/js/local-auth.js?v=21"></script>
+    <script src="/static/js/local-firestore.js?v=21"></script>
     
     <!-- 3. Scripts de Interface e Módulos -->
-    <script src="/static/js/auth.js?v=20"></script>
-    <script src="/static/js/admin-module.js?v=20"></script>
-    <script src="/static/js/app.js?v=20"></script>
-    <script src="/static/js/modules.js?v=20"></script>
-    <script src="/static/js/dashboard.js?v=20"></script>
-    <script src="/static/js/pwa.js?v=20"></script>
+    <script src="/static/js/auth.js?v=21"></script>
+    <script src="/static/js/admin-module.js?v=21"></script>
+    <script src="/static/js/app.js?v=21"></script>
+    <script src="/static/js/modules.js?v=21"></script>
+    <script src="/static/js/dashboard.js?v=21"></script>
+    <script src="/static/js/pwa.js?v=21"></script>
     
     <!-- Inicialização do formulário de cadastro -->
     <script>
