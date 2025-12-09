@@ -54,14 +54,13 @@
             }
         }
         
-        // Migração para sistema híbrido v17
-        if (!localStorage.getItem('system_hybrid_v19')) {
-            console.log('🔄 Migrando para sistema híbrido v19...');
-            localStorage.removeItem('system_hybrid_v17'); // Limpar flag antiga
-            localStorage.removeItem('system_hybrid_v15'); // Limpar flag antiga
-            localStorage.setItem('system_hybrid_v19', 'true');
-            console.log('✅ Sistema híbrido v19 ativado!');
-            console.log('📡 Todos os erros de login corrigidos');
+        // Migração para sistema híbrido v20
+        if (!localStorage.getItem('system_hybrid_v20')) {
+            console.log('🔄 Migrando para sistema híbrido v20...');
+            localStorage.removeItem('system_hybrid_v19'); // Limpar flag antiga
+            localStorage.setItem('system_hybrid_v20', 'true');
+            console.log('✅ Sistema híbrido v20 ativado!');
+            console.log('📡 Dashboard integrado - Dados sendo exibidos corretamente');
         }
     </script>
 </head>
@@ -694,19 +693,19 @@
     <!-- JavaScript - Ordem: Firebase Config > Local Fallback > Auth > App -->
     
     <!-- 1. Configuração Firebase (Sistema Híbrido) -->
-    <script src="/static/js/firebase-config.js?v=19"></script>
+    <script src="/static/js/firebase-config.js?v=20"></script>
     
     <!-- 2. Fallback Local (se Firebase falhar) -->
-    <script src="/static/js/local-auth.js?v=19"></script>
-    <script src="/static/js/local-firestore.js?v=19"></script>
+    <script src="/static/js/local-auth.js?v=20"></script>
+    <script src="/static/js/local-firestore.js?v=20"></script>
     
     <!-- 3. Scripts de Interface e Módulos -->
-    <script src="/static/js/auth.js?v=19"></script>
-    <script src="/static/js/admin-module.js?v=19"></script>
-    <script src="/static/js/app.js?v=19"></script>
-    <script src="/static/js/modules.js?v=19"></script>
-    <script src="/static/js/dashboard.js?v=19"></script>
-    <script src="/static/js/pwa.js?v=19"></script>
+    <script src="/static/js/auth.js?v=20"></script>
+    <script src="/static/js/admin-module.js?v=20"></script>
+    <script src="/static/js/app.js?v=20"></script>
+    <script src="/static/js/modules.js?v=20"></script>
+    <script src="/static/js/dashboard.js?v=20"></script>
+    <script src="/static/js/pwa.js?v=20"></script>
     
     <!-- Inicialização do formulário de cadastro -->
     <script>

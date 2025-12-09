@@ -7,9 +7,16 @@ let chartEficiencia = null;
 // Carregar dashboard
 async function loadDashboard() {
     try {
+        console.log('🔄 Carregando dashboard...');
         showLoading('Carregando dashboard...');
         
+        // Garantir que dados locais estão carregados
+        if (typeof loadLocalData === 'function') {
+            loadLocalData();
+        }
+        
         const stats = await obterEstatisticas();
+        console.log('📊 Estatísticas obtidas:', stats);
         
         // Atualizar cards de estatisticas
         document.getElementById('statTotalProdutos').textContent = stats.totalProdutos || 0;
@@ -17,17 +24,20 @@ async function loadDashboard() {
         document.getElementById('statValorTotal').textContent = formatCurrency(stats.valorTotal || 0);
         document.getElementById('statVendasMes').textContent = formatCurrency(stats.vendasMes || 0);
         
+        console.log('✅ Cards atualizados');
+        
         // Carregar historico
-        loadHistoricoRecente(stats.movimentacoes);
+        loadHistoricoRecente(stats.movimentacoes || []);
         
         // Carregar graficos e verificar estoque baixo
         await loadChartsAndAlerts();
         
+        console.log('✅ Dashboard carregado com sucesso');
         hideLoading();
         
     } catch (error) {
         hideLoading();
-        console.error('Erro ao carregar dashboard:', error);
+        console.error('❌ Erro ao carregar dashboard:', error);
         showToast('Erro ao carregar dashboard', 'error');
     }
 }
@@ -76,10 +86,15 @@ function loadHistoricoRecente(movimentacoes) {
 // Carregar graficos e alertas
 async function loadChartsAndAlerts() {
     try {
+        console.log('📈 Carregando gráficos e alertas...');
+        
         const [produtos, movimentacoes] = await Promise.all([
             obterDadosEstoque(),
             obterHistoricoMovimentacoes()
         ]);
+        
+        console.log('📦 Produtos obtidos:', produtos.length);
+        console.log('📊 Movimentações obtidas:', movimentacoes.length);
         
         // Verificar estoque baixo
         checkLowStock(produtos);
@@ -93,8 +108,10 @@ async function loadChartsAndAlerts() {
         // Grafico de Eficiencia (Gauge)
         loadChartEficiencia();
         
+        console.log('✅ Gráficos carregados');
+        
     } catch (error) {
-        console.error('Erro ao carregar graficos:', error);
+        console.error('❌ Erro ao carregar graficos:', error);
     }
 }
 

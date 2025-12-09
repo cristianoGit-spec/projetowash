@@ -80,8 +80,11 @@ async function venderProduto(event) {
         showToast('Venda registrada com sucesso!', 'success');
         document.getElementById('formEstoqueSaida').reset();
         
-        // Atualizar visualização se estiver na tela de estoque
-        console.log('Saída registrada - Dashboard será recarregado automaticamente');
+        // Atualizar Dashboard automaticamente
+        console.log('✅ Saída registrada - Atualizando dashboard...');
+        if (typeof loadDashboard === 'function') {
+            setTimeout(() => loadDashboard(), 500);
+        }
         
     } catch (error) {
         console.error('Erro ao vender:', error);

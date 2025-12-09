@@ -234,6 +234,11 @@ async function loginLocal(emailOrLogin, password) {
     localIsSuperAdmin = user.role === 'superadmin';
     saveLocalCurrentUser();
     
+    // Carregar dados locais primeiro
+    if (typeof loadLocalData === 'function') {
+        loadLocalData();
+    }
+    
     // Mostrar app e dashboard
     showApp();
     setTimeout(() => {
@@ -242,7 +247,7 @@ async function loginLocal(emailOrLogin, password) {
         } else if (typeof loadDashboard === 'function') {
             loadDashboard();
         }
-    }, 100);
+    }, 150);
     
     return user;
 }

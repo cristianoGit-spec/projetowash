@@ -340,6 +340,13 @@ function showAuth() {
  * Exibir container da aplicacao
  */
 function showApp() {
+    console.log('🚀 Mostrando aplicação...');
+    
+    // Carregar dados locais antes de mostrar o app
+    if (typeof loadLocalData === 'function') {
+        loadLocalData();
+    }
+    
     document.getElementById('authContainer').classList.add('hidden');
     document.getElementById('appContainer').classList.remove('hidden');
     
@@ -349,6 +356,9 @@ function showApp() {
         : (typeof currentUser !== 'undefined' ? currentUser : null);
         
     const userName = user ? (user.email || user.nome || user.displayName || 'Usuario') : 'Usuario';
+    
+    console.log('👤 Usuário atual:', userName);
+    console.log('🏢 Empresa:', user?.nomeEmpresa || 'N/A');
     
     const userDisplayElement = document.getElementById('userEmail');
     if (userDisplayElement) {

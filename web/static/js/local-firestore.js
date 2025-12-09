@@ -9,10 +9,20 @@ let localFolhaPagamento = [];
 // Carregar dados do localStorage
 function loadLocalData() {
     const estoque = localStorage.getItem('localEstoque');
-    if (estoque) localEstoque = JSON.parse(estoque);
+    if (estoque) {
+        localEstoque = JSON.parse(estoque);
+        console.log('📦 Estoque carregado:', localEstoque.length, 'produtos');
+    } else {
+        console.log('📦 Nenhum estoque encontrado no localStorage');
+    }
     
     const movimentacoes = localStorage.getItem('localMovimentacoes');
-    if (movimentacoes) localMovimentacoes = JSON.parse(movimentacoes);
+    if (movimentacoes) {
+        localMovimentacoes = JSON.parse(movimentacoes);
+        console.log('📊 Movimentações carregadas:', localMovimentacoes.length);
+    } else {
+        console.log('📊 Nenhuma movimentação encontrada');
+    }
     
     const financeiro = localStorage.getItem('localFinanceiro');
     if (financeiro) localFinanceiro = JSON.parse(financeiro);
