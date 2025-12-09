@@ -50,13 +50,14 @@ def registrar_entrada_produto(
         # Atualizar produto existente
         produto.quantidade += quantidade  # Incrementa quantidade
         # Atualiza valor se fornecido
-        produto.valor = valor if valor > 0 else produto.valor
+        if valor > 0:
+            produto.valor_unitario = valor
         if data:
-            produto.data = data
+            produto.data_fabricacao = data
         if fornecedor:
             produto.fornecedor = fornecedor
         if local:
-            produto.local = local
+            produto.local_armazem = local
         
         db_session.commit()
         return (produto, False)
@@ -66,10 +67,10 @@ def registrar_entrada_produto(
             codigo=codigo,
             nome=nome,
             quantidade=quantidade,
-            valor=valor,
-            data=data or "",
+            valor_unitario=valor,
+            data_fabricacao=data or "",
             fornecedor=fornecedor or "",
-            local=local or ""
+            local_armazem=local or ""
         )
         
         db_session.add(novo_produto)
