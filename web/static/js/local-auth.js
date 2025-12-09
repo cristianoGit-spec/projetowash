@@ -194,23 +194,39 @@ function saveLocalCurrentUser() {
  * @returns {Promise<Object>} - Dados do usuário autenticado
  */
 async function loginLocal(emailOrLogin, password) {
+    console.log('🔑 Tentando login local:', emailOrLogin);
+    console.log('📋 Usuários disponíveis:', localUsers.length);
+    
+    // Garantir que os usuários foram carregados
+    if (localUsers.length === 0) {
+        console.warn('⚠️ Nenhum usuário carregado, recarregando...');
+        loadLocalUsers();
+    }
+    
     // Buscar usuário por email ou loginUsuario
     const user = localUsers.find(u => 
         u.email === emailOrLogin || u.loginUsuario === emailOrLogin
     );
     
     if (!user) {
+        console.error('❌ Usuário não encontrado:', emailOrLogin);
+        console.log('📋 Usuários disponíveis:', localUsers.map(u => ({ email: u.email, login: u.loginUsuario })));
         throw new Error('Usuário não encontrado');
     }
     
+    console.log('✅ Usuário encontrado:', user.email);
+    
     // Verificar senha (texto simples - modo desenvolvimento)
     if (user.senha !== password) {
+        console.error('❌ Senha incorreta');
         throw new Error('Senha incorreta');
     }
     
     if (!user.ativo) {
         throw new Error('Usuário inativo. Entre em contato com o administrador.');
     }
+    
+    console.log('✅ Login bem-sucedido:', user.email);
     
     // Login bem-sucedido
     localCurrentUser = user;

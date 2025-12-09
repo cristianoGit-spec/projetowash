@@ -37,10 +37,22 @@ async function loginRapido(tipo) {
     try {
         // Tentar Firebase primeiro, fallback para local
         if (typeof firebaseInitialized !== 'undefined' && firebaseInitialized && typeof loginFirebase !== 'undefined') {
-            await loginFirebase(cred.email, cred.senha);
+            try {
+                await loginFirebase(cred.email, cred.senha);
+            } catch (firebaseError) {
+                console.warn('⚠️ Firebase falhou, usando local:', firebaseError.message);
+                if (typeof loginLocal !== 'undefined') {
+                    await loginLocal(cred.email, cred.senha);
+                    showToast('Login realizado com sucesso!', 'success');
+                } else {
+                    throw firebaseError;
+                }
+            }
         } else if (typeof loginLocal !== 'undefined') {
             await loginLocal(cred.email, cred.senha);
-            window.location.reload();
+            showToast('Login realizado com sucesso!', 'success');
+        } else {
+            throw new Error('Nenhum sistema de autenticação disponível');
         }
     } catch (error) {
         console.error('Erro no login rápido:', error);
@@ -99,27 +111,28 @@ async function handleLogin(event) {
         
         if (isFirebaseActive && typeof loginFirebase !== 'undefined') {
             // Modo Firebase Cloud
-            await loginFirebase(email, password);
+            try {
+                await loginFirebase(email, password);
+            } catch (firebaseError) {
+                console.warn('⚠️ Firebase falhou, tentando local:', firebaseError.message);
+                // Se Firebase falhar, tentar local como fallback
+                if (typeof loginLocal !== 'undefined') {
+                    await loginLocal(email, password);
+                    showToast('Login realizado com sucesso!', 'success');
+                } else {
+                    throw firebaseError;
+                }
+            }
         } else if (typeof loginLocal !== 'undefined') {
             // Modo Local (fallback)
             await loginLocal(email, password);
-            return;
+            showToast('Login realizado com sucesso!', 'success');
         } else {
             throw new Error('Nenhum sistema de autenticação disponível');
         }
         
     } catch (error) {
         console.error('❌ Erro no login:', error);
-        
-        // Se Firebase falhar, tentar local como fallback
-        if (error.code && error.code.startsWith('auth/') && typeof loginLocal !== 'undefined') {
-            try {
-                await loginLocal(email, password);
-                return;
-            } catch (localError) {
-            }
-        }
-        
         showToast(error.message || 'Erro ao entrar. Verifique suas credenciais.', 'error');
     } finally {
         hideLoading();
