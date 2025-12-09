@@ -1,37 +1,37 @@
 ﻿// ============================================================================
-// MÃ“DULO DE ADMINISTRAÃ‡ÃO - SUPER ADMIN
+// MÓDULO DE ADMINISTRAÇÃO - SUPER ADMIN
 // ============================================================================
-// Este mÃ³dulo permite ao super administrador visualizar todas as empresas
-// cadastradas no sistema, seus dados e estatÃ­sticas gerais.
+// Este módulo permite ao super administrador visualizar todas as empresas
+// cadastradas no sistema, seus dados e estatísticas gerais.
 
 // ============================================================================
-// FUNÃ‡ÃO PRINCIPAL - CARREGAR PAINEL ADMINISTRATIVO
+// FUNÇÃO PRINCIPAL - CARREGAR PAINEL ADMINISTRATIVO
 // ============================================================================
 
 function loadAdminModule(container) {
     const user = JSON.parse(localStorage.getItem('localCurrentUser'));
     
-    // Verificar se Ã© super admin
+    // Verificar se é super admin
     if (!user || user.role !== 'superadmin') {
         showToast('Acesso negado! Apenas super administradores podem acessar.', 'error');
         return;
     }
 
-    // Se nÃ£o houver container, usar content-area (compatibilidade)
+    // Se não houver container, usar content-area (compatibilidade)
     const contentArea = container || document.getElementById('content-area');
     
     contentArea.innerHTML = `
         <div class="admin-panel">
-            <!-- CabeÃ§alho do Painel -->
+            <!-- Cabeçalho do Painel -->
             <div class="admin-header">
                 <div class="admin-title">
                     <i class="fas fa-shield-alt"></i>
-                    <h2>Painel do Super Administrador</h2>
+                    <h2>Painel de Administração - Gestão de Empresas</h2>
                 </div>
-                <p class="admin-subtitle">VisÃ£o geral de todas as empresas cadastradas no sistema</p>
+                <p class="admin-subtitle">Visão geral de todas as empresas cadastradas no sistema</p>
             </div>
 
-            <!-- EstatÃ­sticas Gerais -->
+            <!-- Estatísticas Gerais -->
             <div class="admin-stats">
                 <div class="stat-card">
                     <div class="stat-icon blue">
@@ -230,21 +230,23 @@ function renderizarTabelaEmpresas(empresas) {
         return `
             <div class="empresa-card ${!isAtiva ? 'empresa-inativa' : ''}">
                 <div class="empresa-card-header" style="background: linear-gradient(135deg, ${segmentoInfo ? segmentoInfo.cor : '#2563eb'} 0%, ${segmentoInfo ? segmentoInfo.cor + 'dd' : '#1e40af'} 100%)">
-                    <div class="empresa-icon">
-                        <i class="fas ${segmentoInfo ? segmentoInfo.icon : 'fa-building'}"></i>
-                    </div>
-                    <div class="empresa-status">
-                        <span class="status-badge ${isAtiva ? 'status-active' : 'status-inactive'}">
-                            ${isAtiva ? 'Ativa' : 'Bloqueada'}
-                        </span>
+                    <div class="empresa-header-content">
+                        <div class="empresa-icon">
+                            <i class="fas ${segmentoInfo ? segmentoInfo.icon : 'fa-building'}"></i>
+                        </div>
+                        <div class="empresa-header-info">
+                            <h3 class="empresa-nome">${empresa.nomeEmpresa || 'Sem nome'}</h3>
+                            <span class="status-badge ${isAtiva ? 'status-active' : 'status-inactive'}">
+                                ${isAtiva ? 'Ativa' : 'Bloqueada'}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="empresa-card-body">
-                    <h3 class="empresa-nome">${empresa.nomeEmpresa || 'Sem nome'}</h3>
                     <p class="empresa-responsavel">
                         <i class="fas fa-user"></i>
-                        ${empresa.nome || 'Administrador'}
+                        <strong>Responsável:</strong> ${empresa.nome || 'Administrador'}
                     </p>
                     
                     <div class="empresa-info-grid">
@@ -258,7 +260,7 @@ function renderizarTabelaEmpresas(empresas) {
                         </div>
                         <div class="info-item">
                             <i class="fas fa-calendar"></i>
-                            <span>${dataCadastro}</span>
+                            <span>Cadastro: ${dataCadastro}</span>
                         </div>
                     </div>
                 </div>
@@ -272,8 +274,8 @@ function renderizarTabelaEmpresas(empresas) {
                         <i class="fas fa-${isAtiva ? 'lock' : 'unlock'}"></i>
                         <span>${isAtiva ? 'Bloquear' : 'Desbloquear'}</span>
                     </button>
-                    <button onclick="excluirEmpresa('${empresa.uid}')" class="btn-card-action btn-delete" title="Excluir">
-                        <i class="fas fa-trash"></i>
+                    <button onclick="excluirEmpresa('${empresa.uid}')" class="btn-card-action btn-delete" title="Excluir Empresa">
+                        <i class="fas fa-trash-alt"></i>
                         <span>Excluir</span>
                     </button>
                 </div>
@@ -348,11 +350,11 @@ function verDetalhesEmpresa(uid) {
                 <div class="empresa-details">
                     <div class="detail-row">
                         <label><i class="fas fa-building"></i> Nome da Empresa:</label>
-                        <span>${empresa.nomeEmpresa || 'NÃ£o informado'}</span>
+                        <span>${empresa.nomeEmpresa || 'Não informado'}</span>
                     </div>
                     <div class="detail-row">
-                        <label><i class="fas fa-user"></i> ResponsÃ¡vel:</label>
-                        <span>${empresa.nome || 'NÃ£o informado'}</span>
+                        <label><i class="fas fa-user"></i> Responsável:</label>
+                        <span>${empresa.nome || 'Não informado'}</span>
                     </div>
                     <div class="detail-row">
                         <label><i class="fas fa-envelope"></i> Email:</label>
@@ -360,11 +362,11 @@ function verDetalhesEmpresa(uid) {
                     </div>
                     <div class="detail-row">
                         <label><i class="fas fa-industry"></i> Segmento:</label>
-                        <span>${segmentoInfo ? segmentoInfo.nome : 'NÃ£o definido'}</span>
+                        <span>${segmentoInfo ? segmentoInfo.nome : 'Não definido'}</span>
                     </div>
                     <div class="detail-row">
                         <label><i class="fas fa-calendar-plus"></i> Data de Cadastro:</label>
-                        <span>${empresa.dataCadastro ? new Date(empresa.dataCadastro).toLocaleString('pt-BR') : 'NÃ£o informada'}</span>
+                        <span>${empresa.dataCadastro ? new Date(empresa.dataCadastro).toLocaleString('pt-BR') : 'Não informada'}</span>
                     </div>
                     <div class="detail-row">
                         <label><i class="fas fa-fingerprint"></i> ID da Empresa:</label>
@@ -393,7 +395,7 @@ function toggleStatusEmpresa(uid) {
     const empresaIndex = localUsers.findIndex(u => u.uid === uid);
     
     if (empresaIndex === -1) {
-        showToast('Empresa nÃ£o encontrada!', 'error');
+        showToast('Empresa não encontrada!', 'error');
         return;
     }
     
@@ -401,7 +403,7 @@ function toggleStatusEmpresa(uid) {
     const novoStatus = !(empresa.ativo !== false);
     const acao = novoStatus ? 'desbloquear' : 'bloquear';
     
-    // Confirmar aÃ§Ã£o
+    // Confirmar ação
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
     modal.innerHTML = `
@@ -416,7 +418,7 @@ function toggleStatusEmpresa(uid) {
                 <p style="margin: 0 0 1.5rem 0; font-size: 1.1rem; text-align: center;">
                     Tem certeza que deseja <strong>${acao}</strong> a empresa <strong>${empresa.nomeEmpresa || empresa.email}</strong>?
                 </p>
-                ${!novoStatus ? '<p style="margin: 0 0 1.5rem 0; color: #dc2626; text-align: center;"><i class="fas fa-exclamation-triangle"></i> A empresa nÃ£o poderÃ¡ acessar o sistema enquanto estiver bloqueada.</p>' : ''}
+                ${!novoStatus ? '<p style="margin: 0 0 1.5rem 0; color: #dc2626; text-align: center;"><i class="fas fa-exclamation-triangle"></i> A empresa não poderá acessar o sistema enquanto estiver bloqueada.</p>' : ''}
                 <div style="display: flex; gap: 1rem; justify-content: center;">
                     <button onclick="this.closest('.modal-overlay').remove()" class="btn-cancel">
                         <i class="fas fa-times"></i> Cancelar
@@ -437,7 +439,7 @@ function confirmarToggleStatus(uid, novoStatus) {
     const empresaIndex = localUsers.findIndex(u => u.uid === uid);
     
     if (empresaIndex === -1) {
-        showToast('Empresa nÃ£o encontrada!', 'error');
+        showToast('Empresa não encontrada!', 'error');
         return;
     }
     
@@ -467,7 +469,7 @@ function editarEmpresa(uid) {
     const empresa = localUsers.find(u => u.uid === uid);
     
     if (!empresa) {
-        showToast('Empresa nÃ£o encontrada!', 'error');
+        showToast('Empresa não encontrada!', 'error');
         return;
     }
     
@@ -493,7 +495,7 @@ function editarEmpresa(uid) {
                     </div>
                     
                     <div class="form-group">
-                        <label><i class="fas fa-user"></i> Nome do ResponsÃ¡vel *</label>
+                        <label><i class="fas fa-user"></i> Nome do Responsável *</label>
                         <input type="text" id="editNomeResponsavel" value="${empresa.nome || ''}" required class="form-input">
                     </div>
                     
@@ -514,7 +516,7 @@ function editarEmpresa(uid) {
                             <i class="fas fa-times"></i> Cancelar
                         </button>
                         <button type="submit" class="btn-confirm">
-                            <i class="fas fa-save"></i> Salvar AlteraÃ§Ãµes
+                            <i class="fas fa-save"></i> Salvar Alterações
                         </button>
                     </div>
                 </form>
@@ -546,7 +548,7 @@ function salvarEdicaoEmpresa(event, uid) {
     const empresaIndex = localUsers.findIndex(u => u.uid === uid);
     
     if (empresaIndex === -1) {
-        showToast('Empresa nÃ£o encontrada!', 'error');
+        showToast('Empresa não encontrada!', 'error');
         return;
     }
     
@@ -556,10 +558,10 @@ function salvarEdicaoEmpresa(event, uid) {
     const email = document.getElementById('editEmail').value.trim();
     const segmento = document.getElementById('editSegmento').value;
     
-    // Verificar se o email jÃ¡ existe em outra empresa
+    // Verificar se o email já existe em outra empresa
     const emailExiste = localUsers.some(u => u.email === email && u.uid !== uid);
     if (emailExiste) {
-        showToast('Este email jÃ¡ estÃ¡ sendo usado por outra empresa!', 'error');
+        showToast('Este email já está sendo usado por outra empresa!', 'error');
         return;
     }
     
@@ -592,7 +594,7 @@ function excluirEmpresa(uid) {
     const empresa = localUsers.find(u => u.uid === uid);
     
     if (!empresa) {
-        showToast('Empresa nÃ£o encontrada!', 'error');
+        showToast('Empresa não encontrada!', 'error');
         return;
     }
     
@@ -615,7 +617,7 @@ function excluirEmpresa(uid) {
                     <p style="margin: 0; color: #666;">${empresa.email}</p>
                 </div>
                 <p style="margin: 0 0 1.5rem 0; color: #dc2626; text-align: center; font-weight: 500;">
-                    <i class="fas fa-exclamation-circle"></i> Esta aÃ§Ã£o nÃ£o pode ser desfeita!
+                    <i class="fas fa-exclamation-circle"></i> Esta ação não pode ser desfeita!
                 </p>
                 <div style="display: flex; gap: 1rem; justify-content: center;">
                     <button onclick="this.closest('.modal-overlay').remove()" class="btn-cancel">
@@ -637,7 +639,7 @@ function confirmarExclusaoEmpresa(uid) {
     const empresaIndex = localUsers.findIndex(u => u.uid === uid);
     
     if (empresaIndex === -1) {
-        showToast('Empresa nÃ£o encontrada!', 'error');
+        showToast('Empresa não encontrada!', 'error');
         return;
     }
     
@@ -646,7 +648,7 @@ function confirmarExclusaoEmpresa(uid) {
     localUsers.splice(empresaIndex, 1);
     localStorage.setItem('localUsers', JSON.stringify(localUsers));
     
-    showToast(`Empresa "${empresa.nomeEmpresa || empresa.email}" excluÃ­da com sucesso!`, 'success');
+    showToast(`Empresa "${empresa.nomeEmpresa || empresa.email}" excluída com sucesso!`, 'success');
     
     // Fechar modal
     document.querySelector('.modal-overlay').remove();
@@ -667,8 +669,8 @@ function exportarEmpresas() {
         return;
     }
     
-    // CabeÃ§alho do CSV
-    let csv = 'Nome da Empresa,Email,ResponsÃ¡vel,Segmento,Data de Cadastro,Status\n';
+    // Cabeçalho do CSV
+    let csv = 'Nome da Empresa,Email,Responsável,Segmento,Data de Cadastro,Status\n';
     
     // Dados
     empresas.forEach(empresa => {
@@ -677,11 +679,11 @@ function exportarEmpresas() {
             : null;
         
         const row = [
-            empresa.nomeEmpresa || 'NÃ£o informado',
+            empresa.nomeEmpresa || 'Não informado',
             empresa.email,
-            empresa.nome || 'NÃ£o informado',
-            segmentoInfo ? segmentoInfo.nome : 'NÃ£o definido',
-            empresa.dataCadastro ? new Date(empresa.dataCadastro).toLocaleString('pt-BR') : 'NÃ£o informada',
+            empresa.nome || 'Não informado',
+            segmentoInfo ? segmentoInfo.nome : 'Não definido',
+            empresa.dataCadastro ? new Date(empresa.dataCadastro).toLocaleString('pt-BR') : 'Não informada',
             empresa.ativo !== false ? 'Ativa' : 'Inativa'
         ];
         

@@ -10,6 +10,14 @@ async function loadDashboard() {
         console.log('🔄 Carregando dashboard...');
         showLoading('Carregando dashboard...');
         
+        // Verificar se Chart.js está disponível
+        if (typeof Chart === 'undefined') {
+            console.error('❌ Chart.js não está carregado!');
+            hideLoading();
+            showToast('Erro: Biblioteca de gráficos não disponível. Recarregue a página.', 'error');
+            return;
+        }
+        
         // Garantir que dados locais estão carregados
         if (typeof loadLocalData === 'function') {
             loadLocalData();
@@ -18,11 +26,25 @@ async function loadDashboard() {
         const stats = await obterEstatisticas();
         console.log('📊 Estatísticas obtidas:', stats);
         
-        // Atualizar cards de estatisticas
-        document.getElementById('statTotalProdutos').textContent = stats.totalProdutos || 0;
-        document.getElementById('statTotalItens').textContent = stats.totalItens || 0;
-        document.getElementById('statValorTotal').textContent = formatCurrency(stats.valorTotal || 0);
-        document.getElementById('statVendasMes').textContent = formatCurrency(stats.vendasMes || 0);
+        // Atualizar cards de estatisticas com animação
+        const elements = {
+            statTotalProdutos: stats.totalProdutos || 0,
+            statTotalItens: stats.totalItens || 0,
+            statValorTotal: formatCurrency(stats.valorTotal || 0),
+            statVendasMes: formatCurrency(stats.vendasMes || 0)
+        };
+        
+        Object.entries(elements).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.style.opacity = '0';
+                element.textContent = value;
+                setTimeout(() => {
+                    element.style.transition = 'opacity 0.5s ease';
+                    element.style.opacity = '1';
+                }, 50);
+            }
+        });
         
         console.log('✅ Cards atualizados');
         
@@ -38,7 +60,22 @@ async function loadDashboard() {
     } catch (error) {
         hideLoading();
         console.error('❌ Erro ao carregar dashboard:', error);
-        showToast('Erro ao carregar dashboard', 'error');
+        showToast('Erro ao carregar dashboard. Verifique sua conexão.', 'error');
+        
+        // Mostrar estado de erro no dashboard
+        const statsGrid = document.querySelector('.stats-grid');
+        if (statsGrid) {
+            statsGrid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px; background: #fee; border-radius: 12px; border: 2px solid #fcc;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #c00; margin-bottom: 10px;"></i>
+                    <h3 style="color: #c00;">Erro ao Carregar Dashboard</h3>
+                    <p style="color: #666;">Tente atualizar a página ou verificar sua conexão.</p>
+                    <button onclick="loadDashboard()" class="btn btn-primary" style="margin-top: 15px;">
+                        <i class="fas fa-sync-alt"></i> Tentar Novamente
+                    </button>
+                </div>
+            `;
+        }
     }
 }
 
@@ -46,11 +83,25 @@ async function loadDashboard() {
 function loadHistoricoRecente(movimentacoes) {
     const container = document.getElementById('historicoRecente');
     
+    if (!container) {
+        console.warn('⚠️ Container de histórico não encontrado');
+        return;
+    }
+    
     if (!movimentacoes || movimentacoes.length === 0) {
         container.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-inbox"></i>
-                <p>Nenhuma movimentacao recente</p>
+            <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #94a3b8;">
+                <i class="fas fa-inbox" style="font-size: 4rem; margin-bottom: 20px; opacity: 0.3;"></i>
+                <h4 style="color: #64748b; margin-bottom: 10px;">Nenhuma movimentação recente</h4>
+                <p style="font-size: 0.9rem;">Registre entradas ou saídas de produtos para visualizar o histórico</p>
+                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="showModule('estoque-entrada')" class="btn btn-success btn-sm">
+                        <i class="fas fa-plus"></i> Nova Entrada
+                    </button>
+                    <button onclick="showModule('estoque-saida')" class="btn btn-primary btn-sm">
+                        <i class="fas fa-minus"></i> Nova Saída
+                    </button>
+                </div>
             </div>
         `;
         return;
@@ -148,6 +199,11 @@ function checkLowStock(produtos) {
 function loadChartMovimentacoes(movimentacoes) {
     const ctx = document.getElementById('chartMovimentacoes');
     
+    if (!ctx) {
+        console.warn('⚠️ Canvas chartMovimentacoes não encontrado');
+        return;
+    }
+    
     // Contar entradas e saidas dos ultimos 7 dias
     const hoje = new Date();
     const dias = [];
@@ -213,7 +269,34 @@ function loadChartMovimentacoes(movimentacoes) {
                     position: 'bottom',
                     labels: {
                         usePointStyle: true,
-                        padding: 20
+                        padding: 15,
+                        font: {
+                            size: 12,
+                            weight: '600'
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.parsed.y + ' unidade(s)';
+                            return label;
+                        }
                     }
                 }
             },
@@ -221,21 +304,36 @@ function loadChartMovimentacoes(movimentacoes) {
                 y: {
                     beginAtZero: true,
                     grid: {
-                        color: '#f1f5f9'
+                        color: '#f1f5f9',
+                        drawBorder: false
                     },
                     ticks: {
-                        stepSize: 1
+                        stepSize: 1,
+                        font: {
+                            size: 11
+                        },
+                        padding: 8
                     }
                 },
                 x: {
                     grid: {
                         display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        },
+                        padding: 8
                     }
                 }
             },
             interaction: {
                 intersect: false,
                 mode: 'index'
+            },
+            animation: {
+                duration: 750,
+                easing: 'easeInOutQuart'
             }
         }
     });
@@ -244,6 +342,26 @@ function loadChartMovimentacoes(movimentacoes) {
 // Grafico de Top Produtos
 function loadChartTopProdutos(produtos) {
     const ctx = document.getElementById('chartTopProdutos');
+    
+    if (!ctx) {
+        console.warn('⚠️ Canvas chartTopProdutos não encontrado');
+        return;
+    }
+    
+    // Se não há produtos, mostrar mensagem
+    if (!produtos || produtos.length === 0) {
+        const chartCard = ctx.closest('.chart-card');
+        if (chartCard) {
+            chartCard.innerHTML = `
+                <h3>Top 5 Produtos</h3>
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; color: #94a3b8;">
+                    <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.3;"></i>
+                    <p style="text-align: center; font-size: 0.9rem;">Cadastre produtos para visualizar o ranking</p>
+                </div>
+            `;
+        }
+        return;
+    }
     
     // Ordenar por quantidade e pegar top 5
     const top5 = produtos
@@ -284,23 +402,59 @@ function loadChartTopProdutos(produtos) {
             plugins: {
                 legend: {
                     display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: false,
+                    callbacks: {
+                        label: function(context) {
+                            return 'Estoque: ' + context.parsed.y + ' unidades';
+                        }
+                    }
                 }
             },
             scales: {
                 y: {
                     beginAtZero: true,
                     grid: {
-                        color: '#f1f5f9'
+                        color: '#f1f5f9',
+                        drawBorder: false
                     },
                     ticks: {
-                        stepSize: 1
+                        stepSize: 1,
+                        font: {
+                            size: 11
+                        },
+                        padding: 8
                     }
                 },
                 x: {
                     grid: {
                         display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11,
+                            weight: '500'
+                        },
+                        padding: 8,
+                        maxRotation: 45,
+                        minRotation: 0
                     }
                 }
+            },
+            animation: {
+                duration: 750,
+                easing: 'easeInOutQuart'
             }
         }
     });

@@ -1,5 +1,181 @@
 // Servicos de dados do Firestore
 // Sistema Multi-Tenant: Todos os dados são isolados por companyId
+// Sistema Híbrido: Firebase (nuvem) + localStorage (cache offline)
+
+console.log('🔄 Firestore Service - Modo Híbrido com Sincronização');
+
+// ===== SINCRONIZAÇÃO HÍBRIDA =====
+
+/**
+ * Sincroniza dados do Firebase para localStorage (cache offline)
+ */
+async function syncFirebaseToLocal() {
+    if (!firebaseInitialized || !currentUser) return;
+    
+    try {
+        console.log('⬇️ Sincronizando Firebase → localStorage...');
+        
+        const companyId = currentUser.companyId;
+        
+        // Sincronizar estoque
+        const estoqueSnapshot = await db.collection('estoque')
+            .where('companyId', '==', companyId)
+            .get();
+        
+        const estoque = [];
+        estoqueSnapshot.forEach(doc => {
+            estoque.push({ id: doc.id, ...doc.data() });
+        });
+        
+        localStorage.setItem('localEstoque', JSON.stringify(estoque));
+        
+        // Sincronizar movimentações
+        const movSnapshot = await db.collection('movimentacoes')
+            .where('companyId', '==', companyId)
+            .orderBy('timestamp', 'desc')
+            .limit(100)
+            .get();
+        
+        const movimentacoes = [];
+        movSnapshot.forEach(doc => {
+            const data = doc.data();
+            movimentacoes.push({
+                id: doc.id,
+                ...data,
+                timestamp: data.timestamp?.toDate?.() || data.timestamp
+            });
+        });
+        
+        localStorage.setItem('localMovimentacoes', JSON.stringify(movimentacoes));
+        
+        console.log('✅ Sincronização concluída:', {
+            estoque: estoque.length,
+            movimentacoes: movimentacoes.length
+        });
+        
+    } catch (error) {
+        console.error('❌ Erro na sincronização:', error);
+    }
+}
+
+// ===== AUTENTICAÇÃO FIREBASE =====
+
+/**
+ * Cadastrar usuário no Firebase (acesso de qualquer rede)
+ */
+async function cadastrarUsuarioFirebase(nome, email, senha, extraData) {
+    if (!firebaseInitialized) {
+        throw new Error('Firebase não disponível - usando modo local');
+    }
+    
+    try {
+        console.log('📝 Cadastrando usuário no Firebase...');
+        
+        // Criar usuário no Authentication
+        const userCredential = await auth.createUserWithEmailAndPassword(email, senha);
+        const user = userCredential.user;
+        
+        // Atualizar perfil
+        await user.updateProfile({
+            displayName: nome
+        });
+        
+        // Criar documento no Firestore
+        const userData = {
+            uid: user.uid,
+            nome: nome,
+            email: email,
+            nomeEmpresa: extraData.nomeEmpresa,
+            segmento: extraData.segmento,
+            companyId: 'comp-' + Date.now(),
+            role: extraData.role || 'admin',
+            ativo: true,
+            criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+            atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        
+        await db.collection('usuarios').doc(user.uid).set(userData);
+        
+        // Sincronizar para localStorage também (cache)
+        const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+        localUsers.push({
+            ...userData,
+            senha: senha, // Apenas no localStorage
+            dataCadastro: new Date().toISOString()
+        });
+        localStorage.setItem('localUsers', JSON.stringify(localUsers));
+        
+        console.log('✅ Usuário cadastrado:', {
+            nome: userData.nome,
+            empresa: userData.nomeEmpresa,
+            companyId: userData.companyId
+        });
+        
+        return userData;
+        
+    } catch (error) {
+        console.error('❌ Erro ao cadastrar no Firebase:', error);
+        throw error;
+    }
+}
+
+/**
+ * Login no Firebase (acesso de qualquer rede)
+ */
+async function loginFirebase(email, senha) {
+    if (!firebaseInitialized) {
+        throw new Error('Firebase não disponível - usando modo local');
+    }
+    
+    try {
+        console.log('🔐 Fazendo login no Firebase...');
+        
+        const userCredential = await auth.signInWithEmailAndPassword(email, senha);
+        const user = userCredential.user;
+        
+        // Buscar dados adicionais
+        const userDoc = await db.collection('usuarios').doc(user.uid).get();
+        
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            
+            currentUser = {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                ...userData
+            };
+            
+            isAdmin = userData.role === 'admin' || userData.role === 'superadmin';
+            isSuperAdmin = userData.role === 'superadmin';
+            
+            // Sincronizar dados para acesso offline
+            await syncFirebaseToLocal();
+            
+            console.log('✅ Login Firebase bem-sucedido');
+            console.log('🏢 Empresa:', userData.nomeEmpresa);
+            console.log('🆔 CompanyID:', userData.companyId);
+            
+            // Mostrar app
+            showApp();
+            setTimeout(() => {
+                if (typeof showModule === 'function') {
+                    showModule('dashboard');
+                } else if (typeof loadDashboard === 'function') {
+                    loadDashboard();
+                }
+            }, 150);
+            
+            return currentUser;
+        }
+        
+        throw new Error('Dados do usuário não encontrados');
+        
+    } catch (error) {
+        console.error('❌ Erro no login Firebase:', error);
+        throw error;
+    }
+}
 
 // ===== USUÁRIOS E GERENCIAMENTO DE EMPRESA =====
 

@@ -15,39 +15,65 @@ function loadRHModule(container) {
             </div>
             
             <!-- Formulário de Cadastro -->
-            <div class="card mb-3" style="background: #f8f9fa; border: 1px solid #e9ecef;">
-                <h5 class="mb-3"><i class="fas fa-user-plus"></i> Novo Funcionário</h5>
+            <div class="card mb-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border: 2px solid #667eea; box-shadow: 0 2px 8px rgba(102,126,234,0.2);">
+                <h5 class="mb-3" style="color: #667eea; font-weight: bold;">
+                    <i class="fas fa-user-plus"></i> Cadastrar Novo Funcionário
+                </h5>
                 <form id="formCadastroFuncionario" onsubmit="cadastrarFuncionario(event)">
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Nome Completo</label>
-                            <input type="text" id="novoNome" required placeholder="Ex: João da Silva">
+                            <label style="font-weight: 600; color: #334155;">
+                                <i class="fas fa-id-card"></i> Nome Completo
+                            </label>
+                            <input type="text" id="novoNome" required placeholder="Ex: João da Silva Santos" 
+                                   style="border: 2px solid #e2e8f0; transition: all 0.3s;"
+                                   onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
+                                   onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
                         </div>
                         <div class="form-group">
-                            <label>Cargo</label>
-                            <select id="novoCargo" required>
-                                <option value="">Selecione...</option>
-                                <option value="Operário (R$ 15/h)">Operário (R$ 15/h)</option>
-                                <option value="Supervisor (R$ 40/h)">Supervisor (R$ 40/h)</option>
-                                <option value="Gerente (R$ 60/h)">Gerente (R$ 60/h)</option>
-                                <option value="Diretor (R$ 80/h)">Diretor (R$ 80/h)</option>
+                            <label style="font-weight: 600; color: #334155;">
+                                <i class="fas fa-briefcase"></i> Cargo / Função
+                            </label>
+                            <select id="novoCargo" required
+                                    style="border: 2px solid #e2e8f0; transition: all 0.3s;"
+                                    onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
+                                    onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                                <option value="">Selecione o cargo...</option>
+                                <option value="Operário (R$ 15/h)">🔧 Operário - R$ 15,00/hora</option>
+                                <option value="Supervisor (R$ 40/h)">👷 Supervisor - R$ 40,00/hora</option>
+                                <option value="Gerente (R$ 60/h)">👔 Gerente - R$ 60,00/hora</option>
+                                <option value="Diretor (R$ 80/h)">💼 Diretor - R$ 80,00/hora</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Admissão</label>
-                            <input type="date" id="novoAdmissao" required>
+                            <label style="font-weight: 600; color: #334155;">
+                                <i class="fas fa-calendar-check"></i> Data de Admissão
+                            </label>
+                            <input type="date" id="novoAdmissao" required
+                                   style="border: 2px solid #e2e8f0; transition: all 0.3s;"
+                                   onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
+                                   onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success btn-sm">
+                    <button type="submit" class="btn btn-success btn-sm" 
+                            style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; padding: 10px 24px; font-weight: 600; box-shadow: 0 2px 8px rgba(16,185,129,0.3); transition: all 0.3s;"
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(16,185,129,0.4)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(16,185,129,0.3)'">
                         <i class="fas fa-save"></i> Salvar Funcionário
                     </button>
                 </form>
             </div>
 
             <!-- Barra de Pesquisa -->
-            <div class="form-group">
-                <label><i class="fas fa-search"></i> Pesquisar Funcionário</label>
-                <input type="text" id="searchFuncionario" onkeyup="filtrarFuncionarios()" placeholder="Digite o nome para buscar...">
+            <div class="form-group" style="margin-top: 20px;">
+                <label style="font-weight: 600; color: #334155;">
+                    <i class="fas fa-search"></i> Pesquisar Funcionário
+                </label>
+                <input type="text" id="searchFuncionario" onkeyup="filtrarFuncionarios()" 
+                       placeholder="Digite o nome ou cargo para buscar..."
+                       style="border: 2px solid #e2e8f0; padding: 12px; transition: all 0.3s;"
+                       onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
+                       onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
             </div>
             
             <!-- Lista de Funcionários -->
@@ -55,9 +81,12 @@ function loadRHModule(container) {
                 <p class="text-center text-muted">Carregando funcionários...</p>
             </div>
             
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="calcularFolhaPagamento()">
-                    <i class="fas fa-calculator"></i> Calcular Folha (Mês Atual)
+            <div class="button-group" style="margin-top: 30px; text-align: center;">
+                <button class="btn btn-primary" onclick="calcularFolhaPagamento()"
+                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 14px 32px; font-size: 1.05rem; font-weight: 600; box-shadow: 0 4px 12px rgba(102,126,234,0.4); transition: all 0.3s; border-radius: 8px;"
+                        onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(102,126,234,0.5)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(102,126,234,0.4)'">
+                    <i class="fas fa-calculator"></i> Calcular Folha de Pagamento (Mês Atual)
                 </button>
             </div>
             
@@ -187,31 +216,92 @@ function renderizarListaFuncionarios(lista) {
         return;
     }
     
-    let html = '';
+    let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; margin-top: 15px;">';
+    
     lista.forEach(func => {
+        // Extrair apenas nome do cargo sem o valor
+        const cargoNome = func.cargo.split('(')[0].trim();
+        const cargoValor = func.cargo.match(/\((.+)\)/)?.[1] || '';
+        
+        // Definir cor do cargo
+        let cargoCor = '#3b82f6';
+        if (func.cargo.includes('Diretor')) cargoCor = '#8b5cf6';
+        else if (func.cargo.includes('Gerente')) cargoCor = '#10b981';
+        else if (func.cargo.includes('Supervisor')) cargoCor = '#f59e0b';
+        else if (func.cargo.includes('Operário')) cargoCor = '#6366f1';
+        
+        // Calcular tempo de empresa
+        const dataAdmissao = new Date(func.admissao + 'T00:00:00');
+        const hoje = new Date();
+        const diffTime = Math.abs(hoje - dataAdmissao);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const meses = Math.floor(diffDays / 30);
+        const tempoEmpresa = meses > 0 ? `${meses} ${meses === 1 ? 'mês' : 'meses'}` : `${diffDays} dias`;
+        
         html += `
-            <div class="card mb-2 func-card" data-id="${func.id}" style="background: #fff; border-left: 4px solid #007bff;">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <strong>${func.nome}</strong><br>
-                        <small class="text-muted">${func.cargo} | Adm: ${func.admissao || 'N/A'}</small>
+            <div class="card" style="padding: 16px; background: white; border: 2px solid #e2e8f0; border-radius: 12px; transition: all 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"
+                 onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(102,126,234,0.15)'; this.style.borderColor='${cargoCor}'"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.1)'; this.style.borderColor='#e2e8f0'">
+                
+                <!-- Cabeçalho do Card -->
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                    <div style="flex: 1;">
+                        <h6 style="margin: 0 0 4px 0; color: #0f172a; font-size: 1.05rem; font-weight: 600;">
+                            👤 ${func.nome}
+                        </h6>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
+                            <span style="background: ${cargoCor}; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">
+                                ${cargoNome}
+                            </span>
+                            <span style="color: #64748b; font-size: 0.85rem; font-weight: 500;">
+                                ${cargoValor}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Informações -->
+                <div style="background: #f8fafc; padding: 10px; border-radius: 8px; margin: 12px 0; border-left: 3px solid ${cargoCor};">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <i class="fas fa-calendar-check" style="color: ${cargoCor}; width: 16px;"></i>
+                        <span style="font-size: 0.85rem; color: #475569;">
+                            <strong>Admissão:</strong> ${new Date(func.admissao + 'T00:00:00').toLocaleDateString('pt-BR')}
+                        </span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-clock" style="color: ${cargoCor}; width: 16px;"></i>
+                        <span style="font-size: 0.85rem; color: #475569;">
+                            <strong>Na empresa:</strong> ${tempoEmpresa}
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Horas Extras e Ações -->
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px;">
+                    <div class="form-group mb-0" style="flex: 1;">
+                        <label style="font-size: 0.8rem; margin-bottom: 4px; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                            ⏰ Horas Extras (mês)
+                        </label>
+                        <input type="number" class="func-he-input" data-id="${func.id}" min="0" max="100" value="0" step="0.5" 
+                               placeholder="0h"
+                               style="padding: 8px; border: 2px solid #e2e8f0; border-radius: 6px; font-weight: 600; text-align: center; transition: all 0.3s; width: 100%;"
+                               onfocus="this.style.borderColor='${cargoCor}'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
+                               onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
                     </div>
                     
-                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-                        <div class="form-group mb-0" style="width: 120px;">
-                            <label style="font-size: 0.8rem; margin-bottom: 0;">Horas Extras</label>
-                            <input type="number" class="func-he-input" data-id="${func.id}" min="0" value="0" step="0.5" style="padding: 4px;">
-                        </div>
-                        
-                        <button class="btn btn-danger btn-sm" onclick="removerFuncionario('${func.id}')" title="Excluir Funcionário">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
+                    <button class="btn btn-danger btn-sm" onclick="removerFuncionario('${func.id}')" 
+                            title="Excluir Funcionário"
+                            style="padding: 8px 12px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; border-radius: 6px; transition: all 0.3s; box-shadow: 0 2px 4px rgba(239,68,68,0.3);"
+                            onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 8px rgba(239,68,68,0.4)'"
+                            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 4px rgba(239,68,68,0.3)'">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </div>
             </div>
         `;
     });
     
+    html += '</div>';
     container.innerHTML = html;
 }
 
@@ -297,13 +387,14 @@ async function calcularFolhaPagamento() {
             const valorHora = tabelaValores[func.cargo] || 15;
             const horasExtras = mapHE[func.id] || 0;
             
-            // Salário base
+            // Salário base (220h mensais)
             const salarioBase = valorHora * horasNormais;
             
-            // Horas extras (50% adicional)
-            const valorHorasExtras = horasExtras * valorHora * 1.5;
+            // Horas extras com adicional de 50% (valor da hora × 1.5)
+            // Exemplo: R$ 15/h × 1.5 = R$ 22.50/h para cada hora extra
+            const valorHorasExtras = horasExtras * (valorHora * 1.5);
             
-            // Salário bruto
+            // Salário bruto = Base + Horas Extras
             const salarioBruto = salarioBase + valorHorasExtras;
             
             // Calcular INSS progressivo (Tabela 2025)
@@ -419,18 +510,26 @@ function exibirResultadoRH(data) {
     
     let tabelaHTML = '';
     data.detalhes.forEach((func, idx) => {
+        // Calcular valor/hora para exibição
+        const valorHoraBase = func.salarioBase / 220; // 220h normais/mês
+        const valorHoraExtra = valorHoraBase * 1.5; // Hora extra com adicional de 50%
+        
         tabelaHTML += `
-            <tr>
-                <td>${idx + 1}</td>
-                <td>${func.nome}</td>
-                <td>${func.cargo}</td>
-                <td>${func.horasExtras > 0 ? func.horasExtras + 'h' : '-'}</td>
-                <td>${formatCurrency(func.salarioBase)}</td>
-                <td>${formatCurrency(func.valorHorasExtras)}</td>
-                <td><strong>${formatCurrency(func.salarioBruto)}</strong></td>
-                <td class="text-danger">${formatCurrency(func.inss)}</td>
-                <td class="text-danger">${formatCurrency(func.ir)}</td>
-                <td><strong class="text-success">${formatCurrency(func.salarioLiquido)}</strong></td>
+            <tr style="transition: all 0.3s; cursor: pointer;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
+                <td style="font-weight: bold; color: #667eea;">${idx + 1}</td>
+                <td style="font-weight: 500;">${func.nome}</td>
+                <td><span style="background: #e0e7ff; color: #4c51bf; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">${func.cargo}</span></td>
+                <td style="text-align: center; font-weight: bold; color: ${func.horasExtras > 0 ? '#f59e0b' : '#94a3b8'};">
+                    ${func.horasExtras > 0 ? func.horasExtras + 'h' : '-'}
+                </td>
+                <td style="text-align: right;">${formatCurrency(func.salarioBase)}</td>
+                <td style="text-align: right; color: ${func.valorHorasExtras > 0 ? '#16a34a' : '#94a3b8'};">
+                    ${func.valorHorasExtras > 0 ? '+ ' + formatCurrency(func.valorHorasExtras) : '-'}
+                </td>
+                <td style="text-align: right; font-weight: bold; color: #0f172a; background: #f1f5f9;">${formatCurrency(func.salarioBruto)}</td>
+                <td style="text-align: right; color: #dc2626;">- ${formatCurrency(func.inss)}</td>
+                <td style="text-align: right; color: #dc2626;">- ${formatCurrency(func.ir)}</td>
+                <td style="text-align: right; font-weight: bold; font-size: 1.05rem; color: #16a34a; background: #f0fdf4;">${formatCurrency(func.salarioLiquido)}</td>
             </tr>
         `;
     });
@@ -444,23 +543,23 @@ function exibirResultadoRH(data) {
                 </button>
             </div>
             
-            <div class="table-container" style="overflow-x: auto;">
-                <table>
-                    <thead>
+            <div class="table-container" style="overflow-x: auto; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 8px;">
+                <table style="margin: 0;">
+                    <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                         <tr>
-                            <th>#</th>
-                            <th>Nome</th>
-                            <th>Cargo</th>
-                            <th>HE</th>
-                            <th>Salário Base</th>
-                            <th>Valor HE (1.5x)</th>
-                            <th>Salário Bruto</th>
-                            <th>INSS</th>
-                            <th>IR</th>
-                            <th>Salário Líquido</th>
+                            <th style="color: white;">#</th>
+                            <th style="color: white; text-align: left;">👤 Nome</th>
+                            <th style="color: white; text-align: left;">💼 Cargo</th>
+                            <th style="color: white; text-align: center;">⏰ HE</th>
+                            <th style="color: white; text-align: right;">💰 Base (220h)</th>
+                            <th style="color: white; text-align: right;">⚡ Valor HE (+50%)</th>
+                            <th style="color: white; text-align: right;">📊 Bruto</th>
+                            <th style="color: white; text-align: right;">🏛️ INSS</th>
+                            <th style="color: white; text-align: right;">🏦 IR</th>
+                            <th style="color: white; text-align: right;">✅ Líquido</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="background: white;">
                         ${tabelaHTML}
                     </tbody>
                 </table>
@@ -483,11 +582,17 @@ function exibirResultadoRH(data) {
                 </div>
             </div>
             
-            <div style="margin-top: 15px; padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                <p style="margin: 0; font-size: 0.875rem; color: #92400e;">
+            <div style="margin-top: 15px; padding: 15px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <p style="margin: 0 0 8px 0; font-size: 0.875rem; color: #92400e;">
                     <i class="fas fa-info-circle"></i>
-                    <strong>Cálculos conforme legislação 2025:</strong> INSS progressivo (7,5% a 14%) e IR progressivo (isento a 27,5%)
+                    <strong>Cálculos conforme legislação 2025:</strong>
                 </p>
+                <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: #78350f;">
+                    <li><strong>Horas Extras:</strong> Valor/hora × 1.5 (adicional de 50% por lei)</li>
+                    <li><strong>INSS:</strong> Progressivo de 7,5% a 14% (máx. R$ 908,85)</li>
+                    <li><strong>IR:</strong> Progressivo de 0% a 27,5% (isento até R$ 2.259,20)</li>
+                    <li><strong>Base de Cálculo:</strong> 220 horas/mês (44h/semana)</li>
+                </ul>
             </div>
         </div>
     `;
@@ -534,7 +639,7 @@ async function exportarFolhaPDF() {
                 func.horasExtras > 0 ? func.horasExtras + 'h' : '-',
                 formatCurrency(func.salarioBase),
                 formatCurrency(func.valorHorasExtras),
-                formatCurrency(func.salarioTotal)
+                formatCurrency(func.salarioBruto)
             ];
             tableRows.push(row);
         });

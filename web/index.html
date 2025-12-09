@@ -690,10 +690,11 @@
         console.log('🌐 Ambiente:', IS_PRODUCTION ? 'PRODUÇÃO (Netlify)' : IS_LOCALHOST ? 'LOCAL (Dev)' : 'OUTRO');
     </script>
 
-    <!-- JavaScript - Ordem: Firebase Config > Local Fallback > Auth > App -->
+    <!-- JavaScript - Ordem: Firebase Config > Firestore Service > Local Fallback > Auth > App -->
     
     <!-- 1. Configuração Firebase (Sistema Híbrido) -->
     <script src="/static/js/firebase-config.js?v=21"></script>
+    <script src="/static/js/firestore-service.js?v=21"></script>
     
     <!-- 2. Fallback Local (se Firebase falhar) -->
     <script src="/static/js/local-auth.js?v=21"></script>
