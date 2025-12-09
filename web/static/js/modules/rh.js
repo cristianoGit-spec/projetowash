@@ -285,6 +285,7 @@ async function calcularFolhaPagamento() {
         };
         
         let totalFolha = 0;
+        let totalDescontos = 0;
         let detalhes = [];
         
         // Horas normais por mês (220h = 40h/semana * 4.4 semanas)
@@ -300,10 +301,26 @@ async function calcularFolhaPagamento() {
             // Horas extras (50% adicional)
             const valorHorasExtras = horasExtras * valorHora * 1.5;
             
-            // Total
-            const salarioTotal = salarioBase + valorHorasExtras;
+            // Salário bruto
+            const salarioBruto = salarioBase + valorHorasExtras;
             
-            totalFolha += salarioTotal;
+            // Calcular INSS progressivo (Tabela 2025)
+            const inss = calcularINSS(salarioBruto);
+            
+            // Base de cálculo IR = Salário bruto - INSS
+            const baseIR = salarioBruto - inss;
+            
+            // Calcular IR progressivo (Tabela 2025)
+            const ir = calcularIR(baseIR);
+            
+            // Total de descontos
+            const totalDescontosFunc = inss + ir;
+            
+            // Salário líquido
+            const salarioLiquido = salarioBruto - totalDescontosFunc;
+            
+            totalFolha += salarioLiquido;
+            totalDescontos += totalDescontosFunc;
             
             detalhes.push({
                 nome: func.nome,
@@ -311,7 +328,11 @@ async function calcularFolhaPagamento() {
                 salarioBase: salarioBase,
                 horasExtras: horasExtras,
                 valorHorasExtras: valorHorasExtras,
-                salarioTotal: salarioTotal
+                salarioBruto: salarioBruto,
+                inss: inss,
+                ir: ir,
+                totalDescontos: totalDescontosFunc,
+                salarioLiquido: salarioLiquido
             });
         });
         
@@ -320,7 +341,8 @@ async function calcularFolhaPagamento() {
             mes: new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }),
             data: new Date().toLocaleDateString('pt-BR'),
             detalhes: detalhes,
-            totalFolha: totalFolha
+            totalFolha: totalFolha,
+            totalDescontos: totalDescontos
         };
         
         exibirResultadoRH(lastCalculatedFolha);
@@ -332,6 +354,62 @@ async function calcularFolhaPagamento() {
     } finally {
         hideLoading();
     }
+}
+
+// Calcular INSS progressivo (Tabela 2025)
+function calcularINSS(salario) {
+    let inss = 0;
+    
+    // Faixa 1: Até R$ 1.412,00 = 7,5%
+    if (salario <= 1412.00) {
+        inss = salario * 0.075;
+    }
+    // Faixa 2: R$ 1.412,01 a R$ 2.666,68 = 9%
+    else if (salario <= 2666.68) {
+        inss = (1412.00 * 0.075) + ((salario - 1412.00) * 0.09);
+    }
+    // Faixa 3: R$ 2.666,69 a R$ 4.000,03 = 12%
+    else if (salario <= 4000.03) {
+        inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((salario - 2666.68) * 0.12);
+    }
+    // Faixa 4: R$ 4.000,04 a R$ 7.786,02 = 14%
+    else if (salario <= 7786.02) {
+        inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((4000.03 - 2666.68) * 0.12) + ((salario - 4000.03) * 0.14);
+    }
+    // Acima do teto: limitado ao máximo
+    else {
+        inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((4000.03 - 2666.68) * 0.12) + ((7786.02 - 4000.03) * 0.14);
+    }
+    
+    return inss;
+}
+
+// Calcular IR progressivo (Tabela 2025)
+function calcularIR(baseCalculo) {
+    let ir = 0;
+    
+    // Faixa 1: Até R$ 2.259,20 = Isento
+    if (baseCalculo <= 2259.20) {
+        ir = 0;
+    }
+    // Faixa 2: R$ 2.259,21 a R$ 2.826,65 = 7,5% - R$ 169,44
+    else if (baseCalculo <= 2826.65) {
+        ir = (baseCalculo * 0.075) - 169.44;
+    }
+    // Faixa 3: R$ 2.826,66 a R$ 3.751,05 = 15% - R$ 381,44
+    else if (baseCalculo <= 3751.05) {
+        ir = (baseCalculo * 0.15) - 381.44;
+    }
+    // Faixa 4: R$ 3.751,06 a R$ 4.664,68 = 22,5% - R$ 662,77
+    else if (baseCalculo <= 4664.68) {
+        ir = (baseCalculo * 0.225) - 662.77;
+    }
+    // Faixa 5: Acima de R$ 4.664,68 = 27,5% - R$ 896,00
+    else {
+        ir = (baseCalculo * 0.275) - 896.00;
+    }
+    
+    return Math.max(0, ir); // Garantir que não seja negativo
 }
 
 function exibirResultadoRH(data) {
@@ -347,7 +425,10 @@ function exibirResultadoRH(data) {
                 <td>${func.horasExtras > 0 ? func.horasExtras + 'h' : '-'}</td>
                 <td>${formatCurrency(func.salarioBase)}</td>
                 <td>${formatCurrency(func.valorHorasExtras)}</td>
-                <td><strong>${formatCurrency(func.salarioTotal)}</strong></td>
+                <td><strong>${formatCurrency(func.salarioBruto)}</strong></td>
+                <td class="text-danger">${formatCurrency(func.inss)}</td>
+                <td class="text-danger">${formatCurrency(func.ir)}</td>
+                <td><strong class="text-success">${formatCurrency(func.salarioLiquido)}</strong></td>
             </tr>
         `;
     });
@@ -368,10 +449,13 @@ function exibirResultadoRH(data) {
                             <th>#</th>
                             <th>Nome</th>
                             <th>Cargo</th>
-                            <th>Horas Extras</th>
+                            <th>HE</th>
                             <th>Salário Base</th>
                             <th>Valor HE (1.5x)</th>
-                            <th>Total a Pagar</th>
+                            <th>Salário Bruto</th>
+                            <th>INSS</th>
+                            <th>IR</th>
+                            <th>Salário Líquido</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -380,22 +464,28 @@ function exibirResultadoRH(data) {
                 </table>
             </div>
             
-            <div class="mt-3 p-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                <h5 style="margin: 0 0 10px 0; color: white;"><i class="fas fa-money-bill-wave"></i> Resumo da Folha</h5>
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #2563eb;">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                     <div>
-                        <small style="opacity: 0.9;">Total de Funcionários</small>
-                        <h4 style="margin: 5px 0; color: white;">${data.detalhes.length}</h4>
+                        <p style="margin: 0; font-size: 0.875rem; color: #64748b;">Total Bruto</p>
+                        <h3 style="margin: 5px 0 0 0; color: #0f172a;">${formatCurrency(data.detalhes.reduce((sum, f) => sum + f.salarioBruto, 0))}</h3>
                     </div>
                     <div>
-                        <small style="opacity: 0.9;">Total da Folha</small>
-                        <h4 style="margin: 5px 0; color: white;">${formatCurrency(data.totalFolha)}</h4>
+                        <p style="margin: 0; font-size: 0.875rem; color: #64748b;">Total Descontos</p>
+                        <h3 style="margin: 5px 0 0 0; color: #dc2626;">- ${formatCurrency(data.totalDescontos)}</h3>
                     </div>
                     <div>
-                        <small style="opacity: 0.9;">Data do Cálculo</small>
-                        <h4 style="margin: 5px 0; color: white; font-size: 1rem;">${data.data}</h4>
+                        <p style="margin: 0; font-size: 0.875rem; color: #64748b;">Total Líquido</p>
+                        <h3 style="margin: 5px 0 0 0; color: #16a34a;">${formatCurrency(data.totalFolha)}</h3>
                     </div>
                 </div>
+            </div>
+            
+            <div style="margin-top: 15px; padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                <p style="margin: 0; font-size: 0.875rem; color: #92400e;">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Cálculos conforme legislação 2025:</strong> INSS progressivo (7,5% a 14%) e IR progressivo (isento a 27,5%)
+                </p>
             </div>
         </div>
     `;

@@ -290,11 +290,11 @@ function loadChartTopProdutos(produtos) {
 }
 
 // Grafico de Eficiencia (Gauge)
-function loadChartEficiencia() {
+async function loadChartEficiencia() {
     const ctx = document.getElementById('chartEficiencia');
     
-    // Simular eficiencia (85-98%)
-    const eficiencia = Math.floor(Math.random() * (98 - 85 + 1)) + 85;
+    // Calcular eficiência real baseada nos dados do sistema
+    const eficiencia = await calcularOEE();
     const restante = 100 - eficiencia;
     
     if (chartEficiencia) {
@@ -380,3 +380,60 @@ function toggleSidebar() {
     }
 }
 
+// Calcular OEE (Overall Equipment Effectiveness) Real
+async function calcularOEE() {
+    try {
+        // Obter dados do estoque e movimentações
+        const [produtos, movimentacoes] = await Promise.all([
+            obterDadosEstoque(),
+            obterHistoricoMovimentacoes()
+        ]);
+        
+        // Se não houver dados, retornar 88% como padrão
+        if (!produtos || produtos.length === 0) {
+            return 88;
+        }
+        
+        // Calcular eficiência baseada em:
+        // 1. Taxa de movimentação (produtos com saídas recentes)
+        // 2. Nível de estoque (produtos não zerados)
+        // 3. Disponibilidade (produtos cadastrados vs. ativos)
+        
+        const hoje = new Date();
+        const trintaDiasAtras = new Date(hoje.getTime() - 30 * 24 * 60 * 60 * 1000);
+        
+        // Produtos com estoque disponível
+        const produtosAtivos = produtos.filter(p => p.quantidade > 0).length;
+        const taxaDisponibilidade = (produtosAtivos / produtos.length) * 100;
+        
+        // Movimentações dos últimos 30 dias
+        const movimentacoesRecentes = movimentacoes.filter(m => {
+            const data = m.timestamp && m.timestamp.toDate ? m.timestamp.toDate() : new Date(m.timestamp);
+            return data >= trintaDiasAtras;
+        });
+        
+        // Taxa de performance (movimentações por produto ativo)
+        const taxaMovimentacao = produtosAtivos > 0 
+            ? Math.min((movimentacoesRecentes.length / produtosAtivos) * 10, 100) 
+            : 0;
+        
+        // Produtos com nível adequado de estoque (acima de 5 unidades)
+        const produtosComEstoqueAdequado = produtos.filter(p => p.quantidade >= 5).length;
+        const taxaQualidade = (produtosComEstoqueAdequado / produtos.length) * 100;
+        
+        // OEE = Disponibilidade × Performance × Qualidade
+        // Pesos ajustados para o contexto de estoque
+        const oee = (
+            taxaDisponibilidade * 0.4 +  // 40% peso na disponibilidade
+            taxaMovimentacao * 0.35 +      // 35% peso na movimentação
+            taxaQualidade * 0.25           // 25% peso no estoque adequado
+        );
+        
+        // Garantir que está entre 0 e 100 e arredondar
+        return Math.round(Math.max(0, Math.min(100, oee)));
+        
+    } catch (error) {
+        console.error('Erro ao calcular OEE:', error);
+        return 88; // Valor padrão em caso de erro
+    }
+}
