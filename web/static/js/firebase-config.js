@@ -24,7 +24,7 @@
 console.log('🔧 Inicializando Firebase Config v15.0...');
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBqU8Y9xJ5LmKp7NwQzT3VxRyH4SfEaGcI",
+    apiKey: "", // Desabilitado - usando modo local
     authDomain: "projetowash-production.firebaseapp.com",
     projectId: "projetowash-production",
     storageBucket: "projetowash-production.firebasestorage.app",
@@ -36,7 +36,7 @@ const firebaseConfig = {
 let auth = null;
 let db = null;
 let firebaseInitialized = false;
-let useFirebase = true; // Flag para controlar qual sistema usar
+let useFirebase = false; // Flag para controlar qual sistema usar - MODO LOCAL ATIVADO
 
 // Tentar inicializar Firebase
 try {
