@@ -1,10 +1,10 @@
-﻿# estoque_entrada.py
+# estoque_entrada.py
 # ============================================================================
 # MÓDULO 1: ESTOQUE - ENTRADA DE PRODUTOS
 # ============================================================================
 # Este módulo é responsável por cadastrar novos produtos no estoque.
 # Utiliza BANCO DE DADOS (SQLAlchemy) para armazenar os dados.
-# 
+#
 # CONCEITOS DEMONSTRADOS:
 # - Interação com Banco de Dados
 # - Laços de repetição (for)
@@ -14,11 +14,22 @@
 
 from database import Produto
 
+
 # ============================================================================
 # FUNÇÕES DE LÓGICA PURA (PARA API E CLI)
 # ============================================================================
 
-def registrar_entrada_produto(db_session, codigo, nome, quantidade, valor=0.0, data=None, fornecedor=None, local=None):
+
+def registrar_entrada_produto(
+    db_session,
+    codigo,
+    nome,
+    quantidade,
+    valor=0.0,
+    data=None,
+    fornecedor=None,
+    local=None
+):
     """
     Registra a entrada de um produto no estoque (Lógica Pura).
     
@@ -31,12 +42,15 @@ def registrar_entrada_produto(db_session, codigo, nome, quantidade, valor=0.0, d
         raise ValueError("Quantidade deve ser maior que zero")
     
     # Verifica se o produto já existe pelo código
-    produto = db_session.query(Produto).filter_by(codigo=codigo).first() # Busca por código único
+    produto = db_session.query(Produto).filter_by(
+        codigo=codigo
+    ).first()  # Busca por código único
     
     if produto:
         # Atualizar produto existente
-        produto.quantidade += quantidade # Incrementa quantidade
-        produto.valor = valor if valor > 0 else produto.valor # Atualiza valor se fornecido
+        produto.quantidade += quantidade  # Incrementa quantidade
+        # Atualiza valor se fornecido
+        produto.valor = valor if valor > 0 else produto.valor
         if data:
             produto.data = data
         if fornecedor:
@@ -108,7 +122,10 @@ def cadastrar_produtos(db_session):
         try:
             quantidade = int(input(" Quantidade: "))
             if quantidade <= 0:
-                print(" Quantidade deve ser maior que zero! Pulando este produto.")
+                print(
+                    " Quantidade deve ser maior que zero! "
+                    "Pulando este produto."
+                )
                 continue
         except ValueError:
             print(" Erro: Quantidade inválida! Pulando este produto.")
@@ -127,14 +144,24 @@ def cadastrar_produtos(db_session):
         # Chama a função pura
         try:
             produto, is_novo = registrar_entrada_produto(
-                db_session, codigo, nome, quantidade, valor, data, fornecedor, local
+                db_session,
+                codigo,
+                nome,
+                quantidade,
+                valor,
+                data,
+                fornecedor,
+                local
             )
             
             if is_novo:
                 print(f"\n ✓ Produto '{produto.nome}' cadastrado com sucesso!")
                 produtos_novos += 1
             else:
-                print(f"\n ✓ Produto '{produto.nome}' atualizado! Nova quantidade: {produto.quantidade}")
+                print(
+                    f"\n ✓ Produto '{produto.nome}' atualizado! "
+                    f"Nova quantidade: {produto.quantidade}"
+                )
                 produtos_atualizados += 1
                 
         except Exception as e:
