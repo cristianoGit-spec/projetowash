@@ -2,22 +2,22 @@
 // SERVICE WORKER - PWA OFFLINE SUPPORT
 // Arquivo: service-worker.js
 // Descrição: Gerencia cache e funcionamento offline do aplicativo
-// Versão: 17 (cache limpo - sistema híbrido completo)
+// Versão: 18 (admin cards + modo local fixo)
 // ============================================================================
 
-const CACHE_NAME = 'estoque-certo-v17';
+const CACHE_NAME = 'estoque-certo-v18';
 const CACHE_MAX_AGE_DAYS = 30; // Cache expira após 30 dias
 const CACHE_MAX_ITEMS = 50; // Máximo de itens no cache
 
 // Lista de URLs essenciais para cache (apenas arquivos que realmente existem)
 const urlsToCache = [
     '/',
-    '/static/css/style.css?v=17',
-    '/static/js/app.js?v=17',
-    '/static/js/modules.js?v=17',
-    '/static/js/dashboard.js?v=17',
-    '/static/js/auth.js?v=17',
-    '/static/js/firebase-config.js?v=17',
+    '/static/css/style.css?v=18',
+    '/static/js/app.js?v=18',
+    '/static/js/modules.js?v=18',
+    '/static/js/dashboard.js?v=18',
+    '/static/js/auth.js?v=18',
+    '/static/js/firebase-config.js?v=18',
     '/static/js/local-auth.js?v=17',
     '/static/js/local-firestore.js?v=17',
     '/static/js/pwa.js?v=17'
