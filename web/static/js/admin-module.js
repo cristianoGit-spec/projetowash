@@ -97,27 +97,12 @@ function loadAdminModule(container) {
                 </div>
             </div>
 
-            <!-- Tabela de Empresas -->
-            <div class="admin-table-container">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th><i class="fas fa-building"></i> Empresa</th>
-                            <th><i class="fas fa-envelope"></i> Email</th>
-                            <th><i class="fas fa-industry"></i> Segmento</th>
-                            <th><i class="fas fa-calendar"></i> Data Cadastro</th>
-                            <th><i class="fas fa-signal"></i> Status</th>
-                            <th><i class="fas fa-cog"></i> AÃ§Ãµes</th>
-                        </tr>
-                    </thead>
-                    <tbody id="empresasTableBody">
-                        <tr>
-                            <td colspan="6" class="loading-cell">
-                                <i class="fas fa-spinner fa-spin"></i> Carregando dados...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Grid de Empresas -->
+            <div id="empresasGrid" class="empresas-grid">
+                <div class="loading-card">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Carregando empresas...</p>
+                </div>
             </div>
         </div>
     `;
@@ -218,69 +203,81 @@ function atualizarEstatisticas(empresas) {
 // ============================================================================
 
 function renderizarTabelaEmpresas(empresas) {
-    const tbody = document.getElementById('empresasTableBody');
+    const grid = document.getElementById('empresasGrid');
     
     if (empresas.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="6" class="empty-cell">
-                    <i class="fas fa-inbox"></i>
-                    <p>Nenhuma empresa cadastrada ainda</p>
-                </td>
-            </tr>
+        grid.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h3>Nenhuma empresa cadastrada</h3>
+                <p>As empresas cadastradas aparecerão aqui</p>
+            </div>
         `;
         return;
     }
     
-    tbody.innerHTML = empresas.map(empresa => {
+    grid.innerHTML = empresas.map(empresa => {
         const segmentoInfo = typeof SEGMENTOS_EMPRESARIAIS !== 'undefined' && empresa.segmento 
             ? SEGMENTOS_EMPRESARIAIS[empresa.segmento] 
             : null;
         
         const dataCadastro = empresa.dataCadastro 
             ? new Date(empresa.dataCadastro).toLocaleDateString('pt-BR')
-            : 'NÃ£o informada';
+            : 'Não informada';
         
-        const status = empresa.ativo !== false ? 'Ativa' : 'Inativa';
-        const statusClass = empresa.ativo !== false ? 'status-active' : 'status-inactive';
+        const isAtiva = empresa.ativo !== false;
         
         return `
-            <tr data-empresa-id="${empresa.uid}">
-                <td class="empresa-cell">
-                    <div class="empresa-info">
-                        <i class="fas fa-building" style="color: ${segmentoInfo ? segmentoInfo.cor : '#2563eb'}"></i>
-                        <div>
-                            <strong>${empresa.nomeEmpresa || 'Sem nome'}</strong>
-                            <small>${empresa.nome || 'Administrador'}</small>
+            <div class="empresa-card ${!isAtiva ? 'empresa-inativa' : ''}">
+                <div class="empresa-card-header" style="background: linear-gradient(135deg, ${segmentoInfo ? segmentoInfo.cor : '#2563eb'} 0%, ${segmentoInfo ? segmentoInfo.cor + 'dd' : '#1e40af'} 100%)">
+                    <div class="empresa-icon">
+                        <i class="fas ${segmentoInfo ? segmentoInfo.icon : 'fa-building'}"></i>
+                    </div>
+                    <div class="empresa-status">
+                        <span class="status-badge ${isAtiva ? 'status-active' : 'status-inactive'}">
+                            ${isAtiva ? 'Ativa' : 'Bloqueada'}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="empresa-card-body">
+                    <h3 class="empresa-nome">${empresa.nomeEmpresa || 'Sem nome'}</h3>
+                    <p class="empresa-responsavel">
+                        <i class="fas fa-user"></i>
+                        ${empresa.nome || 'Administrador'}
+                    </p>
+                    
+                    <div class="empresa-info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>${empresa.email}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-industry"></i>
+                            <span>${segmentoInfo ? segmentoInfo.nome : 'Não definido'}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${dataCadastro}</span>
                         </div>
                     </div>
-                </td>
-                <td>${empresa.email}</td>
-                <td>
-                    ${segmentoInfo ? `
-                        <span class="segmento-badge" style="background-color: ${segmentoInfo.cor}20; color: ${segmentoInfo.cor}">
-                            <i class="fas ${segmentoInfo.icon}"></i>
-                            ${segmentoInfo.nome}
-                        </span>
-                    ` : '<span class="text-muted">NÃ£o definido</span>'}
-                </td>
-                <td>${dataCadastro}</td>
-                <td><span class="status-badge ${statusClass}">${status}</span></td>
-                <td class="actions-cell">
-                    <button onclick="verDetalhesEmpresa('${empresa.uid}')" class="btn-action btn-view" title="Ver Detalhes">
+                </div>
+                
+                <div class="empresa-card-actions">
+                    <button onclick="verDetalhesEmpresa('${empresa.uid}')" class="btn-card-action btn-view" title="Ver Detalhes">
                         <i class="fas fa-eye"></i>
+                        <span>Visualizar</span>
                     </button>
-                    <button onclick="editarEmpresa('${empresa.uid}')" class="btn-action btn-edit" title="Editar">
-                        <i class="fas fa-edit"></i>
+                    <button onclick="toggleStatusEmpresa('${empresa.uid}')" class="btn-card-action btn-toggle" title="${isAtiva ? 'Bloquear' : 'Desbloquear'}">
+                        <i class="fas fa-${isAtiva ? 'lock' : 'unlock'}"></i>
+                        <span>${isAtiva ? 'Bloquear' : 'Desbloquear'}</span>
                     </button>
-                    <button onclick="toggleStatusEmpresa('${empresa.uid}')" class="btn-action btn-toggle" title="${empresa.ativo !== false ? 'Bloquear' : 'Desbloquear'}">
-                        <i class="fas fa-${empresa.ativo !== false ? 'lock' : 'unlock'}"></i>
-                    </button>
-                    <button onclick="excluirEmpresa('${empresa.uid}')" class="btn-action btn-delete" title="Excluir">
+                    <button onclick="excluirEmpresa('${empresa.uid}')" class="btn-card-action btn-delete" title="Excluir">
                         <i class="fas fa-trash"></i>
+                        <span>Excluir</span>
                     </button>
-                </td>
-            </tr>
+                </div>
+            </div>
         `;
     }).join('');
 }
