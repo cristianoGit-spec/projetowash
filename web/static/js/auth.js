@@ -631,8 +631,20 @@ async function listarUsuarios() {
         </div>
     `;
 
-    document.getElementById('modalTitle').textContent = 'Usuários';
-    document.getElementById('modalBody').innerHTML = html;
+    // Renderizar na área de conteúdo principal
+    const contentArea = document.getElementById('contentArea');
+    if (contentArea) {
+        contentArea.innerHTML = html;
+        document.title = 'Gerenciar Usuários';
+    } else {
+        // Fallback para modal
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        if (modalTitle && modalBody) {
+            modalTitle.textContent = 'Usuários';
+            modalBody.innerHTML = html;
+        }
+    }
 }
 
 // Mostrar formulario de adicionar usuario (Admin)
@@ -713,7 +725,16 @@ function showAddUser() {
         </div>
     `;
     
-    document.getElementById('modalBody').innerHTML = html;
+    // Renderizar na área de conteúdo principal
+    const contentArea = document.getElementById('contentArea');
+    if (contentArea) {
+        contentArea.innerHTML = html;
+    } else {
+        const modalBody = document.getElementById('modalBody');
+        if (modalBody) {
+            modalBody.innerHTML = html;
+        }
+    }
 }
 
 // Handler para adicionar usuario
