@@ -377,6 +377,7 @@ function showApp() {
         const companyNameEl = document.getElementById('companyName');
         const companyIdEl = document.getElementById('companyId');
         const userCompanyInfoEl = document.getElementById('userCompanyInfo');
+        const headerCompanyNameEl = document.getElementById('headerCompanyName');
         
         if (companyNameEl) {
             companyNameEl.textContent = user.nomeEmpresa || 'Sem empresa';
@@ -388,6 +389,11 @@ function showApp() {
         
         if (userCompanyInfoEl) {
             userCompanyInfoEl.textContent = user.nomeEmpresa || 'Empresa não informada';
+        }
+        
+        // Atualizar nome da empresa no header
+        if (headerCompanyNameEl) {
+            headerCompanyNameEl.textContent = user.nomeEmpresa || 'Empresa Local Demo';
         }
     }
     
