@@ -6,7 +6,7 @@
 
 [build]
   publish = "web"
-  # Sem comando de build - site estático puro (HTML, CSS, JS)
+  command = "echo 'Site estático - sem build necessário'"
   
 # Ignorar node_modules e arquivos desnecessários
 [build.environment]

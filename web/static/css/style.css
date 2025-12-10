@@ -1191,9 +1191,9 @@ table tbody tr:hover {
 .modal-header h2 {
     margin: 0;
     font-size: 1.375rem;
-    font-weight: 600;
-    color: var(--primary-dark);
-    letter-spacing: -0.01em;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
 }
 
 .close-btn {
@@ -1427,6 +1427,9 @@ table tbody tr:hover {
 
 .manager-header h3 {
     margin-bottom: 0.25rem;
+    color: #1a1a1a;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 .company-info {
@@ -1945,10 +1948,10 @@ table tbody tr:hover {
 
 .auth-header h2 {
     font-size: 2rem;
-    color: var(--text-primary);
+    color: #1a1a1a;
     margin-bottom: 0.5rem;
     font-weight: 800;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.02em;
 }
 
 .auth-header p {
@@ -2308,8 +2311,10 @@ table tbody tr:hover {
 
 .welcome-header h2 {
     font-size: 32px;
-    color: #1A3D0A;
+    color: #1a1a1a;
     margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
 }
 
 .welcome-header p {
@@ -2394,13 +2399,14 @@ table tbody tr:hover {
 .stat-info h3 {
     font-size: 28px;
     font-weight: 700;
-    color: var(--text-primary);
+    color: #1a1a1a;
     margin: 0 0 5px 0;
+    letter-spacing: -0.02em;
 }
 
 .stat-info p {
     font-size: 14px;
-    color: var(--text-secondary);
+    color: #4a5568;
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -2427,8 +2433,10 @@ table tbody tr:hover {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: var(--text-primary);
+    color: #1a1a1a;
     margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.02em;
 }
 
 .welcome-header h2 i {
@@ -3135,7 +3143,9 @@ table tbody tr:hover {
 .sidebar-header-mobile h3 {
     margin: 0;
     font-size: 1.25rem;
-    color: var(--primary-color);
+    color: #1a1a1a;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 .close-sidebar-btn {
