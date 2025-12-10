@@ -13,8 +13,8 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css?v=35">
-    <link rel="stylesheet" href="/static/css/admin.css?v=35">
+    <link rel="stylesheet" href="/static/css/style.css?v=36">
+    <link rel="stylesheet" href="/static/css/admin.css?v=36">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -30,7 +30,7 @@
     <!-- Segments Config -->
     <script src="/static/js/segments-config.js?v=17"></script>
     
-    <!-- Limpeza de Cache v35 - Módulo RH Simplificado -->
+    <!-- Limpeza de Cache v36 - Estoque Saída Simplificado -->
     <script>
         // Limpar cache antigo do Service Worker
         if ('serviceWorker' in navigator) {
@@ -44,7 +44,7 @@
             if ('caches' in window) {
                 caches.keys().then(function(names) {
                     for (let name of names) {
-                        if (name !== 'estoque-certo-v35') {
+                        if (name !== 'estoque-certo-v36') {
                             console.log('🗑️ Removendo cache antigo:', name);
                             caches.delete(name);
                         }
@@ -53,14 +53,14 @@
             }
         }
         
-        // Módulo RH Simplificado v35
-        if (!localStorage.getItem('rh_clean_v35')) {
-            console.log('👥 Simplificando RH v35...');
+        // Estoque Saída Simplificado v36
+        if (!localStorage.getItem('estoque_saida_v36')) {
+            console.log('🚚 Simplificando Estoque Saída v36...');
             // Limpar flags antigas
-            localStorage.removeItem('operacional_clean_v34');
-            localStorage.setItem('rh_clean_v35', 'true');
-            console.log('✅ Layout limpo e profissional!');
-            console.log('📋 Formulário otimizado e responsivo');
+            localStorage.removeItem('rh_clean_v35');
+            localStorage.setItem('estoque_saida_v36', 'true');
+            console.log('✅ Layout limpo com cards de resultado!');
+            console.log('📋 Grid 2 colunas + info grid');
         }
     </script>
 </head>

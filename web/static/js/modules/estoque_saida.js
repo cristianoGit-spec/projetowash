@@ -4,28 +4,49 @@
 
 function loadEstoqueSaidaModule(container) {
     const html = `
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-truck-loading"></i> Registrar Venda/Saída
+        <div class="card modern-card">
+            <div class="card-header modern-header">
+                <div class="header-content">
+                    <div class="header-icon">
+                        <i class="fas fa-truck-loading"></i>
+                    </div>
+                    <div class="header-text">
+                        <h3>Registrar Venda/Saída</h3>
+                        <p class="subtitle">Controle de saída de produtos do estoque</p>
+                    </div>
+                </div>
             </div>
             
-            <form id="formEstoqueSaida" onsubmit="venderProduto(event)">
-                <div class="form-group">
-                    <label for="nomeProduto"><i class="fas fa-search"></i> Nome do Produto</label>
-                    <input type="text" id="nomeProduto" name="nomeProduto" required placeholder="Digite o nome do produto">
-                </div>
+            <div class="card-body modern-body">
+                <form id="formEstoqueSaida" onsubmit="venderProduto(event)">
+                    <div class="form-group modern-form-group">
+                        <label class="modern-label">
+                            <i class="fas fa-search"></i>
+                            <span>Nome do Produto</span>
+                        </label>
+                        <input type="text" id="nomeProduto" name="nomeProduto" 
+                               class="modern-input" required 
+                               placeholder="Digite o nome do produto">
+                    </div>
+                    
+                    <div class="form-group modern-form-group">
+                        <label class="modern-label">
+                            <i class="fas fa-cubes"></i>
+                            <span>Quantidade a Vender</span>
+                        </label>
+                        <input type="number" id="quantidadeVenda" name="quantidadeVenda" 
+                               class="modern-input" required min="1" 
+                               placeholder="Ex: 50">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-warning modern-btn-warning">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Registrar Venda</span>
+                    </button>
+                </form>
                 
-                <div class="form-group">
-                    <label for="quantidadeVenda"><i class="fas fa-cubes"></i> Quantidade a Vender</label>
-                    <input type="number" id="quantidadeVenda" name="quantidadeVenda" required min="1" placeholder="Ex: 50">
-                </div>
-                
-                <button type="submit" class="btn btn-warning">
-                    <i class="fas fa-shopping-cart"></i> Registrar Venda
-                </button>
-            </form>
-            
-            <div id="resultadoVenda" class="mt-3 hidden"></div>
+                <div id="resultadoVenda" class="mt-3 hidden"></div>
+            </div>
         </div>
     `;
     
@@ -98,36 +119,51 @@ function exibirResultadoVenda(data) {
     const resultado = document.getElementById('resultadoVenda');
     
     const html = `
-        <div class="card alert alert-success">
-            <h4><i class="fas fa-check-circle"></i> Venda Registrada com Sucesso!</h4>
+        <div class="results-section">
+            <div class="success-banner">
+                <i class="fas fa-check-circle"></i>
+                <span>Venda Registrada com Sucesso!</span>
+            </div>
             
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <td><strong>Produto:</strong></td>
-                        <td>${data.produto}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Quantidade Vendida:</strong></td>
-                        <td>${formatNumber(data.quantidade)} unidades</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Valor Unitário:</strong></td>
-                        <td>${formatCurrency(data.valorUnitario)}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Valor Total:</strong></td>
-                        <td><strong>${formatCurrency(data.valorTotal)}</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Estoque Anterior:</strong></td>
-                        <td>${formatNumber(data.estoqueAnterior)}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Estoque Atual:</strong></td>
-                        <td>${formatNumber(data.estoqueAtual)}</td>
-                    </tr>
-                </table>
+            <div class="stats-grid grid-2">
+                <div class="stat-card green">
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${formatNumber(data.quantidade)}</h3>
+                        <p>Quantidade Vendida</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card blue">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${formatCurrency(data.valorTotal)}</h3>
+                        <p>Valor Total</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-row">
+                    <span class="info-label">Produto:</span>
+                    <span class="info-value">${data.produto}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Valor Unitário:</span>
+                    <span class="info-value">${formatCurrency(data.valorUnitario)}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Estoque Anterior:</span>
+                    <span class="info-value">${formatNumber(data.estoqueAnterior)} unidades</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Estoque Atual:</span>
+                    <span class="info-value highlight">${formatNumber(data.estoqueAtual)} unidades</span>
+                </div>
             </div>
         </div>
     `;

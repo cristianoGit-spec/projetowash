@@ -4102,3 +4102,117 @@ select {
         justify-content: center;
     }
 }
+
+/* ============================================================================
+   MÓDULO ESTOQUE SAÍDA - ESTILOS LIMPOS v36
+   ============================================================================ */
+
+/* Botão Warning */
+.modern-btn-warning {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+}
+
+.modern-btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.35);
+}
+
+.modern-btn-warning:active {
+    transform: translateY(0);
+}
+
+/* Success Banner */
+.success-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-left: 4px solid var(--success-color);
+    border-radius: var(--radius-md);
+    color: #065f46;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.success-banner i {
+    font-size: 1.5rem;
+    color: var(--success-color);
+}
+
+/* Grid 2 Colunas */
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* Info Grid */
+.info-grid {
+    margin-top: 1.5rem;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-row:nth-child(even) {
+    background: #f8fafc;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+}
+
+.info-value {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+}
+
+.info-value.highlight {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* Responsividade Estoque Saída */
+@media (max-width: 768px) {
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+    
+    .modern-btn-warning {
+        width: 100%;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}
