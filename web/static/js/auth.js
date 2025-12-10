@@ -375,7 +375,7 @@ async function showProfile() {
         `;
         
         // Exibir perfil via toast por enquanto
-        const userData = typeof localCurrentUser !== 'undefined' ? localCurrentUser : (currentUser || {});
+        // const userData = typeof localCurrentUser !== 'undefined' ? localCurrentUser : (currentUser || {});
         showToast(`Perfil: ${userData.nome || userData.email} - ${userData.role === 'admin' ? 'Administrador' : 'Usuário'}`, 'info');
         console.log('[PROFILE] Dados do usuário:', userData);
         

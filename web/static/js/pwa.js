@@ -70,7 +70,7 @@ window.addEventListener('appinstalled', (e) => {
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
+        navigator.serviceWorker.register('/static/service-worker.js')
             .then((registration) => {
                 console.log('PWA: Service Worker registrado com sucesso:', registration.scope);
                 
