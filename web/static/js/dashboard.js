@@ -78,10 +78,10 @@ async function loadDashboard() {
         const statsGrid = document.querySelector('.stats-grid');
         if (statsGrid) {
             statsGrid.innerHTML = `
-                <div style="grid-column: 1/-1; text-align: center; padding: 40px; background: #fee; border-radius: 12px; border: 2px solid #fcc;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #c00; margin-bottom: 10px;"></i>
-                    <h3 style="color: #c00;">Erro ao Carregar Dashboard</h3>
-                    <p style="color: #666;">Tente atualizar a página ou verificar sua conexão.</p>
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px; background: #fee2e2; border-radius: 12px; border: 2px solid #fecaca;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #dc2626; margin-bottom: 10px;"></i>
+                    <h3 style="color: #dc2626; font-weight: 700;">Erro ao Carregar Dashboard</h3>
+                    <p style="color: #4a5568; font-weight: 500;">Tente atualizar a página ou verificar sua conexão.</p>
                     <button onclick="loadDashboard()" class="btn btn-primary" style="margin-top: 15px;">
                         <i class="fas fa-sync-alt"></i> Tentar Novamente
                     </button>
@@ -102,10 +102,10 @@ function loadHistoricoRecente(movimentacoes) {
     
     if (!movimentacoes || movimentacoes.length === 0) {
         container.innerHTML = `
-            <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #94a3b8;">
-                <i class="fas fa-inbox" style="font-size: 4rem; margin-bottom: 20px; opacity: 0.3;"></i>
-                <h4 style="color: #64748b; margin-bottom: 10px;">Nenhuma movimentação recente</h4>
-                <p style="font-size: 0.9rem;">Registre entradas ou saídas de produtos para visualizar o histórico</p>
+            <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #6b7280;">
+                <i class="fas fa-inbox" style="font-size: 4rem; margin-bottom: 20px; opacity: 0.3; color: #9ca3af;"></i>
+                <h4 style="color: #1a1a1a; margin-bottom: 10px; font-weight: 700;">Nenhuma movimentação recente</h4>
+                <p style="font-size: 0.9rem; color: #6b7280;">Registre entradas ou saídas de produtos para visualizar o histórico</p>
                 <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                     <button onclick="showModule('estoque-entrada')" class="btn btn-success btn-sm">
                         <i class="fas fa-plus"></i> Nova Entrada
@@ -365,10 +365,10 @@ function loadChartTopProdutos(produtos) {
         const chartCard = ctx.closest('.chart-card');
         if (chartCard) {
             chartCard.innerHTML = `
-                <h3>Top 5 Produtos</h3>
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; color: #94a3b8;">
-                    <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.3;"></i>
-                    <p style="text-align: center; font-size: 0.9rem;">Cadastre produtos para visualizar o ranking</p>
+                <h3 style="color: #1a1a1a; font-weight: 700;">Top 5 Produtos</h3>
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; color: #6b7280;">
+                    <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.3; color: #9ca3af;"></i>
+                    <p style="text-align: center; font-size: 0.9rem; color: #6b7280; font-weight: 500;">Cadastre produtos para visualizar o ranking</p>
                 </div>
             `;
         }
