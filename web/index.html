@@ -12,9 +12,9 @@
     
     <title>Quatro Cantos - Sistema de Gestao</title>
     
-    <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css?v=39">
-    <link rel="stylesheet" href="/static/css/admin.css?v=39">
+    <!-- CSS - Novo Layout PrescrMed -->
+    <link rel="stylesheet" href="/static/css/prescrimed-layout.css?v=40">
+    <link rel="stylesheet" href="/static/css/admin.css?v=40">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -34,7 +34,7 @@
     <!-- Segments Config -->
     <script src="/static/js/segments-config.js?v=17"></script>
     
-    <!-- Limpeza de Cache v38 - Estoque Saída Reorganizado -->
+    <!-- Limpeza de Cache v40 - Layout PrescrMed -->
     <script>
         // Limpar cache antigo do Service Worker
         if ('serviceWorker' in navigator) {
@@ -48,7 +48,7 @@
             if ('caches' in window) {
                 caches.keys().then(function(names) {
                     for (let name of names) {
-                        if (name !== 'estoque-certo-v39') {
+                        if (name !== 'estoque-certo-v40') {
                             console.log('[CACHE] Removendo cache antigo:', name);
                             caches.delete(name);
                         }
@@ -57,14 +57,13 @@
             }
         }
         
-        // Sistema Profissional v39 - Emojis Removidos
-        if (!localStorage.getItem('system_professional_v39')) {
-            console.log('Sistema Quatro Cantos v39 - Logs Profissionais');
+        // Sistema Profissional v40 - Layout PrescrMed
+        if (!localStorage.getItem('system_prescrimed_v40')) {
+            console.log('[SYSTEM] Quatro Cantos v40 - Layout PrescrMed Inspirado');
             // Limpar flags antigas
-            localStorage.removeItem('estoque_saida_organized_v38');
-            localStorage.setItem('system_professional_v39', 'true');
-            console.log('Console logs padronizados com prefixos de categoria');
-            console.log('Todos os emojis removidos para apresentação profissional');
+            localStorage.removeItem('system_professional_v39');
+            localStorage.setItem('system_prescrimed_v40', 'true');
+            console.log('[INFO] Novo layout com sidebar lateral e design moderno');
         }
     </script>
 </head>
@@ -264,390 +263,280 @@
         </div>
     </div>
 
-    <!-- CONTAINER DO APLICATIVO -->
-    <div id="appContainer" class="app-container hidden">
+    <!-- CONTAINER DO APLICATIVO - NOVO LAYOUT PRESCRIMED -->
+    <div id="appContainer" class="app-layout hidden">
         
-        <!-- Header -->
-        <header class="header">
-            <div class="container-fluid">
-                <div class="header-content">
-                    <div class="logo">
-                        <i class="fas fa-bolt"></i>
-                        <h1>Quatro Cantos</h1>
+        <!-- Sidebar Lateral Fixa -->
+        <aside class="sidebar" id="sidebar">
+            <!-- Logo -->
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">
+                    <i class="fas fa-warehouse"></i>
+                </div>
+                <div class="sidebar-logo-text">
+                    <h2>Quatro Cantos</h2>
+                    <p id="sidebarCompanyName">Sistema de Gestão</p>
+                </div>
+            </div>
+
+            <!-- Navegação -->
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <div class="nav-group-title">Principal</div>
+                    <a href="#" class="nav-item active" onclick="showModule('dashboard'); return false;">
+                        <i class="fas fa-th-large"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-group">
+                    <div class="nav-group-title">Operações</div>
+                    <a href="#" class="nav-item" onclick="showModule('operacional'); return false;">
+                        <i class="fas fa-industry"></i>
+                        <span>Operacional</span>
+                    </a>
+                </div>
+
+                <div class="nav-group">
+                    <div class="nav-group-title">Estoque</div>
+                    <a href="#" class="nav-item" onclick="showModule('estoque-entrada'); return false;">
+                        <i class="fas fa-box-open"></i>
+                        <span>Entrada</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="showModule('estoque-saida'); return false;">
+                        <i class="fas fa-truck-loading"></i>
+                        <span>Saída</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="showModule('visualizar'); return false;">
+                        <i class="fas fa-boxes"></i>
+                        <span>Saldo Atual</span>
+                    </a>
+                </div>
+
+                <div class="nav-group">
+                    <div class="nav-group-title">Gestão</div>
+                    <a href="#" class="nav-item" onclick="showModule('financeiro'); return false;">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Financeiro</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="showModule('rh'); return false;">
+                        <i class="fas fa-users"></i>
+                        <span>Recursos Humanos</span>
+                    </a>
+                </div>
+
+                <div class="nav-group admin-only hidden">
+                    <div class="nav-group-title">Administração</div>
+                    <a href="#" class="nav-item" onclick="showModule('historico'); return false;">
+                        <i class="fas fa-history"></i>
+                        <span>Histórico</span>
+                    </a>
+                </div>
+
+                <div class="nav-group superadmin-only hidden">
+                    <div class="nav-group-title">Super Admin</div>
+                    <a href="#" class="nav-item" onclick="showModule('admin'); return false;">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Painel Admin</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Footer da Sidebar -->
+            <div class="sidebar-footer">
+                <div class="sidebar-user" onclick="toggleUserMenu()">
+                    <div class="sidebar-user-avatar" id="sidebarUserAvatar">U</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="sidebarUserName">Usuário</div>
+                        <div class="sidebar-user-role" id="sidebarUserRole">Admin</div>
                     </div>
-                    
-                    <!-- User Company Name -->
-                    <div class="header-company-name">
-                        <span id="headerCompanyName">Empresa Local Demo</span>
-                    </div>
-                    
-                    <!-- Global Search -->
-                    <div class="global-search desktop-only global-search-container">
-                        <div class="input-group global-search-input-group">
-                            <input type="text" placeholder="Buscar peça, lote ou serial..." class="global-search-input">
-                            <i class="fas fa-search global-search-icon"></i>
+                    <i class="fas fa-chevron-up" style="color: var(--sidebar-text); font-size: 0.875rem;"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Overlay para Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileMenu()"></div>
+
+        <!-- Área de Conteúdo Principal -->
+        <div class="main-content" id="mainContent">
+            
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="topbar-title">
+                        <h1 id="pageTitle">Dashboard</h1>
+                        <div class="breadcrumb" id="breadcrumb">
+                            <div class="breadcrumb-item"><i class="fas fa-home"></i> Início</div>
+                            <div class="breadcrumb-item active">Dashboard</div>
                         </div>
                     </div>
-                    
-                    <div class="header-actions">
-                        <!-- Mobile Menu Button -->
-                        <button class="mobile-menu-btn hidden-desktop" onclick="toggleMobileMenu()" aria-label="Abrir menu de navegação">
-                            <i class="fas fa-bars"></i>
-                        </button>
+                </div>
 
-                        <!-- Notifications -->
-                        <button class="nav-btn btn-notifications" aria-label="Notificações">
-                            <i class="fas fa-bell"></i>
-                            <span class="notification-badge"></span>
-                        </button>
+                <div class="topbar-actions">
+                    <!-- Busca -->
+                    <div class="topbar-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Buscar...">
+                    </div>
 
-                        <button id="installBtn" class="install-btn hidden">
-                            <i class="fas fa-download"></i>
-                            Instalar App
+                    <!-- Notificações -->
+                    <button class="topbar-icon-btn" title="Notificações">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+
+                    <!-- Instalar App -->
+                    <button id="installBtn" class="btn btn-primary hidden" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                        <i class="fas fa-download"></i>
+                        <span>Instalar</span>
+                    </button>
+
+                    <!-- User Menu Dropdown -->
+                    <div class="user-menu" style="position: relative;">
+                        <button class="topbar-icon-btn" onclick="toggleUserMenu()" title="Menu do usuário">
+                            <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
                         </button>
                         
-                        <div class="user-menu">
-                            <button class="user-btn" onclick="toggleUserMenu()">
-                                <i class="fas fa-user-circle"></i>
-                                <div class="user-info">
-                                    <span id="userEmail">usuario@email.com</span>
-                                    <small id="userCompanyInfo" class="company-info">Empresa</small>
+                        <div id="userMenuDropdown" class="user-menu-dropdown hidden" style="position: absolute; right: 0; top: 100%; margin-top: 0.5rem;">
+                            <div class="company-header" style="padding: 1rem; background: linear-gradient(135deg, var(--primary-blue), var(--primary-light)); color: white; border-radius: var(--radius-md) var(--radius-md) 0 0;">
+                                <i class="fas fa-building"></i>
+                                <div>
+                                    <small style="opacity: 0.9; font-size: 0.75rem;">Empresa:</small>
+                                    <strong id="companyName" style="display: block; margin: 0.25rem 0;">Carregando...</strong>
+                                    <small id="userEmail" style="opacity: 0.8; font-size: 0.75rem;">usuario@email.com</small>
                                 </div>
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                            
-                            <div id="userMenuDropdown" class="user-menu-dropdown hidden">
-                                <div class="company-header">
-                                    <i class="fas fa-building"></i>
-                                    <div>
-                                        <small>Empresa:</small>
-                                        <strong id="companyName">Carregando...</strong>
-                                        <small id="companyId" class="company-id">ID: ...</small>
-                                    </div>
-                                </div>
-                                <hr>
-                                <a href="#" onclick="showProfile()">
+                            </div>
+                            <div style="padding: 0.5rem 0;">
+                                <a href="#" onclick="showProfile(); return false;" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: var(--text-primary); text-decoration: none; transition: var(--transition);">
                                     <i class="fas fa-user"></i> Meu Perfil
                                 </a>
-                                <a href="#" onclick="showConfig()" class="admin-only hidden">
-                                    <i class="fas fa-cog"></i> Configuracoes
+                                <a href="#" onclick="showConfig(); return false;" class="admin-only hidden" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: var(--text-primary); text-decoration: none; transition: var(--transition);">
+                                    <i class="fas fa-cog"></i> Configurações
                                 </a>
-                                <a href="#" onclick="handleLogout()">
+                                <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #f1f5f9;">
+                                <a href="#" onclick="handleLogout(); return false;" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: var(--danger); text-decoration: none; transition: var(--transition);">
                                     <i class="fas fa-sign-out-alt"></i> Sair
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
 
-        <!-- Layout Wrapper -->
-        <div class="dashboard-layout container-fluid dashboard-spacing">
-            
-            <!-- Desktop Sidebar -->
-            <aside class="dashboard-sidebar desktop-only">
-                <div class="modules-list">
-                    <div class="module-card-side active" onclick="showModule('dashboard')">
-                        <div class="module-icon-side blue">
-                            <i class="fas fa-tachometer-alt"></i>
-                        </div>
-                        <div class="module-info-side">
-                            <h3>Dashboard</h3>
-                            <p>Visão Geral</p>
-                        </div>
-                        <i class="fas fa-chevron-right arrow-icon"></i>
-                    </div>
-
-                    <div class="module-card-side" onclick="showModule('operacional')">
-                        <div class="module-icon-side indigo">
-                            <i class="fas fa-industry"></i>
-                        </div>
-                        <div class="module-info-side">
-                            <h3>Operacional</h3>
-                            <p>Produção</p>
-                        </div>
-                        <i class="fas fa-chevron-right arrow-icon"></i>
-                    </div>
-
-                    <!-- Módulo Estoque com Submenu -->
-                    <div class="module-card-side module-with-submenu" onclick="toggleEstoqueSubmenu(event)">
-                        <div class="module-icon-side cyan">
-                            <i class="fas fa-warehouse"></i>
-                        </div>
-                        <div class="module-info-side">
-                            <h3>Estoque</h3>
-                            <p>Gestão</p>
-                        </div>
-                        <i class="fas fa-chevron-down arrow-icon submenu-arrow"></i>
-                    </div>
-                    
-                    <div class="submenu-container" id="estoqueSubmenu">
-                        <div class="module-card-side submenu-item" onclick="showModule('estoque-entrada')">
-                            <div class="module-icon-side green">
-                                <i class="fas fa-box-open"></i>
-                            </div>
-                            <div class="module-info-side">
-                                <h3>Entrada</h3>
-                                <p>Recebimento</p>
-                            </div>
-                            <i class="fas fa-chevron-right arrow-icon"></i>
-                        </div>
-
-                        <div class="module-card-side submenu-item" onclick="showModule('estoque-saida')">
-                            <div class="module-icon-side orange">
-                                <i class="fas fa-truck-loading"></i>
-                            </div>
-                            <div class="module-info-side">
-                                <h3>Saída</h3>
-                                <p>Expedição</p>
-                            </div>
-                            <i class="fas fa-chevron-right arrow-icon"></i>
-                        </div>
-
-                        <div class="module-card-side submenu-item" onclick="showModule('visualizar')">
-                            <div class="module-icon-side blue">
-                                <i class="fas fa-boxes"></i>
-                            </div>
-                            <div class="module-info-side">
-                                <h3>Saldo</h3>
-                                <p>Estoque Atual</p>
-                            </div>
-                            <i class="fas fa-chevron-right arrow-icon"></i>
-                        </div>
-                    </div>
-
-                    <div class="module-card-side" onclick="showModule('financeiro')">
-                        <div class="module-icon-side purple">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="module-info-side">
-                            <h3>Financeiro</h3>
-                            <p>Custos e Receitas</p>
-                        </div>
-                        <i class="fas fa-chevron-right arrow-icon"></i>
-                    </div>
-
-                    <div class="module-card-side" onclick="showModule('rh')">
-                        <div class="module-icon-side teal">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="module-info-side">
-                            <h3>RH</h3>
-                            <p>Equipe</p>
-                        </div>
-                        <i class="fas fa-chevron-right arrow-icon"></i>
-                    </div>
-
-                    <!-- Admin Only -->
-                    <div class="module-card-side admin-only hidden" onclick="showModule('historico')">
-                        <div class="module-icon-side blue">
-                            <i class="fas fa-history"></i>
-                        </div>
-                        <div class="module-info-side">
-                            <h3>Histórico</h3>
-                            <p>Auditoria</p>
-                        </div>
-                        <i class="fas fa-chevron-right arrow-icon"></i>
-                    </div>
-
-                    <!-- Super Admin Only -->
-                    <div class="module-card-side superadmin-only hidden" onclick="showModule('admin')">
-                        <div class="module-icon-side red">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div class="module-info-side">
-                            <h3>Painel Admin</h3>
-                            <p>Gerenciar Empresas</p>
-                        </div>
-                        <i class="fas fa-chevron-right arrow-icon"></i>
-                    </div>
-                </div>
-
-                <div class="sidebar-footer">
-                    <div class="sidebar-status-container">
-                        <span class="status-indicator"></span>
-                        SISTEMA ONLINE
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Mobile Sidebar (Hidden on Desktop) -->
-            <div id="mobileSidebar" class="mobile-sidebar hidden-desktop">
-                <div class="sidebar-header">
-                    <h3>Menu</h3>
-                    <button class="close-sidebar-btn" onclick="toggleMobileMenu()" aria-label="Fechar menu de navegação">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="sidebar-content">
-                    <button class="sidebar-btn module-nav-btn" onclick="showModule('dashboard'); toggleMobileMenu()">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </button>
-                    <button class="sidebar-btn module-nav-btn" data-module="operacional" onclick="showModule('operacional'); toggleMobileMenu()">
-                        <i class="fas fa-industry"></i> Operacional
-                    </button>
-                    
-                    <!-- Estoque com Submenu Mobile -->
-                    <button class="sidebar-btn module-nav-btn submenu-toggle" onclick="toggleEstoqueSubmenuMobile(event)">
-                        <i class="fas fa-warehouse"></i> Estoque
-                        <i class="fas fa-chevron-down submenu-arrow-mobile"></i>
-                    </button>
-                    <div class="mobile-submenu" id="estoqueSubmenuMobile">
-                        <button class="sidebar-btn module-nav-btn submenu-btn" data-module="estoque-entrada" onclick="showModule('estoque-entrada'); toggleMobileMenu()">
-                            <i class="fas fa-box-open"></i> Entrada
-                        </button>
-                        <button class="sidebar-btn module-nav-btn submenu-btn" data-module="estoque-saida" onclick="showModule('estoque-saida'); toggleMobileMenu()">
-                            <i class="fas fa-truck-loading"></i> Saída
-                        </button>
-                        <button class="sidebar-btn module-nav-btn submenu-btn" data-module="visualizar" onclick="showModule('visualizar'); toggleMobileMenu()">
-                            <i class="fas fa-boxes"></i> Saldo
-                        </button>
-                    </div>
-                    
-                    <button class="sidebar-btn module-nav-btn" data-module="financeiro" onclick="showModule('financeiro'); toggleMobileMenu()">
-                        <i class="fas fa-chart-line"></i> Financeiro
-                    </button>
-                    <button class="sidebar-btn module-nav-btn" data-module="rh" onclick="showModule('rh'); toggleMobileMenu()">
-                        <i class="fas fa-users"></i> RH
-                    </button>
-                    <!-- Admin Only -->
-                    <button class="sidebar-btn module-nav-btn admin-only hidden" data-module="historico" onclick="showModule('historico'); toggleMobileMenu()">
-                        <i class="fas fa-history"></i> Histórico
-                    </button>
-                    <button class="sidebar-btn module-nav-btn admin-only hidden" data-module="backup" onclick="realizarBackup(); toggleMobileMenu()">
-                        <i class="fas fa-database"></i> Backup
-                    </button>
-                    <!-- Super Admin Only -->
-                    <button class="sidebar-btn module-nav-btn superadmin-only hidden btn-admin-module" data-module="admin" onclick="showModule('admin'); toggleMobileMenu()">
-                        <i class="fas fa-shield-alt"></i> Administração
-                    </button>
-                </div>
-            </div>
-            <div id="sidebarOverlay" class="sidebar-overlay hidden-desktop" onclick="toggleMobileMenu()"></div>
-
-            <!-- Main Content Area -->
-            <main class="main-content main-content-no-padding">
+            <!-- Área de Conteúdo -->
+            <div class="content-area" id="contentArea">
                 
                 <!-- Dashboard Section -->
                 <section id="dashboardSection" class="dashboard-section">
-                    <div class="welcome-header">
-                        <div>
-                            <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
-                            <p>Visão geral do sistema</p>
-                        </div>
-                        <div class="header-actions">
-                            <button class="btn-refresh" onclick="loadDashboard()" title="Atualizar dados">
-                                <i class="fas fa-sync-alt"></i> Atualizar
-                            </button>
-                        </div>
-                    </div>
-                    
                     <!-- Alertas de Estoque Baixo -->
                     <div id="stockAlerts" class="hidden"></div>
                     
-                    <!-- Cards de Estatísticas Modernos -->
-                    <div class="stats-grid">
-                        <!-- Card 1: Total de Produtos -->
-                        <div class="stat-card blue">
-                            <div class="stat-icon">
+                    <!-- Cards de Estatísticas -->
+                    <div class="cards-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">
                                 <i class="fas fa-boxes"></i>
                             </div>
-                            <div class="stat-info">
-                                <h3 id="statTotalProdutos">0</h3>
-                                <p>Total de Produtos</p>
+                            <div class="stat-content">
+                                <div class="stat-label">Total de Produtos</div>
+                                <div class="stat-value" id="statTotalProdutos">0</div>
                             </div>
                         </div>
                         
-                        <!-- Card 2: Total de Itens -->
-                        <div class="stat-card green">
-                            <div class="stat-icon">
+                        <div class="stat-card">
+                            <div class="stat-icon green">
                                 <i class="fas fa-cubes"></i>
                             </div>
-                            <div class="stat-info">
-                                <h3 id="statTotalItens">0</h3>
-                                <p>Itens em Estoque</p>
+                            <div class="stat-content">
+                                <div class="stat-label">Itens em Estoque</div>
+                                <div class="stat-value" id="statTotalItens">0</div>
                             </div>
                         </div>
                         
-                        <!-- Card 3: Valor em Estoque -->
-                        <div class="stat-card purple">
-                            <div class="stat-icon">
+                        <div class="stat-card">
+                            <div class="stat-icon purple">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <div class="stat-info">
-                                <h3 id="statValorTotal">R$ 0,00</h3>
-                                <p>Valor em Estoque</p>
+                            <div class="stat-content">
+                                <div class="stat-label">Valor em Estoque</div>
+                                <div class="stat-value" id="statValorTotal">R$ 0,00</div>
                             </div>
                         </div>
                         
-                        <!-- Card 4: Vendas do Mês -->
-                        <div class="stat-card orange">
-                            <div class="stat-icon">
+                        <div class="stat-card">
+                            <div class="stat-icon orange">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <div class="stat-info">
-                                <h3 id="statVendasMes">R$ 0,00</h3>
-                                <p>Vendas do Mês</p>
+                            <div class="stat-content">
+                                <div class="stat-label">Vendas do Mês</div>
+                                <div class="stat-value" id="statVendasMes">R$ 0,00</div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Graficos -->
-                    <div class="charts-grid">
-                        <div class="chart-card">
-                            <h3>Movimentacoes Recentes</h3>
-                            <canvas id="chartMovimentacoes"></canvas>
+                    <!-- Gráficos -->
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Movimentações Recentes</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="chartMovimentacoes"></canvas>
+                            </div>
                         </div>
                         
-                        <div class="chart-card">
-                            <h3>Top 5 Produtos</h3>
-                            <canvas id="chartTopProdutos"></canvas>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Top 5 Produtos</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="chartTopProdutos"></canvas>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="chart-card">
+                    <div class="card">
+                        <div class="card-header">
                             <h3>Eficiência da Linha</h3>
+                        </div>
+                        <div class="card-body">
                             <canvas id="chartEficiencia"></canvas>
                         </div>
                     </div>
                     
-                    <!-- Historico Recente -->
-                    <div class="history-card">
-                        <h3>Ultimas Movimentacoes</h3>
-                        <div id="historicoRecente" class="history-list">
-                            <!-- Preenchido via JS -->
+                    <!-- Histórico Recente -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h3>Últimas Movimentações</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="historicoRecente" class="history-list">
+                                <!-- Preenchido via JS -->
+                            </div>
                         </div>
                     </div>
                 </section>
-
-                <!-- Navigation Cards (Modulos) - REMOVIDO (Agora no Header/Sidebar) -->
-                <!-- <section id="modulesSection" class="modules-grid"> ... </section> -->
             </div>
-        </main>
         </div>
 
         <!-- Modal Container -->
         <div id="modalContainer" class="modal-container hidden">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 id="modalTitle">Modulo</h2>
+                    <h2 id="modalTitle">Módulo</h2>
                     <button class="close-btn" onclick="closeModule()" aria-label="Fechar modal">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
                 <div class="modal-body" id="modalBody">
-                    <!-- O conteudo sera inserido dinamicamente pelo JavaScript -->
+                    <!-- O conteúdo será inserido dinamicamente pelo JavaScript -->
                 </div>
             </div>
         </div>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="container-fluid">
-                <p>&copy; 2025 Quatro Cantos. Todos os direitos reservados.</p>
-                <p>Sistema de Gestao Empresarial v2.0</p>
-            </div>
-        </footer>
     </div>
 
     <!-- Toast Notification -->
@@ -664,34 +553,63 @@
 
     <!-- Configuração Global -->
     <script>
-        // SISTEMA HÍBRIDO COM LAYOUT PROFISSIONAL - Firebase Cloud + Fallback Local
-        // Versão 31.0 - Layout dashboard responsivo e moderno
-        const APP_VERSION = '39';
+        // SISTEMA HÍBRIDO COM LAYOUT PRESCRIMED - Firebase Cloud + Fallback Local
+        // Versão 40.0 - Layout moderno com sidebar lateral
+        const APP_VERSION = '40';
         const IS_PRODUCTION = window.location.hostname.includes('netlify.app');
         const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         
         // Sistema tenta usar Firebase primeiro, fallback para localStorage se falhar
         console.log('[ENV] Ambiente:', IS_PRODUCTION ? 'PRODUÇÃO (Netlify)' : IS_LOCALHOST ? 'LOCAL (Dev)' : 'OUTRO');
-        console.log('Versão:', APP_VERSION, '- Layout Responsivo');
+        console.log('[SYSTEM] Versão:', APP_VERSION, '- Layout PrescrMed Inspirado');
+        
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (sidebar && overlay) {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            }
+        }
+        
+        // Toggle User Menu
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userMenuDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+            }
+        }
+        
+        // Fechar dropdown ao clicar fora
+        document.addEventListener('click', function(event) {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.getElementById('userMenuDropdown');
+            
+            if (userMenu && dropdown && !userMenu.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
     </script>
 
     <!-- JavaScript - Ordem: Firebase Config > Firestore Service > Local Fallback > Auth > App -->
     
     <!-- 1. Configuração Firebase (Sistema Híbrido) -->
-    <script src="/static/js/firebase-config.js?v=30"></script>
-    <script src="/static/js/firestore-service.js?v=30"></script>
+    <script src="/static/js/firebase-config.js?v=40"></script>
+    <script src="/static/js/firestore-service.js?v=40"></script>
     
     <!-- 2. Fallback Local (se Firebase falhar) -->
-    <script src="/static/js/local-auth.js?v=30"></script>
-    <script src="/static/js/local-firestore.js?v=30"></script>
+    <script src="/static/js/local-auth.js?v=40"></script>
+    <script src="/static/js/local-firestore.js?v=40"></script>
     
     <!-- 3. Scripts de Interface e Módulos -->
-    <script src="/static/js/auth.js?v=30"></script>
-    <script src="/static/js/admin-module.js?v=30"></script>
-    <script src="/static/js/app.js?v=30"></script>
-    <script src="/static/js/modules.js?v=30"></script>
-    <script src="/static/js/dashboard.js?v=30"></script>
-    <script src="/static/js/pwa.js?v=30"></script>
+    <script src="/static/js/auth.js?v=40"></script>
+    <script src="/static/js/admin-module.js?v=40"></script>
+    <script src="/static/js/app.js?v=40"></script>
+    <script src="/static/js/modules.js?v=40"></script>
+    <script src="/static/js/dashboard.js?v=40"></script>
+    <script src="/static/js/pwa.js?v=40"></script>
     
     <!-- Inicialização do formulário de cadastro -->
     <script>

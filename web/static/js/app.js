@@ -95,9 +95,60 @@ function showModule(moduleName) {
 }
 
 /**
- * Atualiza o item ativo na sidebar
+ * Atualiza o item ativo na sidebar (NOVO LAYOUT V40)
  * @param {string} moduleName - Nome do módulo ativo
  */
+function updateActiveSidebarItem(moduleName) {
+    console.log('[NAV] Ativando módulo:', moduleName);
+    
+    // Atualizar título da página e breadcrumb
+    const pageTitle = document.getElementById('pageTitle');
+    const breadcrumb = document.getElementById('breadcrumb');
+    
+    const moduleTitles = {
+        'dashboard': 'Dashboard',
+        'operacional': 'Operacional',
+        'estoque-entrada': 'Entrada de Estoque',
+        'estoque-saida': 'Saída de Estoque',
+        'visualizar': 'Saldo de Estoque',
+        'financeiro': 'Financeiro',
+        'rh': 'Recursos Humanos',
+        'historico': 'Histórico',
+        'admin': 'Administração'
+    };
+    
+    if (pageTitle) {
+        pageTitle.textContent = moduleTitles[moduleName] || 'Dashboard';
+    }
+    
+    if (breadcrumb) {
+        const modulePath = moduleTitles[moduleName] || 'Dashboard';
+        breadcrumb.innerHTML = `
+            <div class="breadcrumb-item"><i class="fas fa-home"></i> Início</div>
+            <div class="breadcrumb-item active">${modulePath}</div>
+        `;
+    }
+    
+    // Atualizar itens ativos da sidebar
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.classList.remove('active');
+        
+        // Verificar se o onclick corresponde ao módulo
+        const onclick = item.getAttribute('onclick');
+        if (onclick && onclick.includes(`'${moduleName}'`)) {
+            item.classList.add('active');
+        }
+    });
+    
+    // Fechar sidebar mobile após navegação
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (sidebar && sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
+    }
+}
 function updateActiveSidebarItem(moduleName) {
     // Desktop sidebar
     const sidebarItems = document.querySelectorAll('.module-card-side');
