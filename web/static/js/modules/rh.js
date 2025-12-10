@@ -9,88 +9,92 @@ let lastCalculatedFolha = null; // Cache para exportação PDF
 
 function loadRHModule(container) {
     const html = `
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-users"></i> Gestão de RH e Folha de Pagamento
+        <div class="card modern-card">
+            <div class="card-header modern-header">
+                <div class="header-content">
+                    <div class="header-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="header-text">
+                        <h3>Gestão de RH e Folha de Pagamento</h3>
+                        <p class="subtitle">Cadastro de funcionários e cálculo de folha</p>
+                    </div>
+                </div>
             </div>
             
-            <!-- Formulário de Cadastro -->
-            <div class="card mb-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border: 2px solid #667eea; box-shadow: 0 2px 8px rgba(102,126,234,0.2);">
-                <h5 class="mb-3" style="color: #667eea; font-weight: bold;">
-                    <i class="fas fa-user-plus"></i> Cadastrar Novo Funcionário
-                </h5>
-                <form id="formCadastroFuncionario" onsubmit="cadastrarFuncionario(event)">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label style="font-weight: 600; color: #334155;">
-                                <i class="fas fa-id-card"></i> Nome Completo
+            <div class="card-body modern-body">
+                <!-- Formulário de Cadastro Limpo -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Cadastrar Novo Funcionário</span>
+                    </div>
+                    
+                    <form id="formCadastroFuncionario" onsubmit="cadastrarFuncionario(event)">
+                        <div class="form-group modern-form-group">
+                            <label class="modern-label">
+                                <i class="fas fa-id-card"></i>
+                                <span>Nome Completo</span>
                             </label>
-                            <input type="text" id="novoNome" required placeholder="Ex: João da Silva Santos" 
-                                   style="border: 2px solid #e2e8f0; transition: all 0.3s;"
-                                   onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
-                                   onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                            <input type="text" id="novoNome" class="modern-input" required 
+                                   placeholder="Ex: João da Silva Santos">
                         </div>
-                        <div class="form-group">
-                            <label style="font-weight: 600; color: #334155;">
-                                <i class="fas fa-briefcase"></i> Cargo / Função
+                        
+                        <div class="form-group modern-form-group">
+                            <label class="modern-label">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Cargo / Função</span>
                             </label>
-                            <select id="novoCargo" required
-                                    style="border: 2px solid #e2e8f0; transition: all 0.3s;"
-                                    onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
-                                    onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                            <select id="novoCargo" class="modern-select" required>
                                 <option value="">Selecione o cargo...</option>
-                                <option value="Operário (R$ 15/h)">🔧 Operário - R$ 15,00/hora</option>
-                                <option value="Supervisor (R$ 40/h)">👷 Supervisor - R$ 40,00/hora</option>
-                                <option value="Gerente (R$ 60/h)">👔 Gerente - R$ 60,00/hora</option>
-                                <option value="Diretor (R$ 80/h)">💼 Diretor - R$ 80,00/hora</option>
+                                <option value="Operário (R$ 15/h)">Operário - R$ 15,00/hora</option>
+                                <option value="Supervisor (R$ 40/h)">Supervisor - R$ 40,00/hora</option>
+                                <option value="Gerente (R$ 60/h)">Gerente - R$ 60,00/hora</option>
+                                <option value="Diretor (R$ 80/h)">Diretor - R$ 80,00/hora</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label style="font-weight: 600; color: #334155;">
-                                <i class="fas fa-calendar-check"></i> Data de Admissão
+                        
+                        <div class="form-group modern-form-group">
+                            <label class="modern-label">
+                                <i class="fas fa-calendar-check"></i>
+                                <span>Data de Admissão</span>
                             </label>
-                            <input type="date" id="novoAdmissao" required
-                                   style="border: 2px solid #e2e8f0; transition: all 0.3s;"
-                                   onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
-                                   onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                            <input type="date" id="novoAdmissao" class="modern-input" required>
                         </div>
-                    </div>
-                    <button type="submit" class="btn btn-success btn-sm" 
-                            style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; padding: 10px 24px; font-weight: 600; box-shadow: 0 2px 8px rgba(16,185,129,0.3); transition: all 0.3s;"
-                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(16,185,129,0.4)'"
-                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(16,185,129,0.3)'">
-                        <i class="fas fa-save"></i> Salvar Funcionário
-                    </button>
-                </form>
-            </div>
+                        
+                        <button type="submit" class="btn btn-success modern-btn-success">
+                            <i class="fas fa-save"></i>
+                            <span>Salvar Funcionário</span>
+                        </button>
+                    </form>
+                </div>
 
-            <!-- Barra de Pesquisa -->
-            <div class="form-group" style="margin-top: 20px;">
-                <label style="font-weight: 600; color: #334155;">
-                    <i class="fas fa-search"></i> Pesquisar Funcionário
-                </label>
-                <input type="text" id="searchFuncionario" onkeyup="filtrarFuncionarios()" 
-                       placeholder="Digite o nome ou cargo para buscar..."
-                       style="border: 2px solid #e2e8f0; padding: 12px; transition: all 0.3s;"
-                       onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
-                       onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                <!-- Barra de Pesquisa Limpa -->
+                <div class="form-group modern-form-group">
+                    <label class="modern-label">
+                        <i class="fas fa-search"></i>
+                        <span>Pesquisar Funcionário</span>
+                    </label>
+                    <input type="text" id="searchFuncionario" class="modern-input" 
+                           onkeyup="filtrarFuncionarios()" 
+                           placeholder="Digite o nome ou cargo para buscar...">
+                </div>
+                
+                <!-- Lista de Funcionários -->
+                <div id="listaFuncionariosContainer" class="mb-3">
+                    <p class="text-center text-muted">Carregando funcionários...</p>
+                </div>
+                
+                <!-- Botão de Cálculo -->
+                <div class="button-center">
+                    <button class="btn btn-primary modern-btn" onclick="calcularFolhaPagamento()">
+                        <i class="fas fa-calculator"></i>
+                        <span>Calcular Folha de Pagamento (Mês Atual)</span>
+                    </button>
+                </div>
+                
+                <div id="resultadoRH" class="mt-3 hidden"></div>
             </div>
-            
-            <!-- Lista de Funcionários -->
-            <div id="listaFuncionariosContainer" class="mb-3">
-                <p class="text-center text-muted">Carregando funcionários...</p>
-            </div>
-            
-            <div class="button-group" style="margin-top: 30px; text-align: center;">
-                <button class="btn btn-primary" onclick="calcularFolhaPagamento()"
-                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 14px 32px; font-size: 1.05rem; font-weight: 600; box-shadow: 0 4px 12px rgba(102,126,234,0.4); transition: all 0.3s; border-radius: 8px;"
-                        onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(102,126,234,0.5)'"
-                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(102,126,234,0.4)'">
-                    <i class="fas fa-calculator"></i> Calcular Folha de Pagamento (Mês Atual)
-                </button>
-            </div>
-            
-            <div id="resultadoRH" class="mt-3 hidden"></div>
         </div>
     `;
     

@@ -4003,3 +4003,102 @@ select {
         padding: 1.25rem;
     }
 }
+
+/* ============================================================================
+   MÓDULO RH - ESTILOS LIMPOS v35
+   ============================================================================ */
+
+/* Section Title */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.section-title i {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+/* Form Section */
+.form-section {
+    margin-bottom: 2rem;
+}
+
+/* Modern Input */
+.modern-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+    background: white;
+    transition: all var(--transition-base);
+}
+
+.modern-input:hover {
+    border-color: var(--primary-light);
+}
+
+.modern-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.modern-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Botão Success */
+.modern-btn-success {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.modern-btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+}
+
+.modern-btn-success:active {
+    transform: translateY(0);
+}
+
+/* Button Center */
+.button-center {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Responsividade RH */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1rem;
+    }
+    
+    .modern-btn-success,
+    .modern-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

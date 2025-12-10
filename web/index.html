@@ -13,8 +13,8 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css?v=34">
-    <link rel="stylesheet" href="/static/css/admin.css?v=34">
+    <link rel="stylesheet" href="/static/css/style.css?v=35">
+    <link rel="stylesheet" href="/static/css/admin.css?v=35">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -30,7 +30,7 @@
     <!-- Segments Config -->
     <script src="/static/js/segments-config.js?v=17"></script>
     
-    <!-- Limpeza de Cache v34 - Layout Operacional Simplificado -->
+    <!-- Limpeza de Cache v35 - Módulo RH Simplificado -->
     <script>
         // Limpar cache antigo do Service Worker
         if ('serviceWorker' in navigator) {
@@ -44,7 +44,7 @@
             if ('caches' in window) {
                 caches.keys().then(function(names) {
                     for (let name of names) {
-                        if (name !== 'estoque-certo-v34') {
+                        if (name !== 'estoque-certo-v35') {
                             console.log('🗑️ Removendo cache antigo:', name);
                             caches.delete(name);
                         }
@@ -53,14 +53,14 @@
             }
         }
         
-        // Layout Operacional Simplificado v34
-        if (!localStorage.getItem('operacional_clean_v34')) {
-            console.log('✨ Simplificando Operacional v34...');
+        // Módulo RH Simplificado v35
+        if (!localStorage.getItem('rh_clean_v35')) {
+            console.log('👥 Simplificando RH v35...');
             // Limpar flags antigas
-            localStorage.removeItem('operacional_modern_v33');
-            localStorage.setItem('operacional_clean_v34', 'true');
-            console.log('✅ Layout limpo e minimalista!');
-            console.log('📈 Apenas 4 cards essenciais + alert');
+            localStorage.removeItem('operacional_clean_v34');
+            localStorage.setItem('rh_clean_v35', 'true');
+            console.log('✅ Layout limpo e profissional!');
+            console.log('📋 Formulário otimizado e responsivo');
         }
     </script>
 </head>
