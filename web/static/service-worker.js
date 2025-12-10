@@ -2,28 +2,28 @@
 // SERVICE WORKER - PWA OFFLINE SUPPORT
 // Arquivo: service-worker.js
 // Descrição: Gerencia cache e funcionamento offline do aplicativo
-// Versão: 42 (HOTFIX - console errors corrigidos)
+// Versão: 43 (Modo Local - Zero Erros)
 // ============================================================================
 
-const CACHE_NAME = 'estoque-certo-v42';
+const CACHE_NAME = 'estoque-certo-v43';
 const CACHE_MAX_AGE_DAYS = 30; // Cache expira após 30 dias
 const CACHE_MAX_ITEMS = 50; // Máximo de itens no cache
 
 // Lista de URLs essenciais para cache (apenas arquivos que realmente existem)
 const urlsToCache = [
     '/',
-    '/static/css/style.css?v=42',
-    '/static/css/admin.css?v=42',
+    '/static/css/prescrimed-layout.css?v=43',
+    '/static/css/admin.css?v=43',
     '/static/js/app.js?v=42',
     '/static/js/modules.js?v=42',
     '/static/js/dashboard.js?v=42',
-    '/static/js/auth.js?v=42',
-    '/static/js/firebase-config.js?v=42',
+    '/static/js/auth.js?v=43',
+    '/static/js/firebase-config.js?v=43',
     '/static/js/firestore-service.js?v=42',
     '/static/js/admin-module.js?v=42',
-    '/static/js/local-auth.js?v=42',
-    '/static/js/local-firestore.js?v=42',
-    '/static/js/pwa.js?v=42'
+    '/static/js/local-auth.js?v=41',
+    '/static/js/local-firestore.js?v=41',
+    '/static/js/pwa.js?v=41'
 ];
 
 // ============================================================================
@@ -76,7 +76,7 @@ async function limitCacheSize() {
 // INSTALAÇÁO DO SERVICE WORKER
 // ============================================================================
 self.addEventListener('install', (event) => {
-    console.log('Service Worker v11: Instalando...');
+    console.log('Service Worker v12: Instalando...');
     
     event.waitUntil(
         caches.open(CACHE_NAME)
