@@ -100,10 +100,10 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.stat-icon.blue { background: linear-gradient(135deg, #40916c 0%, #2d6a4f 100%); }
-.stat-icon.green { background: linear-gradient(135deg, #52b788 0%, #40916c 100%); }
-.stat-icon.orange { background: linear-gradient(135deg, #f77f00 0%, #d97706 100%); }
-.stat-icon.purple { background: linear-gradient(135deg, #74c69d 0%, #52b788 100%); }
+.stat-icon.blue { background: linear-gradient(135deg, #0066cc 0%, #004c99 100%); }
+.stat-icon.green { background: linear-gradient(135deg, #06d6a0 0%, #00b894 100%); }
+.stat-icon.orange { background: linear-gradient(135deg, #ffc300 0%, #ffb700 100%); }
+.stat-icon.purple { background: linear-gradient(135deg, #48cae4 0%, #00b4d8 100%); }
 
 .stat-info {
     flex: 1;
@@ -521,36 +521,36 @@
 }
 
 .btn-card-action.btn-view {
-    color: #2d6a4f;
-    border-color: #2d6a4f20;
+    color: #0066cc;
+    border-color: #0066cc20;
 }
 
 .btn-card-action.btn-view:hover {
-    background: linear-gradient(135deg, #d8f3dc 0%, #f1f8f4 100%);
-    border-color: #2d6a4f;
-    color: #1b4332;
+    background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
+    border-color: #0066cc;
+    color: #004c99;
 }
 
 .btn-card-action.btn-toggle {
-    color: #74c69d;
-    border-color: #74c69d20;
+    color: #00b4d8;
+    border-color: #00b4d820;
 }
 
 .btn-card-action.btn-toggle:hover {
-    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f4 100%);
-    border-color: #74c69d;
-    color: #52b788;
+    background: linear-gradient(135deg, #e0f7fa 0%, #f8f9fa 100%);
+    border-color: #00b4d8;
+    color: #0096c7;
 }
 
 .btn-card-action.btn-delete {
-    color: #dc2626;
-    border-color: #dc262620;
+    color: #ef476f;
+    border-color: #ef476f20;
 }
 
 .btn-card-action.btn-delete:hover {
-    background: linear-gradient(135deg, #fee2e2 0%, #fef2f2 100%);
-    border-color: #dc2626;
-    color: #b91c1c;
+    background: linear-gradient(135deg, #ffe3e9 0%, #fff5f7 100%);
+    border-color: #ef476f;
+    color: #d63754;
 }
 
 .btn-card-action.btn-delete i {
