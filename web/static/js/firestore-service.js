@@ -753,6 +753,7 @@ async function buscarTodasEmpresasFirebase() {
                     cargo: data.cargo,
                     ativo: data.ativo !== false,
                     dataCadastro: data.criadoEm?.toDate?.() || data.criadoEm,
+                    criadoEm: data.criadoEm,
                     allowedModules: data.allowedModules || [],
                     _syncTimestamp: timestamp // Timestamp da sincronização
                 });
@@ -776,6 +777,106 @@ async function buscarTodasEmpresasFirebase() {
         console.error('❌ ERRO CRÍTICO ao buscar empresas do Firebase:', error);
         console.error('Detalhes do erro:', error.message);
         return [];
+    }
+}
+
+// Alias para compatibilidade com gestao-empresas.js
+async function listarTodasEmpresasFirebase() {
+    return await buscarTodasEmpresasFirebase();
+}
+
+/**
+ * Atualizar dados de uma empresa (Super Admin)
+ */
+async function atualizarEmpresaFirebase(uid, dadosAtualizados) {
+    if (!firebaseInitialized) {
+        throw new Error('Firebase não disponível');
+    }
+    
+    try {
+        console.log(`[EMPRESA] Atualizando empresa ${uid}...`);
+        
+        await db.collection('usuarios').doc(uid).update({
+            ...dadosAtualizados,
+            atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        console.log('[OK] Empresa atualizada com sucesso');
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Erro ao atualizar empresa:', error);
+        throw error;
+    }
+}
+
+/**
+ * Deletar empresa (Super Admin)
+ */
+async function deletarEmpresaFirebase(uid) {
+    if (!firebaseInitialized) {
+        throw new Error('Firebase não disponível');
+    }
+    
+    try {
+        console.log(`[EMPRESA] Deletando empresa ${uid}...`);
+        
+        // Buscar dados da empresa antes de deletar
+        const empresaDoc = await db.collection('usuarios').doc(uid).get();
+        if (!empresaDoc.exists) {
+            throw new Error('Empresa não encontrada');
+        }
+        
+        const empresaData = empresaDoc.data();
+        const companyId = empresaData.companyId;
+        
+        // Deletar documento do usuário admin
+        await db.collection('usuarios').doc(uid).delete();
+        
+        // Deletar todos os dados relacionados à empresa
+        // (estoque, movimentações, financeiro, etc)
+        const batch = db.batch();
+        
+        // Deletar estoque
+        const estoqueSnapshot = await db.collection('estoque')
+            .where('companyId', '==', companyId)
+            .get();
+        estoqueSnapshot.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+        
+        // Deletar movimentações
+        const movSnapshot = await db.collection('movimentacoes')
+            .where('companyId', '==', companyId)
+            .get();
+        movSnapshot.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+        
+        // Deletar financeiro
+        const finSnapshot = await db.collection('financeiro')
+            .where('companyId', '==', companyId)
+            .get();
+        finSnapshot.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+        
+        // Deletar folha de pagamento
+        const rhSnapshot = await db.collection('folha_pagamento')
+            .where('companyId', '==', companyId)
+            .get();
+        rhSnapshot.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+        
+        await batch.commit();
+        
+        console.log('[OK] Empresa e todos os dados relacionados foram deletados');
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Erro ao deletar empresa:', error);
+        throw error;
     }
 }
 

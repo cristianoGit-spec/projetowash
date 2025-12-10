@@ -335,6 +335,10 @@
 
                 <div class="nav-group superadmin-only hidden">
                     <div class="nav-group-title">Super Admin</div>
+                    <a href="#" class="nav-item" onclick="showModule('gestao-empresas'); return false;">
+                        <i class="fas fa-building"></i>
+                        <span>Gestão de Empresas</span>
+                    </a>
                     <a href="#" class="nav-item" onclick="showModule('admin'); return false;">
                         <i class="fas fa-shield-alt"></i>
                         <span>Painel Admin</span>
@@ -520,6 +524,70 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- GESTÃO DE EMPRESAS (SUPER ADMIN ONLY) -->
+                <section id="gestaoEmpresasSection" class="section-module hidden">
+                    <div class="module-header">
+                        <div>
+                            <h1 style="font-size: 1.875rem; font-weight: 600; color: #111827; margin: 0;">Gestão de Empresas</h1>
+                            <p style="color: #6b7280; margin: 0.5rem 0 0 0; font-size: 0.875rem;">Visualize, edite e gerencie todas as empresas cadastradas no sistema</p>
+                        </div>
+                        <button id="btn-refresh-empresas" style="padding: 0.625rem 1.25rem; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                            <i class="fas fa-sync-alt"></i>
+                            Atualizar
+                        </button>
+                    </div>
+
+                    <!-- Lista de Empresas -->
+                    <div class="card mt-4">
+                        <div id="empresas-list-container" style="min-height: 400px;">
+                            <!-- Preenchido via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Modal de Edição de Empresa -->
+                <div id="modal-editar-empresa" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+                    <div style="background: white; border-radius: 12px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+                        <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                            <h2 style="font-size: 1.5rem; font-weight: 600; color: #111827; margin: 0;">Editar Empresa</h2>
+                        </div>
+                        
+                        <div style="padding: 1.5rem;">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">Nome da Empresa</label>
+                                <input type="text" id="edit-nome-empresa" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">Segmento</label>
+                                <select id="edit-segmento" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
+                                    <option value="lavacar">Lava Car</option>
+                                    <option value="outros">Outros</option>
+                                </select>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">Email</label>
+                                <input type="email" id="edit-email" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">Contato</label>
+                                <input type="text" id="edit-contato" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
+                            </div>
+                        </div>
+                        
+                        <div style="padding: 1rem 1.5rem; background: #f9fafb; border-top: 1px solid #e5e7eb; display: flex; gap: 0.75rem; justify-content: flex-end; border-radius: 0 0 12px 12px;">
+                            <button id="btn-cancelar-edicao" style="padding: 0.625rem 1.25rem; background: #f3f4f6; color: #374151; border: none; border-radius: 6px; font-size: 0.875rem; cursor: pointer; transition: all 0.2s;">
+                                Cancelar
+                            </button>
+                            <button id="btn-salvar-edicao" style="padding: 0.625rem 1.25rem; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 0.875rem; cursor: pointer; transition: all 0.2s;">
+                                Salvar Alterações
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -594,6 +662,7 @@
     <script src="/static/js/app.js?v=40"></script>
     <script src="/static/js/modules.js?v=40"></script>
     <script src="/static/js/dashboard.js?v=40"></script>
+    <script src="/static/js/modules/gestao-empresas.js?v=40"></script>
     <script src="/static/js/pwa.js?v=40"></script>
     
     <!-- Inicialização do formulário de cadastro -->

@@ -9,93 +9,151 @@ let lastCalculatedFolha = null; // Cache para exportação PDF
 
 function loadRHModule(container) {
     const html = `
-        <div class="card modern-card">
-            <div class="card-header modern-header">
-                <div class="header-content">
-                    <div class="header-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="header-text">
-                        <h3>Gestão de RH e Folha de Pagamento</h3>
-                        <p class="subtitle">Cadastro de funcionários e cálculo de folha</p>
-                    </div>
-                </div>
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+            <!-- Header -->
+            <div style="padding: 1.5rem; border-bottom: 1px solid #f3f4f6;">
+                <h1 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-users" style="color: #10b981; font-size: 0.875rem;"></i>
+                    Gestão de RH e Folha de Pagamento
+                </h1>
+                <p style="color: #6b7280; margin: 0.5rem 0 0 0; font-size: 0.8125rem;">Cadastro de funcionários e cálculo de folha</p>
             </div>
             
-            <div class="card-body modern-body">
-                <!-- Formulário de Cadastro Limpo -->
-                <div class="form-section">
-                    <div class="section-title">
-                        <i class="fas fa-user-plus"></i>
-                        <span>Cadastrar Novo Funcionário</span>
+            <!-- Conteúdo -->
+            <div style="padding: 1.5rem;">
+                <!-- Grid 2 Colunas -->
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
+                    
+                    <!-- Coluna Esquerda: Cadastro -->
+                    <div style="background: #f9fafb; border-radius: 8px; padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                            <i class="fas fa-user-plus" style="color: #3b82f6; font-size: 0.875rem;"></i>
+                            <h3 style="font-size: 0.9375rem; font-weight: 600; color: #111827; margin: 0;">Cadastrar Novo Funcionário</h3>
+                        </div>
+                        
+                        <form id="formCadastroFuncionario" onsubmit="cadastrarFuncionario(event)">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-id-card" style="color: #6b7280; font-size: 0.75rem;"></i>
+                                    Nome Completo
+                                </label>
+                                <input type="text" id="novoNome" required 
+                                       placeholder="Ex: João da Silva Santos"
+                                       style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem; transition: all 0.2s; outline: none;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-briefcase" style="color: #6b7280; font-size: 0.75rem;"></i>
+                                    Cargo / Função
+                                </label>
+                                <select id="novoCargo" required
+                                        style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem; background: white; cursor: pointer;">
+                                    <option value="">Selecione o cargo...</option>
+                                    <option value="Operário (R$ 15/h)">Operário - R$ 15,00/hora</option>
+                                    <option value="Supervisor (R$ 40/h)">Supervisor - R$ 40,00/hora</option>
+                                    <option value="Gerente (R$ 60/h)">Gerente - R$ 60,00/hora</option>
+                                    <option value="Diretor (R$ 80/h)">Diretor - R$ 80,00/hora</option>
+                                </select>
+                            </div>
+                            
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-calendar-check" style="color: #6b7280; font-size: 0.75rem;"></i>
+                                    Data de Admissão
+                                </label>
+                                <input type="date" id="novoAdmissao" required
+                                       style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
+                            </div>
+                            
+                            <button type="submit" style="width: 100%; padding: 0.75rem; background: #10b981; color: white; border: none; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <i class="fas fa-save"></i>
+                                Salvar Funcionário
+                            </button>
+                        </form>
                     </div>
                     
-                    <form id="formCadastroFuncionario" onsubmit="cadastrarFuncionario(event)">
-                        <div class="form-group modern-form-group">
-                            <label class="modern-label">
-                                <i class="fas fa-id-card"></i>
-                                <span>Nome Completo</span>
-                            </label>
-                            <input type="text" id="novoNome" class="modern-input" required 
-                                   placeholder="Ex: João da Silva Santos">
+                    <!-- Coluna Direita: Pesquisa e Ações -->
+                    <div style="background: #f9fafb; border-radius: 8px; padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                            <i class="fas fa-search" style="color: #3b82f6; font-size: 0.875rem;"></i>
+                            <h3 style="font-size: 0.9375rem; font-weight: 600; color: #111827; margin: 0;">Pesquisar Funcionário</h3>
                         </div>
                         
-                        <div class="form-group modern-form-group">
-                            <label class="modern-label">
-                                <i class="fas fa-briefcase"></i>
-                                <span>Cargo / Função</span>
-                            </label>
-                            <select id="novoCargo" class="modern-select" required>
-                                <option value="">Selecione o cargo...</option>
-                                <option value="Operário (R$ 15/h)">Operário - R$ 15,00/hora</option>
-                                <option value="Supervisor (R$ 40/h)">Supervisor - R$ 40,00/hora</option>
-                                <option value="Gerente (R$ 60/h)">Gerente - R$ 60,00/hora</option>
-                                <option value="Diretor (R$ 80/h)">Diretor - R$ 80,00/hora</option>
-                            </select>
+                        <div style="margin-bottom: 1.5rem;">
+                            <input type="text" id="searchFuncionario" 
+                                   onkeyup="filtrarFuncionarios()" 
+                                   placeholder="Digite o nome ou cargo para buscar..."
+                                   style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
                         </div>
                         
-                        <div class="form-group modern-form-group">
-                            <label class="modern-label">
-                                <i class="fas fa-calendar-check"></i>
-                                <span>Data de Admissão</span>
-                            </label>
-                            <input type="date" id="novoAdmissao" class="modern-input" required>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                            <i class="fas fa-calculator" style="color: #8b5cf6; font-size: 0.875rem;"></i>
+                            <h3 style="font-size: 0.9375rem; font-weight: 600; color: #111827; margin: 0;">Cálculo de Folha</h3>
                         </div>
                         
-                        <button type="submit" class="btn btn-success modern-btn-success">
-                            <i class="fas fa-save"></i>
-                            <span>Salvar Funcionário</span>
+                        <button onclick="calcularFolhaPagamento()" style="width: 100%; padding: 0.75rem; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                            <i class="fas fa-calculator"></i>
+                            Calcular Folha de Pagamento (Mês Atual)
                         </button>
-                    </form>
-                </div>
-
-                <!-- Barra de Pesquisa Limpa -->
-                <div class="form-group modern-form-group">
-                    <label class="modern-label">
-                        <i class="fas fa-search"></i>
-                        <span>Pesquisar Funcionário</span>
-                    </label>
-                    <input type="text" id="searchFuncionario" class="modern-input" 
-                           onkeyup="filtrarFuncionarios()" 
-                           placeholder="Digite o nome ou cargo para buscar...">
+                        
+                        <!-- Info Alert -->
+                        <div style="margin-top: 1.5rem; background: #eff6ff; border: 1px solid #3b82f6; border-radius: 6px; padding: 0.75rem; display: flex; gap: 0.75rem;">
+                            <i class="fas fa-info-circle" style="color: #3b82f6; font-size: 0.875rem; margin-top: 2px;"></i>
+                            <div>
+                                <p style="margin: 0; font-size: 0.8125rem; color: #1e40af; line-height: 1.5;">
+                                    <strong>Funcionários cadastrados:</strong> <span id="totalFuncionarios">0</span><br>
+                                    O cálculo considera 176 horas/mês e descontos de INSS/IR.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Lista de Funcionários -->
-                <div id="listaFuncionariosContainer" class="mb-3">
-                    <p class="text-center text-muted">Carregando funcionários...</p>
+                <div style="background: #f9fafb; border-radius: 8px; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-users" style="color: #10b981; font-size: 0.875rem;"></i>
+                            <h3 style="font-size: 0.9375rem; font-weight: 600; color: #111827; margin: 0;">Funcionários Cadastrados</h3>
+                        </div>
+                    </div>
+                    
+                    <div id="listaFuncionariosContainer" style="min-height: 200px;">
+                        <p style="text-align: center; color: #6b7280; padding: 2rem;">Carregando funcionários...</p>
+                    </div>
                 </div>
                 
-                <!-- Botão de Cálculo -->
-                <div class="button-center">
-                    <button class="btn btn-primary modern-btn" onclick="calcularFolhaPagamento()">
-                        <i class="fas fa-calculator"></i>
-                        <span>Calcular Folha de Pagamento (Mês Atual)</span>
-                    </button>
-                </div>
-                
-                <div id="resultadoRH" class="mt-3 hidden"></div>
+                <!-- Resultado do Cálculo -->
+                <div id="resultadoRH" class="hidden" style="margin-top: 1.5rem;"></div>
             </div>
         </div>
+        
+        <style>
+            /* Focus states */
+            #formCadastroFuncionario input:focus,
+            #formCadastroFuncionario select:focus,
+            #searchFuncionario:focus {
+                border-color: #3b82f6 !important;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+            
+            /* Hover states */
+            button[type="submit"]:hover {
+                background: #059669 !important;
+            }
+            
+            button[onclick="calcularFolhaPagamento()"]:hover {
+                background: #2563eb !important;
+            }
+            
+            /* Responsivo */
+            @media (max-width: 768px) {
+                div[style*="grid-template-columns: repeat(2, 1fr)"] {
+                    grid-template-columns: 1fr !important;
+                }
+            }
+        </style>
     `;
     
     container.innerHTML = html;
@@ -214,13 +272,24 @@ async function carregarFuncionariosLocal() {
 
 function renderizarListaFuncionarios(lista) {
     const container = document.getElementById('listaFuncionariosContainer');
+    const totalFuncionariosEl = document.getElementById('totalFuncionarios');
+    
+    if (totalFuncionariosEl) {
+        totalFuncionariosEl.textContent = lista.length;
+    }
     
     if (lista.length === 0) {
-        container.innerHTML = '<p class="text-muted text-center">Nenhum funcionário cadastrado.</p>';
+        container.innerHTML = `
+            <div style="text-align: center; padding: 3rem 1rem; color: #6b7280;">
+                <i class="fas fa-users" style="font-size: 3rem; color: #d1d5db; margin-bottom: 1rem;"></i>
+                <p style="font-size: 0.9375rem; font-weight: 500; margin-bottom: 0.5rem;">Nenhum funcionário cadastrado</p>
+                <p style="font-size: 0.8125rem; color: #9ca3af;">Cadastre o primeiro funcionário usando o formulário acima</p>
+            </div>
+        `;
         return;
     }
     
-    let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; margin-top: 15px;">';
+    let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">';
     
     lista.forEach(func => {
         // Extrair apenas nome do cargo sem o valor
@@ -232,7 +301,7 @@ function renderizarListaFuncionarios(lista) {
         if (func.cargo.includes('Diretor')) cargoCor = '#8b5cf6';
         else if (func.cargo.includes('Gerente')) cargoCor = '#10b981';
         else if (func.cargo.includes('Supervisor')) cargoCor = '#f59e0b';
-        else if (func.cargo.includes('Operário')) cargoCor = '#6366f1';
+        else if (func.cargo.includes('Operário')) cargoCor = '#6b7280';
         
         // Calcular tempo de empresa
         const dataAdmissao = new Date(func.admissao + 'T00:00:00');
@@ -243,69 +312,72 @@ function renderizarListaFuncionarios(lista) {
         const tempoEmpresa = meses > 0 ? `${meses} ${meses === 1 ? 'mês' : 'meses'}` : `${diffDays} dias`;
         
         html += `
-            <div class="card" style="padding: 16px; background: white; border: 2px solid #e2e8f0; border-radius: 12px; transition: all 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"
-                 onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(102,126,234,0.15)'; this.style.borderColor='${cargoCor}'"
-                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.1)'; this.style.borderColor='#e2e8f0'">
-                
-                <!-- Cabeçalho do Card -->
-                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; transition: all 0.2s;">
+                <!-- Header do Card -->
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
                     <div style="flex: 1;">
-                        <h6 style="margin: 0 0 4px 0; color: #0f172a; font-size: 1.05rem; font-weight: 600;">
-                            👤 ${func.nome}
+                        <h6 style="margin: 0 0 0.5rem 0; color: #111827; font-size: 0.9375rem; font-weight: 600;">
+                            ${func.nome}
                         </h6>
-                        <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
-                            <span style="background: ${cargoCor}; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">
-                                ${cargoNome}
-                            </span>
-                            <span style="color: #64748b; font-size: 0.85rem; font-weight: 500;">
-                                ${cargoValor}
-                            </span>
-                        </div>
+                        <span style="display: inline-block; background: ${cargoCor}; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 500;">
+                            ${cargoNome}
+                        </span>
+                        <span style="color: #6b7280; font-size: 0.75rem; margin-left: 0.5rem;">
+                            ${cargoValor}
+                        </span>
                     </div>
+                    <button onclick="removerFuncionario('${func.id}')" 
+                            title="Excluir Funcionário"
+                            style="padding: 0.375rem 0.625rem; background: #ef4444; color: white; border: none; border-radius: 6px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s;">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </div>
                 
                 <!-- Informações -->
-                <div style="background: #f8fafc; padding: 10px; border-radius: 8px; margin: 12px 0; border-left: 3px solid ${cargoCor};">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                        <i class="fas fa-calendar-check" style="color: ${cargoCor}; width: 16px;"></i>
-                        <span style="font-size: 0.85rem; color: #475569;">
+                <div style="background: #f9fafb; border-radius: 6px; padding: 0.75rem; margin-bottom: 0.75rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <i class="fas fa-calendar-check" style="color: ${cargoCor}; font-size: 0.75rem; width: 14px;"></i>
+                        <span style="font-size: 0.8125rem; color: #374151;">
                             <strong>Admissão:</strong> ${new Date(func.admissao + 'T00:00:00').toLocaleDateString('pt-BR')}
                         </span>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-clock" style="color: ${cargoCor}; width: 16px;"></i>
-                        <span style="font-size: 0.85rem; color: #475569;">
-                            <strong>Na empresa:</strong> ${tempoEmpresa}
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-clock" style="color: ${cargoCor}; font-size: 0.75rem; width: 14px;"></i>
+                        <span style="font-size: 0.8125rem; color: #374151;">
+                            <strong>Tempo:</strong> ${tempoEmpresa}
                         </span>
                     </div>
                 </div>
                 
-                <!-- Horas Extras e Ações -->
-                <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px;">
-                    <div class="form-group mb-0" style="flex: 1;">
-                        <label style="font-size: 0.8rem; margin-bottom: 4px; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 4px;">
-                            ⏰ Horas Extras (mês)
-                        </label>
-                        <input type="number" class="func-he-input" data-id="${func.id}" min="0" max="100" value="0" step="0.5" 
-                               placeholder="0h"
-                               style="padding: 8px; border: 2px solid #e2e8f0; border-radius: 6px; font-weight: 600; text-align: center; transition: all 0.3s; width: 100%;"
-                               onfocus="this.style.borderColor='${cargoCor}'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
-                               onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
-                    </div>
-                    
-                    <button class="btn btn-danger btn-sm" onclick="removerFuncionario('${func.id}')" 
-                            title="Excluir Funcionário"
-                            style="padding: 8px 12px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; border-radius: 6px; transition: all 0.3s; box-shadow: 0 2px 4px rgba(239,68,68,0.3);"
-                            onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 8px rgba(239,68,68,0.4)'"
-                            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 4px rgba(239,68,68,0.3)'">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                <!-- Horas Extras -->
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 500; color: #6b7280; margin-bottom: 0.375rem;">
+                        <i class="fas fa-clock" style="font-size: 0.625rem;"></i>
+                        Horas Extras (mês)
+                    </label>
+                    <input type="number" class="func-he-input" data-id="${func.id}" min="0" max="100" value="0" step="0.5" 
+                           placeholder="0h"
+                           style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.8125rem; text-align: center; transition: all 0.2s; outline: none;">
                 </div>
             </div>
         `;
     });
     
     html += '</div>';
+    
+    html += `
+        <style>
+            .func-he-input:focus {
+                border-color: #3b82f6 !important;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+            
+            button[onclick^="removerFuncionario"]:hover {
+                background: #dc2626 !important;
+            }
+        </style>
+    `;
+    
     container.innerHTML = html;
 }
 
@@ -519,63 +591,121 @@ function exibirResultadoRH(data) {
         const valorHoraExtra = valorHoraBase * 1.5; // Hora extra com adicional de 50%
         
         tabelaHTML += `
-            <tr style="transition: all 0.3s; cursor: pointer;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
-                <td style="font-weight: bold; color: #667eea;">${idx + 1}</td>
-                <td style="font-weight: 500;">${func.nome}</td>
-                <td><span style="background: #e0e7ff; color: #4c51bf; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">${func.cargo}</span></td>
-                <td style="text-align: center; font-weight: bold; color: ${func.horasExtras > 0 ? '#f59e0b' : '#94a3b8'};">
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+                <td style="padding: 0.75rem; text-align: center; color: #6b7280; font-weight: 500;">${idx + 1}</td>
+                <td style="padding: 0.75rem; color: #111827; font-weight: 500;">${func.nome}</td>
+                <td style="padding: 0.75rem; color: #6b7280; font-size: 0.8125rem;">${func.cargo.split('(')[0].trim()}</td>
+                <td style="padding: 0.75rem; text-align: center; color: ${func.horasExtras > 0 ? '#10b981' : '#9ca3af'}; font-weight: 600;">
                     ${func.horasExtras > 0 ? func.horasExtras + 'h' : '-'}
                 </td>
-                <td style="text-align: right;">${formatCurrency(func.salarioBase)}</td>
-                <td style="text-align: right; color: ${func.valorHorasExtras > 0 ? '#16a34a' : '#94a3b8'};">
+                <td style="padding: 0.75rem; text-align: right; color: #374151;">${formatCurrency(func.salarioBase)}</td>
+                <td style="padding: 0.75rem; text-align: right; color: ${func.valorHorasExtras > 0 ? '#10b981' : '#9ca3af'}; font-weight: ${func.valorHorasExtras > 0 ? '600' : '400'};">
                     ${func.valorHorasExtras > 0 ? '+ ' + formatCurrency(func.valorHorasExtras) : '-'}
                 </td>
-                <td style="text-align: right; font-weight: bold; color: #0f172a; background: #f1f5f9;">${formatCurrency(func.salarioBruto)}</td>
-                <td style="text-align: right; color: #dc2626;">- ${formatCurrency(func.inss)}</td>
-                <td style="text-align: right; color: #dc2626;">- ${formatCurrency(func.ir)}</td>
-                <td style="text-align: right; font-weight: bold; font-size: 1.05rem; color: #16a34a; background: #f0fdf4;">${formatCurrency(func.salarioLiquido)}</td>
+                <td style="padding: 0.75rem; text-align: right; font-weight: 600; color: #111827;">${formatCurrency(func.salarioBruto)}</td>
+                <td style="padding: 0.75rem; text-align: right; color: #ef4444;">- ${formatCurrency(func.inss)}</td>
+                <td style="padding: 0.75rem; text-align: right; color: #ef4444;">- ${formatCurrency(func.ir)}</td>
+                <td style="padding: 0.75rem; text-align: right; font-weight: 700; font-size: 0.9375rem; color: #10b981;">${formatCurrency(func.salarioLiquido)}</td>
             </tr>
         `;
     });
     
     const html = `
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                <h4 style="margin: 0;"><i class="fas fa-file-invoice"></i> Folha de Pagamento - ${data.mes}</h4>
-                <button class="btn btn-danger btn-sm" onclick="exportarFolhaPDF()">
-                    <i class="fas fa-file-pdf"></i> Exportar PDF
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+            <!-- Header -->
+            <div style="padding: 1.5rem; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-file-invoice" style="color: #3b82f6; font-size: 0.875rem;"></i>
+                        Folha de Pagamento - ${data.mes}
+                    </h1>
+                    <p style="color: #6b7280; margin: 0.5rem 0 0 0; font-size: 0.8125rem;">Gerado em ${data.data}</p>
+                </div>
+                <button onclick="exportarFolhaPDF()" style="padding: 0.625rem 1.25rem; background: #ef4444; color: white; border: none; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-file-pdf"></i>
+                    Exportar PDF
                 </button>
             </div>
             
-            <div class="table-container" style="overflow-x: auto; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 8px;">
-                <table style="margin: 0;">
-                    <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                        <tr>
-                            <th style="color: white;">#</th>
-                            <th style="color: white; text-align: left;">👤 Nome</th>
-                            <th style="color: white; text-align: left;">💼 Cargo</th>
-                            <th style="color: white; text-align: center;">⏰ HE</th>
-                            <th style="color: white; text-align: right;">💰 Base (220h)</th>
-                            <th style="color: white; text-align: right;">⚡ Valor HE (+50%)</th>
-                            <th style="color: white; text-align: right;">📊 Bruto</th>
-                            <th style="color: white; text-align: right;">🏛️ INSS</th>
-                            <th style="color: white; text-align: right;">🏦 IR</th>
-                            <th style="color: white; text-align: right;">✅ Líquido</th>
+            <!-- Tabela -->
+            <div style="padding: 1.5rem; overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.8125rem;">
+                    <thead>
+                        <tr style="background: #f9fafb; border-bottom: 2px solid #e5e7eb;">
+                            <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151;">#</th>
+                            <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">Nome</th>
+                            <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #374151;">Cargo</th>
+                            <th style="padding: 0.75rem; text-align: center; font-weight: 600; color: #374151;">HE</th>
+                            <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151;">Base (220h)</th>
+                            <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151;">Valor HE (+50%)</th>
+                            <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151;">Bruto</th>
+                            <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151;">INSS</th>
+                            <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151;">IR</th>
+                            <th style="padding: 0.75rem; text-align: right; font-weight: 600; color: #374151;">Líquido</th>
                         </tr>
                     </thead>
-                    <tbody style="background: white;">
+                    <tbody>
                         ${tabelaHTML}
                     </tbody>
                 </table>
             </div>
             
-            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #2563eb;">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                    <div>
-                        <p style="margin: 0; font-size: 0.875rem; color: #64748b;">Total Bruto</p>
-                        <h3 style="margin: 5px 0 0 0; color: #0f172a;">${formatCurrency(data.detalhes.reduce((sum, f) => sum + f.salarioBruto, 0))}</h3>
+            <!-- Resumo -->
+            <div style="padding: 1.5rem; background: #f9fafb; border-top: 1px solid #e5e7eb;">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem;">
+                        <p style="margin: 0; font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Total Bruto</p>
+                        <h3 style="margin: 0.5rem 0 0 0; font-size: 1.25rem; font-weight: 700; color: #111827;">${formatCurrency(data.detalhes.reduce((sum, f) => sum + f.salarioBruto, 0))}</h3>
                     </div>
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem;">
+                        <p style="margin: 0; font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Total Descontos</p>
+                        <h3 style="margin: 0.5rem 0 0 0; font-size: 1.25rem; font-weight: 700; color: #ef4444;">- ${formatCurrency(data.totalDescontos)}</h3>
+                    </div>
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem;">
+                        <p style="margin: 0; font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Total Líquido</p>
+                        <h3 style="margin: 0.5rem 0 0 0; font-size: 1.25rem; font-weight: 700; color: #10b981;">${formatCurrency(data.totalFolha)}</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Info Alert -->
+            <div style="margin: 1.5rem; background: #eff6ff; border: 1px solid #3b82f6; border-radius: 8px; padding: 1rem;">
+                <div style="display: flex; gap: 0.75rem;">
+                    <i class="fas fa-info-circle" style="color: #3b82f6; font-size: 0.875rem; margin-top: 2px;"></i>
                     <div>
+                        <p style="margin: 0 0 0.5rem 0; font-size: 0.8125rem; color: #1e40af; font-weight: 600;">
+                            Cálculos conforme legislação 2025:
+                        </p>
+                        <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.8125rem; color: #1e40af; line-height: 1.6;">
+                            <li><strong>Horas Extras:</strong> Valor/hora × 1.5 (adicional de 50%)</li>
+                            <li><strong>INSS:</strong> Progressivo de 7,5% a 14% (máx. R$ 908,85)</li>
+                            <li><strong>IR:</strong> Progressivo de 0% a 27,5% (isento até R$ 2.259,20)</li>
+                            <li><strong>Base de Cálculo:</strong> 220 horas/mês (44h/semana)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <style>
+            button[onclick="exportarFolhaPDF()"]:hover {
+                background: #dc2626 !important;
+            }
+            
+            @media (max-width: 768px) {
+                div[style*="grid-template-columns: repeat(3, 1fr)"] {
+                    grid-template-columns: 1fr !important;
+                }
+            }
+        </style>
+    `;
+    
+    resultado.innerHTML = html;
+    resultado.classList.remove('hidden');
+    
+    // Scroll para o resultado
+    resultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
                         <p style="margin: 0; font-size: 0.875rem; color: #64748b;">Total Descontos</p>
                         <h3 style="margin: 5px 0 0 0; color: #dc2626;">- ${formatCurrency(data.totalDescontos)}</h3>
                     </div>

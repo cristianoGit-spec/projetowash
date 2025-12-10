@@ -174,6 +174,31 @@ function showModule(moduleName) {
         } else {
             moduleContent.innerHTML = '<div class="alert alert-danger">Módulo admin não disponível</div>';
         }
+    } else if (moduleName === 'gestao-empresas') {
+        // Gestão de empresas renderiza em seção específica
+        const gestaoSection = document.getElementById('gestaoEmpresasSection');
+        if (gestaoSection) {
+            // Esconder todas as outras seções
+            document.querySelectorAll('.section-module, .dashboard-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            gestaoSection.classList.remove('hidden');
+            
+            // Carregar módulo
+            if (typeof initGestaoEmpresas === 'function') {
+                initGestaoEmpresas();
+            } else {
+                // Carregar script se não estiver disponível
+                const script = document.createElement('script');
+                script.src = '/static/js/modules/gestao-empresas.js?v=40';
+                script.onload = () => {
+                    if (typeof initGestaoEmpresas === 'function') {
+                        initGestaoEmpresas();
+                    }
+                };
+                document.head.appendChild(script);
+            }
+        }
     } else if (typeof loadModuleContent === 'function') {
         // Usar o loader modular para os outros módulos
         loadModuleContent(moduleName, moduleContent);
@@ -203,7 +228,8 @@ function updateActiveSidebarItem(moduleName) {
         'financeiro': 'Financeiro',
         'rh': 'Recursos Humanos',
         'historico': 'Histórico',
-        'admin': 'Administração'
+        'admin': 'Administração',
+        'gestao-empresas': 'Gestão de Empresas'
     };
     
     if (pageTitle) {

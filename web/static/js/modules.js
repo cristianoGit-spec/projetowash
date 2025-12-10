@@ -45,6 +45,11 @@ const AVAILABLE_MODULES = {
     'historico': {
         path: './static/js/modules/historico.js',
         loadFunction: 'loadHistoricoModule'
+    },
+    'gestao-empresas': {
+        path: './static/js/modules/gestao-empresas.js',
+        loadFunction: 'initGestaoEmpresas',
+        isSpecial: true // Renderiza em seção própria
     }
 };
 
