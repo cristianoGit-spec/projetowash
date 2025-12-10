@@ -110,8 +110,18 @@ function loadAdminModule(container) {
     // Popular filtro de segmentos
     popularFiltroSegmentos();
 
-    // Carregar dados das empresas
-    carregarEmpresas();
+    // Carregar dados das empresas (assíncrono)
+    carregarEmpresas().catch(error => {
+        console.error('Erro ao carregar empresas:', error);
+        const grid = document.getElementById('empresasGrid');
+        grid.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i>
+                <h3>Erro ao carregar empresas</h3>
+                <p>Tente recarregar a página</p>
+            </div>
+        `;
+    });
 
     // Adicionar event listeners para filtros
     document.getElementById('searchEmpresa').addEventListener('input', filtrarEmpresas);
@@ -136,19 +146,40 @@ function popularFiltroSegmentos() {
 }
 
 // ============================================================================
-// CARREGAR EMPRESAS DO LOCALSTORAGE
+// CARREGAR EMPRESAS DO FIREBASE E LOCALSTORAGE
 // ============================================================================
 
-function carregarEmpresas() {
-    const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+async function carregarEmpresas() {
+    let empresas = [];
     
-    // Filtrar apenas empresas (role = 'admin'), excluindo o super admin
-    const empresas = localUsers.filter(u => 
-        u.role === 'admin' && 
-        u.email !== 'superadmin@quatrocantos.com' &&
-        u.companyId && 
-        u.companyId !== 'superadmin-master'
-    );
+    // Tentar buscar do Firebase primeiro
+    if (typeof buscarTodasEmpresasFirebase === 'function') {
+        try {
+            console.log('🔍 Buscando empresas do Firebase...');
+            const empresasFirebase = await buscarTodasEmpresasFirebase();
+            if (empresasFirebase && empresasFirebase.length > 0) {
+                empresas = empresasFirebase;
+                console.log('✅ Empresas carregadas do Firebase:', empresas.length);
+            }
+        } catch (error) {
+            console.warn('⚠️ Erro ao buscar do Firebase, usando localStorage:', error);
+        }
+    }
+    
+    // Se não encontrou no Firebase, buscar do localStorage
+    if (empresas.length === 0) {
+        console.log('📦 Buscando empresas do localStorage...');
+        const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+        
+        // Filtrar apenas empresas (role = 'admin'), excluindo o super admin
+        empresas = localUsers.filter(u => 
+            u.role === 'admin' && 
+            u.email !== 'superadmin@quatrocantos.com' &&
+            u.companyId && 
+            u.companyId !== 'superadmin-master'
+        );
+        console.log('✅ Empresas carregadas do localStorage:', empresas.length);
+    }
     
     console.log('ðŸ“Š Total de empresas encontradas:', empresas.length);
     console.log('ðŸ¢ Empresas:', empresas);

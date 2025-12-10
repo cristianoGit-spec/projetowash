@@ -2,25 +2,28 @@
 // SERVICE WORKER - PWA OFFLINE SUPPORT
 // Arquivo: service-worker.js
 // Descrição: Gerencia cache e funcionamento offline do aplicativo
-// Versão: 18 (admin cards + modo local fixo)
+// Versão: 27 (fix empresas Firebase + cards design)
 // ============================================================================
 
-const CACHE_NAME = 'estoque-certo-v18';
+const CACHE_NAME = 'estoque-certo-v27';
 const CACHE_MAX_AGE_DAYS = 30; // Cache expira após 30 dias
 const CACHE_MAX_ITEMS = 50; // Máximo de itens no cache
 
 // Lista de URLs essenciais para cache (apenas arquivos que realmente existem)
 const urlsToCache = [
     '/',
-    '/static/css/style.css?v=18',
-    '/static/js/app.js?v=18',
-    '/static/js/modules.js?v=18',
-    '/static/js/dashboard.js?v=18',
-    '/static/js/auth.js?v=18',
-    '/static/js/firebase-config.js?v=18',
-    '/static/js/local-auth.js?v=17',
-    '/static/js/local-firestore.js?v=17',
-    '/static/js/pwa.js?v=17'
+    '/static/css/style.css?v=27',
+    '/static/css/admin.css?v=27',
+    '/static/js/app.js?v=23',
+    '/static/js/modules.js?v=23',
+    '/static/js/dashboard.js?v=24',
+    '/static/js/auth.js?v=23',
+    '/static/js/firebase-config.js?v=23',
+    '/static/js/firestore-service.js?v=27',
+    '/static/js/admin-module.js?v=27',
+    '/static/js/local-auth.js?v=23',
+    '/static/js/local-firestore.js?v=23',
+    '/static/js/pwa.js?v=23'
 ];
 
 // ============================================================================

@@ -711,3 +711,51 @@ async function realizarBackup() {
         throw error;
     }
 }
+
+/**
+ * Buscar todas as empresas do Firebase (para super admin)
+ */
+async function buscarTodasEmpresasFirebase() {
+    if (!firebaseInitialized) {
+        console.warn('⚠️ Firebase não disponível - usando dados locais');
+        return [];
+    }
+    
+    try {
+        console.log('🔍 Buscando todas as empresas do Firebase...');
+        
+        const snapshot = await db.collection('usuarios')
+            .where('role', '==', 'admin')
+            .get();
+        
+        const empresas = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.email !== 'superadmin@quatrocantos.com' && data.companyId !== 'superadmin-master') {
+                empresas.push({
+                    id: doc.id,
+                    uid: data.uid,
+                    nome: data.nome,
+                    email: data.email,
+                    contato: data.contato,
+                    nomeEmpresa: data.nomeEmpresa,
+                    segmento: data.segmento,
+                    companyId: data.companyId,
+                    role: data.role,
+                    cargo: data.cargo,
+                    ativo: data.ativo !== false,
+                    dataCadastro: data.criadoEm?.toDate?.() || data.criadoEm,
+                    allowedModules: data.allowedModules || []
+                });
+            }
+        });
+        
+        console.log('✅ Empresas encontradas:', empresas.length);
+        return empresas;
+        
+    } catch (error) {
+        console.error('❌ Erro ao buscar empresas:', error);
+        return [];
+    }
+}
+
