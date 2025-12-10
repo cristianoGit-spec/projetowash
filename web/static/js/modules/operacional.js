@@ -94,111 +94,65 @@ function exibirResultadoOperacional(data) {
     const resultado = document.getElementById('resultadoOperacional');
     
     const html = `
-        <div class="results-header">
-            <i class="fas fa-chart-line"></i>
-            <h4>Análise de Capacidade - ${data.turnos} Turno(s)</h4>
+        <div class="results-section">
+            <div class="results-title">
+                <i class="fas fa-chart-line"></i>
+                <span>Análise de Capacidade - ${data.turnos} Turno(s)</span>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${formatNumber(data.capacidade_por_turno)}</h3>
+                        <p>Capacidade/Turno</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card green">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${formatNumber(data.capacidade_diaria)}</h3>
+                        <p>Capacidade Diária</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card purple">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${formatNumber(data.capacidade_mensal)}</h3>
+                        <p>Capacidade Mensal</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card orange">
+                    <div class="stat-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${data.percentual_uso}%</h3>
+                        <p>Utilização</p>
+                    </div>
+                </div>
+            </div>
+            
+            ${data.percentual_uso < 100 ? 
+                `<div class="alert alert-warning simple-alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Oportunidade de Expansão: A fábrica está operando em ${data.percentual_uso}% da capacidade máxima.</span>
+                </div>` : 
+                `<div class="alert alert-success simple-alert">
+                    <i class="fas fa-check-circle"></i>
+                    <span>A fábrica está operando em capacidade MÁXIMA!</span>
+                </div>`
+            }
         </div>
-        
-        <div class="stats-grid results-grid">
-            <div class="stat-card blue">
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>${formatNumber(data.capacidade_por_turno)}</h3>
-                    <p>Capacidade/Turno</p>
-                </div>
-            </div>
-            
-            <div class="stat-card green">
-                <div class="stat-icon">
-                    <i class="fas fa-calendar-day"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>${formatNumber(data.capacidade_diaria)}</h3>
-                    <p>Capacidade Diária</p>
-                </div>
-            </div>
-            
-            <div class="stat-card purple">
-                <div class="stat-icon">
-                    <i class="fas fa-calendar-alt"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>${formatNumber(data.capacidade_mensal)}</h3>
-                    <p>Capacidade Mensal</p>
-                </div>
-            </div>
-            
-            <div class="stat-card orange">
-                <div class="stat-icon">
-                    <i class="fas fa-chart-bar"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>${data.percentual_uso}%</h3>
-                    <p>Utilização</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="info-cards">
-            <div class="info-card">
-                <div class="info-icon blue">
-                    <i class="fas fa-industry"></i>
-                </div>
-                <div class="info-content">
-                    <h5>Capacidade Anual</h5>
-                    <p class="value">${formatNumber(data.capacidade_anual)} unidades</p>
-                </div>
-            </div>
-            
-            <div class="info-card">
-                <div class="info-icon green">
-                    <i class="fas fa-cogs"></i>
-                </div>
-                <div class="info-content">
-                    <h5>Capacidade Máxima (3 turnos)</h5>
-                    <p class="value">${formatNumber(data.capacidade_maxima)} unidades/dia</p>
-                </div>
-            </div>
-            
-            <div class="info-card">
-                <div class="info-icon ${data.diferenca_diaria > 0 ? 'orange' : 'green'}">
-                    <i class="fas ${data.diferenca_diaria > 0 ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
-                </div>
-                <div class="info-content">
-                    <h5>Capacidade Ociosa</h5>
-                    <p class="value">${formatNumber(data.diferenca_diaria)} unidades/dia</p>
-                </div>
-            </div>
-            
-            <div class="info-card">
-                <div class="info-icon purple">
-                    <i class="fas fa-business-time"></i>
-                </div>
-                <div class="info-content">
-                    <h5>Horas de Operação</h5>
-                    <p class="value">${data.horas_dia}h/dia (${data.horas_por_turno}h/turno)</p>
-                </div>
-            </div>
-        </div>
-        
-        ${data.percentual_uso < 100 ? 
-            `<div class="alert alert-warning modern-alert">
-                <i class="fas fa-exclamation-triangle"></i>
-                <div>
-                    <strong>Oportunidade de Expansão</strong>
-                    <p>A fábrica está operando em ${data.percentual_uso}% da capacidade máxima.</p>
-                </div>
-            </div>` : 
-            `<div class="alert alert-success modern-alert">
-                <i class="fas fa-check-circle"></i>
-                <div>
-                    <strong>Capacidade Total</strong>
-                    <p>A fábrica está operando em capacidade MÁXIMA!</p>
-                </div>
-            </div>`
-        }
     `;
     
     resultado.innerHTML = html;
