@@ -281,6 +281,93 @@ function setupEventListeners() {
     if (btnCancelarEdicao) {
         btnCancelarEdicao.addEventListener('click', fecharModalEdicao);
     }
+
+    const btnLimparBanco = document.getElementById('btn-limpar-banco');
+    if (btnLimparBanco) {
+        btnLimparBanco.addEventListener('click', abrirModalLimpeza);
+    }
+
+    const btnCancelarLimpeza = document.getElementById('btn-cancelar-limpeza');
+    if (btnCancelarLimpeza) {
+        btnCancelarLimpeza.addEventListener('click', fecharModalLimpeza);
+    }
+
+    const btnConfirmarLimpeza = document.getElementById('btn-confirmar-limpeza');
+    if (btnConfirmarLimpeza) {
+        btnConfirmarLimpeza.addEventListener('click', executarLimpezaBanco);
+    }
+}
+
+/**
+ * Abre o modal de confirmação de limpeza
+ */
+function abrirModalLimpeza() {
+    const modal = document.getElementById('modal-confirmar-limpeza');
+    const input = document.getElementById('input-confirmar-limpeza');
+    
+    if (modal) {
+        modal.style.display = 'flex';
+        if (input) {
+            input.value = '';
+            setTimeout(() => input.focus(), 100);
+        }
+    }
+}
+
+/**
+ * Fecha o modal de confirmação de limpeza
+ */
+function fecharModalLimpeza() {
+    const modal = document.getElementById('modal-confirmar-limpeza');
+    const input = document.getElementById('input-confirmar-limpeza');
+    
+    if (modal) {
+        modal.style.display = 'none';
+        if (input) input.value = '';
+    }
+}
+
+/**
+ * Executa a limpeza do banco de dados
+ */
+async function executarLimpezaBanco() {
+    const input = document.getElementById('input-confirmar-limpeza');
+    
+    if (!input || input.value.trim().toUpperCase() !== 'CONFIRMAR') {
+        mostrarToast('Digite CONFIRMAR para prosseguir', 'error');
+        return;
+    }
+
+    try {
+        if (typeof showLoading === 'function') showLoading('Limpando banco de dados... Aguarde...');
+        
+        fecharModalLimpeza();
+
+        // Chamar função do firestore-service para limpar o banco
+        if (typeof limparBancoDadosFirebase === 'function') {
+            const resultado = await limparBancoDadosFirebase();
+            
+            if (resultado.success) {
+                mostrarToast(resultado.message, 'success');
+                
+                // Recarregar a lista de empresas
+                setTimeout(async () => {
+                    await carregarEmpresas();
+                    renderizarEmpresas();
+                }, 1500);
+            } else {
+                mostrarToast(resultado.message || 'Erro ao limpar banco de dados', 'error');
+            }
+        } else {
+            throw new Error('Função limparBancoDadosFirebase não disponível');
+        }
+        
+    } catch (error) {
+        console.error('[ERRO] Limpar banco:', error);
+        mostrarToast('Erro ao limpar banco de dados', 'error');
+    } finally {
+        if (typeof hideLoading === 'function') hideLoading();
+    }
 }
 
 // Expor funções globalmente
@@ -289,3 +376,4 @@ window.editarEmpresa = editarEmpresa;
 window.confirmarExclusao = confirmarExclusao;
 
 console.log('[OK] Módulo Gestão de Empresas carregado');
+

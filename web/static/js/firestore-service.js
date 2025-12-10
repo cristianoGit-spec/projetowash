@@ -880,3 +880,117 @@ async function deletarEmpresaFirebase(uid) {
     }
 }
 
+/**
+ * Limpa todo o banco de dados (exceto super administrador)
+ * ATENÇÃO: Esta função deleta TODOS os dados do sistema!
+ */
+async function limparBancoDadosFirebase() {
+    if (!firebaseInitialized) {
+        return {
+            success: false,
+            message: 'Firebase não disponível'
+        };
+    }
+    
+    try {
+        console.log('[LIMPEZA] Iniciando limpeza completa do banco de dados...');
+        
+        let totalDeletados = 0;
+        const SUPER_ADMIN_EMAIL = 'superadmin@quatrocantos.com';
+        
+        // 1. Deletar todas as empresas (usuários com role='admin')
+        console.log('[LIMPEZA] Deletando empresas...');
+        const empresasSnapshot = await db.collection('usuarios')
+            .where('role', '==', 'admin')
+            .get();
+        
+        const batchUsuarios = db.batch();
+        empresasSnapshot.forEach(doc => {
+            const data = doc.data();
+            // Preservar super admin
+            if (data.email !== SUPER_ADMIN_EMAIL) {
+                batchUsuarios.delete(doc.ref);
+                totalDeletados++;
+            }
+        });
+        await batchUsuarios.commit();
+        console.log(`[OK] ${empresasSnapshot.size} empresas deletadas`);
+        
+        // 2. Deletar todo o estoque
+        console.log('[LIMPEZA] Deletando estoque...');
+        const estoqueSnapshot = await db.collection('estoque').get();
+        const batchEstoque = db.batch();
+        estoqueSnapshot.forEach(doc => {
+            batchEstoque.delete(doc.ref);
+            totalDeletados++;
+        });
+        await batchEstoque.commit();
+        console.log(`[OK] ${estoqueSnapshot.size} itens de estoque deletados`);
+        
+        // 3. Deletar todas as movimentações
+        console.log('[LIMPEZA] Deletando movimentações...');
+        const movSnapshot = await db.collection('movimentacoes').get();
+        const batchMov = db.batch();
+        movSnapshot.forEach(doc => {
+            batchMov.delete(doc.ref);
+            totalDeletados++;
+        });
+        await batchMov.commit();
+        console.log(`[OK] ${movSnapshot.size} movimentações deletadas`);
+        
+        // 4. Deletar todos os registros financeiros
+        console.log('[LIMPEZA] Deletando registros financeiros...');
+        const finSnapshot = await db.collection('financeiro').get();
+        const batchFin = db.batch();
+        finSnapshot.forEach(doc => {
+            batchFin.delete(doc.ref);
+            totalDeletados++;
+        });
+        await batchFin.commit();
+        console.log(`[OK] ${finSnapshot.size} registros financeiros deletados`);
+        
+        // 5. Deletar todas as folhas de pagamento
+        console.log('[LIMPEZA] Deletando folhas de pagamento...');
+        const rhSnapshot = await db.collection('folha_pagamento').get();
+        const batchRh = db.batch();
+        rhSnapshot.forEach(doc => {
+            batchRh.delete(doc.ref);
+            totalDeletados++;
+        });
+        await batchRh.commit();
+        console.log(`[OK] ${rhSnapshot.size} folhas de pagamento deletadas`);
+        
+        // 6. Deletar todos os funcionários
+        console.log('[LIMPEZA] Deletando funcionários...');
+        const funcSnapshot = await db.collection('funcionarios').get();
+        const batchFunc = db.batch();
+        funcSnapshot.forEach(doc => {
+            batchFunc.delete(doc.ref);
+            totalDeletados++;
+        });
+        await batchFunc.commit();
+        console.log(`[OK] ${funcSnapshot.size} funcionários deletados`);
+        
+        // Limpar cache local
+        console.log('[LIMPEZA] Limpando cache local...');
+        localStorage.removeItem('localEstoque');
+        localStorage.removeItem('localMovimentacoes');
+        localStorage.removeItem('localFinanceiro');
+        
+        console.log(`[OK] Limpeza completa! Total de ${totalDeletados} registros deletados.`);
+        
+        return {
+            success: true,
+            message: `Banco de dados limpo com sucesso! ${totalDeletados} registros deletados.`,
+            totalDeletados: totalDeletados
+        };
+        
+    } catch (error) {
+        console.error('❌ Erro ao limpar banco de dados:', error);
+        return {
+            success: false,
+            message: `Erro ao limpar banco: ${error.message}`
+        };
+    }
+}
+

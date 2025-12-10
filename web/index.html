@@ -532,10 +532,16 @@
                             <h1 style="font-size: 1.875rem; font-weight: 600; color: #111827; margin: 0;">Gestão de Empresas</h1>
                             <p style="color: #6b7280; margin: 0.5rem 0 0 0; font-size: 0.875rem;">Visualize, edite e gerencie todas as empresas cadastradas no sistema</p>
                         </div>
-                        <button id="btn-refresh-empresas" style="padding: 0.625rem 1.25rem; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
-                            <i class="fas fa-sync-alt"></i>
-                            Atualizar
-                        </button>
+                        <div style="display: flex; gap: 0.75rem;">
+                            <button id="btn-refresh-empresas" style="padding: 0.625rem 1.25rem; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                                <i class="fas fa-sync-alt"></i>
+                                Atualizar
+                            </button>
+                            <button id="btn-limpar-banco" style="padding: 0.625rem 1.25rem; background: #ef4444; color: white; border: none; border-radius: 8px; font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                                <i class="fas fa-trash-alt"></i>
+                                Limpar Banco de Dados
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Lista de Empresas -->
@@ -584,6 +590,55 @@
                             </button>
                             <button id="btn-salvar-edicao" style="padding: 0.625rem 1.25rem; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 0.875rem; cursor: pointer; transition: all 0.2s;">
                                 Salvar Alterações
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de Confirmação de Limpeza -->
+                <div id="modal-confirmar-limpeza" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+                    <div style="background: white; border-radius: 12px; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+                        <div style="padding: 1.5rem; border-bottom: 1px solid #fee2e2; background: #fef2f2; border-radius: 12px 12px 0 0;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem; color: #ef4444;"></i>
+                                <h2 style="font-size: 1.5rem; font-weight: 600; color: #991b1b; margin: 0;">Atenção: Ação Irreversível</h2>
+                            </div>
+                        </div>
+                        
+                        <div style="padding: 1.5rem;">
+                            <p style="color: #374151; font-size: 0.9375rem; line-height: 1.5; margin-bottom: 1rem;">
+                                Você está prestes a <strong style="color: #ef4444;">limpar todo o banco de dados</strong>. Esta ação irá deletar permanentemente:
+                            </p>
+                            
+                            <ul style="color: #6b7280; font-size: 0.875rem; line-height: 1.6; margin-left: 1.5rem; margin-bottom: 1rem;">
+                                <li>Todas as empresas cadastradas (exceto super administrador)</li>
+                                <li>Todos os produtos do estoque</li>
+                                <li>Todas as movimentações de entrada/saída</li>
+                                <li>Todos os registros financeiros</li>
+                                <li>Todas as folhas de pagamento</li>
+                                <li>Todos os funcionários cadastrados</li>
+                            </ul>
+                            
+                            <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem;">
+                                <p style="color: #991b1b; font-size: 0.875rem; font-weight: 500; margin: 0;">
+                                    ⚠️ Esta ação não pode ser desfeita!
+                                </p>
+                            </div>
+                            
+                            <p style="color: #374151; font-size: 0.875rem; line-height: 1.5; margin: 0;">
+                                Digite <strong style="color: #ef4444;">CONFIRMAR</strong> no campo abaixo para prosseguir:
+                            </p>
+                            
+                            <input type="text" id="input-confirmar-limpeza" placeholder="Digite CONFIRMAR" style="width: 100%; padding: 0.625rem; border: 2px solid #d1d5db; border-radius: 6px; font-size: 0.875rem; margin-top: 0.75rem; font-family: monospace;">
+                        </div>
+                        
+                        <div style="padding: 1rem 1.5rem; background: #f9fafb; border-top: 1px solid #e5e7eb; display: flex; gap: 0.75rem; justify-content: flex-end; border-radius: 0 0 12px 12px;">
+                            <button id="btn-cancelar-limpeza" style="padding: 0.625rem 1.25rem; background: #f3f4f6; color: #374151; border: none; border-radius: 6px; font-size: 0.875rem; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                Cancelar
+                            </button>
+                            <button id="btn-confirmar-limpeza" style="padding: 0.625rem 1.25rem; background: #ef4444; color: white; border: none; border-radius: 6px; font-size: 0.875rem; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                <i class="fas fa-trash-alt"></i>
+                                Confirmar Limpeza
                             </button>
                         </div>
                     </div>
