@@ -47,12 +47,12 @@
     --bg-overlay: rgba(15, 23, 42, 0.75);
     --bg-gradient: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
     
-    /* Textos - Hierarquia Visual */
-    --text-primary: #0f172a; /* Slate 900 */
-    --text-secondary: #475569; /* Slate 600 */
-    --text-light: #94a3b8; /* Slate 400 */
+    /* Textos - Hierarquia Visual Padronizada */
+    --text-primary: #1a1a1a; /* Preto suave - títulos e textos principais */
+    --text-secondary: #4a5568; /* Cinza escuro - subtítulos e labels */
+    --text-light: #6b7280; /* Cinza médio - textos auxiliares */
     --text-on-dark: #f8fafc; /* Slate 50 */
-    --text-muted: #cbd5e1; /* Slate 300 */
+    --text-muted: #9ca3af; /* Cinza claro - placeholders */
     
     /* Sombras - Sistema Elevado */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -118,7 +118,7 @@ html {
 body {
     font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     line-height: 1.6;
-    color: var(--text-primary);
+    color: #1a1a1a;
     background-color: var(--bg-secondary);
     min-height: 100vh;
     display: flex;
@@ -129,7 +129,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     line-height: 1.2;
-    color: var(--text-primary);
+    color: #1a1a1a;
 }
 
 h1 { font-size: 2rem; }
@@ -2445,7 +2445,7 @@ table tbody tr:hover {
 }
 
 .welcome-header p {
-    color: var(--text-secondary);
+    color: #6b7280;
     margin: 5px 0 0 0;
     font-size: 0.95rem;
 }
