@@ -138,14 +138,16 @@ async function handleLogin(event) {
         let mensagem = error.message || 'Erro ao entrar. Verifique suas credenciais.';
         
         if (mensagem.includes('Usuário') && mensagem.includes('não encontrado')) {
-            // Exibir mensagem mais amigável
-            showToast('❌ Email não cadastrado! Crie uma conta ou use um usuário demo.', 'error');
+            // Mensagem mais amigável com sugestões
+            showToast('🚫 Email não cadastrado!\n\n👉 Crie uma conta ou use:\n• admin@local.com (senha: admin123)\n• gaby@gmail.com (senha: admin123)', 'error', 8000);
             
             // Destacar visualmente o link "Criar conta"
             setTimeout(() => {
-                const authLinks = document.querySelector('.auth-links');
-                if (authLinks) {
-                    authLinks.style.animation = 'pulse 1s ease-in-out 3';
+                const registerBtn = document.querySelector('.auth-links a[onclick*="showRegister"]');
+                if (registerBtn) {
+                    registerBtn.style.animation = 'pulse 1s ease-in-out 3';
+                    registerBtn.style.fontWeight = 'bold';
+                    registerBtn.style.fontSize = '1.1em';
                 }
             }, 500);
         } else {

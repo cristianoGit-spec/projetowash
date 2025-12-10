@@ -136,11 +136,12 @@ function closeModule() {
 // ============================================================================
 
 /**
- * Exibe uma notificacao toast
+ * Exibe uma notificação toast
  * @param {string} message - Mensagem a ser exibida
  * @param {string} type - Tipo da notificacao (success, error, warning)
+ * @param {number} duration - Duração em ms (padrão 3000)
  */
-function showToast(message, type = 'success') {
+function showToast(message, type = 'success', duration = 3000) {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
     
@@ -148,9 +149,15 @@ function showToast(message, type = 'success') {
     toast.className = `toast ${type}`;
     toast.classList.remove('hidden');
     
-    setTimeout(() => {
+    // Limpar timeout anterior se existir
+    if (window.toastTimeout) {
+        clearTimeout(window.toastTimeout);
+    }
+    
+    // Configurar novo timeout
+    window.toastTimeout = setTimeout(() => {
         toast.classList.add('hidden');
-    }, 3000);
+    }, duration);
 }
 
 // ============================================================================

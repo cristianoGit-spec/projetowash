@@ -37,11 +37,13 @@ const firebaseConfig = {
 let auth = null;
 let db = null;
 let firebaseInitialized = false;
-let useFirebase = true; // Priorizar Firebase para acesso externo
+let useFirebase = false; // Usar modo local por padrão (Firebase ainda não configurado)
 
-// Tentar inicializar Firebase
+// Tentar inicializar Firebase (desabilitado por enquanto - usar modo local)
 try {
-    if (typeof firebase !== 'undefined' && firebaseConfig.apiKey.startsWith("AIza")) {
+    // Firebase desabilitado - usando modo local até configuração completa
+    // Para ativar Firebase: configure a API key real e remova este bloco
+    throw new Error("Firebase em modo local - API key não configurada");
         firebase.initializeApp(firebaseConfig);
         auth = firebase.auth();
         db = firebase.firestore();

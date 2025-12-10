@@ -119,6 +119,32 @@ function loadLocalUsers() {
                 nome: 'Alice',
                 nomeEmpresa: 'Empresa Local Demo',
                 email: 'alice@gmail.com',
+                contato: '(00) 91234-5678',
+                loginUsuario: 'alice',
+                senha: DEFAULT_PASSWORDS.admin, // admin123
+                role: 'user',
+                companyId: 'comp-default',
+                ativo: true,
+                dataCadastro: new Date().toISOString()
+            },
+            {
+                uid: 'user-local-gaby',
+                nome: 'Gabriela Silva',
+                nomeEmpresa: 'Empresa Local Demo',
+                email: 'gaby@gmail.com',
+                contato: '(00) 92345-6789',
+                loginUsuario: 'gaby',
+                senha: DEFAULT_PASSWORDS.admin, // admin123 (mesma senha padrão)
+                role: 'user',
+                companyId: 'comp-default',
+                ativo: true,
+                dataCadastro: new Date().toISOString()
+            },
+            {
+                uid: 'user-local-superacao',
+                nome: 'Superação',
+                nomeEmpresa: 'Empresa Local Demo',
+                email: 'alice@gmail.com',
                 contato: '(11) 99999-9999',
                 loginUsuario: 'alice',
                 senha: DEFAULT_PASSWORDS.alice, // alice123
@@ -212,12 +238,12 @@ async function loginLocal(emailOrLogin, password) {
         console.error('❌ Usuário não encontrado:', emailOrLogin);
         console.log('📋 Usuários disponíveis:', localUsers.map(u => ({ email: u.email, login: u.loginUsuario })));
         
-        // Mensagem mais amigável
-        const sugestao = localUsers.length > 0 
-            ? '\n\nUsuários disponíveis:\n• ' + localUsers.map(u => u.email).join('\n• ')
-            : '\n\nNenhum usuário cadastrado. Crie uma conta primeiro.';
+        // Mensagem mais amigável com sugestões claras
+        const usuariosDisponiveis = localUsers.length > 0 
+            ? '\n\n👉 Usuários cadastrados:\n• ' + localUsers.map(u => `${u.email} (${u.nome})`).join('\n• ')
+            : '\n\n🚫 Nenhum usuário cadastrado. Crie uma conta primeiro.';
         
-        throw new Error(`Usuário "${emailOrLogin}" não encontrado.${sugestao}`);
+        throw new Error(`Email "${emailOrLogin}" não encontrado.${usuariosDisponiveis}`);
     }
     
     console.log('✅ Usuário encontrado:', user.email);
