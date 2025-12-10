@@ -4,57 +4,112 @@
 
 function loadEstoqueEntradaModule(container) {
     const html = `
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-box-open"></i> Cadastrar Produto no Estoque
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden;">
+            <!-- Header -->
+            <div style="padding: 1.25rem; border-bottom: 1px solid #f3f4f6;">
+                <h3 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-box-open" style="color: #3b82f6; font-size: 0.875rem;"></i>
+                    Cadastrar Produto no Estoque
+                </h3>
             </div>
             
-            <form id="formEstoqueEntrada" onsubmit="cadastrarProduto(event)">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="codigo"><i class="fas fa-barcode"></i> Código</label>
-                        <input type="number" id="codigo" name="codigo" required min="1" placeholder="Ex: 001">
+            <!-- Form -->
+            <div style="padding: 1.5rem;">
+                <form id="formEstoqueEntrada" onsubmit="cadastrarProduto(event)">
+                    <!-- Código -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                            <i class="fas fa-barcode" style="color: #6b7280; font-size: 0.75rem;"></i>
+                            Código
+                        </label>
+                        <input type="number" id="codigo" name="codigo" required min="1" placeholder="Ex: 001"
+                               style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                               onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                               onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                     </div>
                     
-                    <div class="form-group">
-                        <label for="nome"><i class="fas fa-tag"></i> Nome do Produto</label>
-                        <input type="text" id="nome" name="nome" required placeholder="Ex: Produto XYZ">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="quantidade"><i class="fas fa-cubes"></i> Quantidade</label>
-                        <input type="number" id="quantidade" name="quantidade" required min="1" placeholder="Ex: 100">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="data"><i class="fas fa-calendar"></i> Data de Fabricação</label>
-                        <input type="date" id="data" name="data" required>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="fornecedor"><i class="fas fa-truck"></i> Fornecedor</label>
-                        <input type="text" id="fornecedor" name="fornecedor" required placeholder="Nome do fornecedor">
+                    <!-- Nome do Produto -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                            <i class="fas fa-tag" style="color: #6b7280; font-size: 0.75rem;"></i>
+                            Nome do Produto
+                        </label>
+                        <input type="text" id="nome" name="nome" required placeholder="Ex: Produto XYZ"
+                               style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                               onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                               onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                     </div>
                     
-                    <div class="form-group">
-                        <label for="local"><i class="fas fa-map-marker-alt"></i> Local no Armazém</label>
-                        <input type="text" id="local" name="local" required placeholder="Ex: Corredor A, Prateleira 3">
+                    <!-- Quantidade -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                            <i class="fas fa-cubes" style="color: #6b7280; font-size: 0.75rem;"></i>
+                            Quantidade
+                        </label>
+                        <input type="number" id="quantidade" name="quantidade" required min="1" placeholder="Ex: 100"
+                               style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                               onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                               onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                     </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="valor"><i class="fas fa-dollar-sign"></i> Valor Unitário (R$)</label>
-                    <input type="number" id="valor" name="valor" required min="0" step="0.01" placeholder="Ex: 25.50">
-                </div>
-                
-                <button type="submit" class="btn btn-success">
-                    <i class="fas fa-save"></i> Cadastrar Produto
-                </button>
-            </form>
+                    
+                    <!-- Data de Fabricação -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                            <i class="fas fa-calendar" style="color: #6b7280; font-size: 0.75rem;"></i>
+                            Data de Fabricação
+                        </label>
+                        <input type="date" id="data" name="data" required
+                               style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                               onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                               onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
+                    </div>
+                    
+                    <!-- Fornecedor -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                            <i class="fas fa-truck" style="color: #6b7280; font-size: 0.75rem;"></i>
+                            Fornecedor
+                        </label>
+                        <input type="text" id="fornecedor" name="fornecedor" required placeholder="Nome do fornecedor"
+                               style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                               onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                               onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
+                    </div>
+                    
+                    <!-- Local no Armazém -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                            <i class="fas fa-map-marker-alt" style="color: #6b7280; font-size: 0.75rem;"></i>
+                            Local no Armazém
+                        </label>
+                        <input type="text" id="local" name="local" required placeholder="Ex: Corredor A, Prateleira 3"
+                               style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                               onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                               onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
+                    </div>
+                    
+                    <!-- Valor Unitário -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                            <i class="fas fa-dollar-sign" style="color: #6b7280; font-size: 0.75rem;"></i>
+                            Valor Unitário (R$)
+                        </label>
+                        <input type="number" id="valor" name="valor" required min="0" step="0.01" placeholder="Ex: 25.50"
+                               style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                               onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                               onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
+                    </div>
+                    
+                    <!-- Botão Submit -->
+                    <button type="submit" class="btn btn-success" 
+                            style="width: 100%; padding: 0.75rem; background: #10b981; color: white; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s ease;"
+                            onmouseover="this.style.background='#059669'"
+                            onmouseout="this.style.background='#10b981'">
+                        <i class="fas fa-save"></i>
+                        Cadastrar Produto
+                    </button>
+                </form>
+            </div>
         </div>
     `;
     
