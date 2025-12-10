@@ -1,39 +1,49 @@
 /* ============================================================================
-   SISTEMA QUATRO CANTOS - ESTILOS CSS (VERSÁO CORRIGIDA)
+   SISTEMA QUATRO CANTOS - ESTILOS CSS (VERSÃO CORRIGIDA)
    ============================================================================ */
 
-/* Variáveis CSS - TEMA ELECTRIC FUTURE */
+/* Variáveis CSS - PALETA SERENIDADE VERDE */
 :root {
-    --primary-color: #2563eb; /* Electric Blue */
-    --primary-dark: #1e40af;
-    --secondary-color: #06b6d4; /* Cyan */
-    --accent-color: #3b82f6;
+    /* Cores Primárias - Verde Sereno */
+    --primary-color: #2d6a4f; /* Verde Floresta */
+    --primary-dark: #1b4332; /* Verde Escuro */
+    --primary-light: #40916c; /* Verde Médio */
+    --secondary-color: #52b788; /* Verde Claro */
+    --accent-color: #74c69d; /* Verde Suave */
     
-    --success-color: #10b981;
-    --danger-color: #ef4444;
-    --warning-color: #f59e0b;
-    --info-color: #0ea5e9;
+    /* Cores de Status */
+    --success-color: #52b788; /* Verde Sucesso */
+    --danger-color: #d62828; /* Vermelho Terra */
+    --warning-color: #f77f00; /* Laranja Quente */
+    --info-color: #06a77d; /* Verde Água */
     
+    /* Backgrounds */
     --bg-primary: #ffffff;
-    --bg-secondary: #f1f5f9; /* Metallic Gray */
-    --bg-dark: #0f172a; /* Slate 900 */
+    --bg-secondary: #f1f8f4; /* Verde Muito Claro */
+    --bg-tertiary: #e8f5e9; /* Verde Pastel */
+    --bg-dark: #1b4332; /* Verde Escuro */
     --bg-card: #ffffff;
     
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --text-light: #94a3b8;
-    --text-on-dark: #f8fafc;
+    /* Textos */
+    --text-primary: #1b4332; /* Verde Escuro */
+    --text-secondary: #2d6a4f; /* Verde Médio */
+    --text-light: #74c69d; /* Verde Suave */
+    --text-on-dark: #f1f8f4; /* Claro */
+    --text-muted: #6c757d; /* Cinza Neutro */
     
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
-    --shadow-glow: 0 0 15px rgba(37, 99, 235, 0.2);
+    /* Sombras */
+    --shadow-sm: 0 1px 2px 0 rgba(29, 67, 50, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(29, 67, 50, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(29, 67, 50, 0.15);
+    --shadow-glow: 0 0 20px rgba(45, 106, 79, 0.25);
     
+    /* Border Radius */
     --radius-sm: 0.25rem;
     --radius-md: 0.5rem;
     --radius-lg: 0.75rem;
     --radius-xl: 1rem;
     
+    /* Spacing */
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;

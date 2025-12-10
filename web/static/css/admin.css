@@ -100,10 +100,10 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.stat-icon.blue { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
-.stat-icon.green { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); }
-.stat-icon.orange { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
-.stat-icon.purple { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); }
+.stat-icon.blue { background: linear-gradient(135deg, #40916c 0%, #2d6a4f 100%); }
+.stat-icon.green { background: linear-gradient(135deg, #52b788 0%, #40916c 100%); }
+.stat-icon.orange { background: linear-gradient(135deg, #f77f00 0%, #d97706 100%); }
+.stat-icon.purple { background: linear-gradient(135deg, #74c69d 0%, #52b788 100%); }
 
 .stat-info {
     flex: 1;
@@ -521,25 +521,25 @@
 }
 
 .btn-card-action.btn-view {
-    color: #2563eb;
-    border-color: #2563eb20;
+    color: #2d6a4f;
+    border-color: #2d6a4f20;
 }
 
 .btn-card-action.btn-view:hover {
-    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
-    border-color: #2563eb;
-    color: #1e40af;
+    background: linear-gradient(135deg, #d8f3dc 0%, #f1f8f4 100%);
+    border-color: #2d6a4f;
+    color: #1b4332;
 }
 
 .btn-card-action.btn-toggle {
-    color: #d97706;
-    border-color: #d9770620;
+    color: #74c69d;
+    border-color: #74c69d20;
 }
 
 .btn-card-action.btn-toggle:hover {
-    background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%);
-    border-color: #d97706;
-    color: #b45309;
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f4 100%);
+    border-color: #74c69d;
+    color: #52b788;
 }
 
 .btn-card-action.btn-delete {
