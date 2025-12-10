@@ -75,15 +75,36 @@ function loadLocalUsers() {
         const defaultSuperAdmin = {
             uid: 'superadmin-master-001',
             nome: 'Super Administrador',
-            nomeEmpresa: '[0000] Quatro Cantos - Administração',
+            nomeEmpresa: '[0000] Quatro Cantos - Administração Master',
             email: 'superadmin@quatrocantos.com',
             senha: DEFAULT_PASSWORDS.superadmin,
             role: 'superadmin',
-            segmento: 'construcao',
+            segmento: 'tecnologia',
             companyId: 'superadmin-master',
             ativo: true,
             dataCadastro: new Date().toISOString(),
-            allowedModules: ['dashboard', 'admin', 'operacional', 'estoque-entrada', 'estoque-saida', 'financeiro', 'rh', 'visualizar', 'historico']
+            // SUPER ADMIN = ACESSO TOTAL A TODOS OS MÓDULOS DO SISTEMA
+            allowedModules: [
+                'dashboard',
+                'admin', // Gestão de Empresas
+                'operacional',
+                'estoque-entrada',
+                'estoque-saida',
+                'visualizar',
+                'financeiro',
+                'rh',
+                'historico'
+            ],
+            permissions: {
+                viewAllCompanies: true,
+                editAllCompanies: true,
+                deleteCompanies: true,
+                createCompanies: true,
+                viewAllData: true,
+                editAllData: true,
+                manageUsers: true,
+                systemSettings: true
+            }
         };
 
         if (superAdminIndex === -1) {
@@ -129,14 +150,29 @@ function loadLocalUsers() {
             {
                 uid: 'superadmin-master-001',
                 nome: 'Super Administrador',
-                nomeEmpresa: '[0000] Quatro Cantos - Administração',
+                nomeEmpresa: '[0000] Quatro Cantos - Administração Master',
                 email: 'superadmin@quatrocantos.com',
                 senha: DEFAULT_PASSWORDS.superadmin,
                 role: 'superadmin',
-                segmento: 'construcao',
+                segmento: 'tecnologia',
                 companyId: 'superadmin-master',
                 ativo: true,
-                dataCadastro: new Date().toISOString()
+                dataCadastro: new Date().toISOString(),
+                allowedModules: [
+                    'dashboard', 'admin', 'operacional', 
+                    'estoque-entrada', 'estoque-saida', 'visualizar',
+                    'financeiro', 'rh', 'historico'
+                ],
+                permissions: {
+                    viewAllCompanies: true,
+                    editAllCompanies: true,
+                    deleteCompanies: true,
+                    createCompanies: true,
+                    viewAllData: true,
+                    editAllData: true,
+                    manageUsers: true,
+                    systemSettings: true
+                }
             },
             {
                 uid: 'admin-local-001',

@@ -715,7 +715,8 @@ async function realizarBackup() {
 
 /**
  * Buscar todas as empresas do Firebase (para super admin)
- * COM CACHE DESABILITADO - sempre busca dados atualizados
+ * SUPER ADMIN = ACESSO MASTER TOTAL
+ * COM CACHE DESABILITADO - sempre busca dados atualizados do servidor
  */
 async function buscarTodasEmpresasFirebase() {
     if (typeof firebaseInitialized === 'undefined' || !firebaseInitialized) {
@@ -725,44 +726,57 @@ async function buscarTodasEmpresasFirebase() {
     
     try {
         const timestamp = new Date().toISOString();
-        console.log(`🔍 [${timestamp}] Buscando TODAS as empresas do Firebase Cloud (SEM CACHE)...`);
+        console.log(`🔍 [SUPER ADMIN] [${timestamp}] Buscando TODAS as empresas do Firebase Cloud...`);
         
-        // Buscar TODAS empresas com role='admin' do Firebase
+        // SUPER ADMIN: Buscar TODAS empresas cadastradas no sistema
+        // Busca usuarios com role='admin' (empresas) E também usuários comuns se necessário
         const snapshot = await db.collection('usuarios')
-            .where('role', '==', 'admin')
+            .where('role', 'in', ['admin', 'user']) // Admin = empresas, User = funcionários
+            .orderBy('criadoEm', 'desc')
             .get({ source: 'server' }); // FORÇA buscar do servidor, não do cache
         
         const empresas = [];
+        const empresasSet = new Set(); // Para evitar duplicatas
+        
         snapshot.forEach(doc => {
             const data = doc.data();
             
-            // Filtrar apenas empresas válidas (não super admin)
+            // SUPER ADMIN: Acesso total, exceto ele mesmo
+            // Filtrar apenas se NÃO for o próprio super admin
             if (data.email !== 'superadmin@quatrocantos.com' && 
-                data.companyId !== 'superadmin-master') {
+                data.companyId && 
+                data.companyId !== 'superadmin-master' &&
+                data.role === 'admin') { // Apenas empresas (admins), não usuários comuns
                 
-                empresas.push({
-                    id: doc.id,
-                    uid: data.uid,
-                    nome: data.nome,
-                    email: data.email,
-                    contato: data.contato,
-                    nomeEmpresa: data.nomeEmpresa,
-                    segmento: data.segmento,
-                    companyId: data.companyId,
-                    role: data.role,
-                    cargo: data.cargo,
-                    ativo: data.ativo !== false,
-                    dataCadastro: data.criadoEm?.toDate?.() || data.criadoEm,
-                    criadoEm: data.criadoEm,
-                    allowedModules: data.allowedModules || [],
-                    _syncTimestamp: timestamp // Timestamp da sincronização
-                });
-                
-                console.log(`✅ Empresa encontrada: [${data.companyId}] ${data.nomeEmpresa} (${data.email})`);
+                // Evitar duplicatas por email
+                if (!empresasSet.has(data.email)) {
+                    empresasSet.add(data.email);
+                    
+                    empresas.push({
+                        id: doc.id,
+                        uid: data.uid || doc.id,
+                        nome: data.nome || 'Não informado',
+                        email: data.email,
+                        contato: data.contato || 'Não informado',
+                        nomeEmpresa: data.nomeEmpresa || data.nome || 'Empresa sem nome',
+                        segmento: data.segmento || 'outros',
+                        companyId: data.companyId,
+                        role: data.role,
+                        cargo: data.cargo || 'Administrador',
+                        ativo: data.ativo !== false, // Default true
+                        dataCadastro: data.criadoEm?.toDate?.() || data.dataCadastro || new Date(),
+                        criadoEm: data.criadoEm,
+                        allowedModules: data.allowedModules || ['dashboard', 'estoque-entrada', 'estoque-saida', 'visualizar'],
+                        _syncTimestamp: timestamp,
+                        _origem: 'firebase'
+                    });
+                    
+                    console.log(`✅ [${empresas.length}] Empresa: [${data.companyId}] ${data.nomeEmpresa || data.email}`);
+                }
             }
         });
         
-        console.log(`✅ TOTAL: ${empresas.length} empresas encontradas no Firebase Cloud`);
+        console.log(`✅ SUPER ADMIN - TOTAL: ${empresas.length} empresas encontradas no Firebase Cloud`);
         
         // Ordenar por data de cadastro (mais recentes primeiro)
         empresas.sort((a, b) => {
@@ -775,7 +789,9 @@ async function buscarTodasEmpresasFirebase() {
         
     } catch (error) {
         console.error('❌ ERRO CRÍTICO ao buscar empresas do Firebase:', error);
-        console.error('Detalhes do erro:', error.message);
+        console.error('Stack:', error.stack);
+        console.error('Código:', error.code);
+        console.error('Mensagem:', error.message);
         return [];
     }
 }
