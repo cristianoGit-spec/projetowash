@@ -13,8 +13,8 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css?v=31">
-    <link rel="stylesheet" href="/static/css/admin.css?v=31">
+    <link rel="stylesheet" href="/static/css/style.css?v=32">
+    <link rel="stylesheet" href="/static/css/admin.css?v=32">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -30,7 +30,7 @@
     <!-- Segments Config -->
     <script src="/static/js/segments-config.js?v=17"></script>
     
-    <!-- Limpeza de Cache v31 - Layout Dashboard Melhorado -->
+    <!-- Limpeza de Cache v32 - Dashboard Reconstruído -->
     <script>
         // Limpar cache antigo do Service Worker
         if ('serviceWorker' in navigator) {
@@ -44,7 +44,7 @@
             if ('caches' in window) {
                 caches.keys().then(function(names) {
                     for (let name of names) {
-                        if (name !== 'estoque-certo-v31') {
+                        if (name !== 'estoque-certo-v32') {
                             console.log('🗑️ Removendo cache antigo:', name);
                             caches.delete(name);
                         }
@@ -53,16 +53,14 @@
             }
         }
         
-        // Layout Dashboard Melhorado v31
-        if (!localStorage.getItem('layout_improved_v31')) {
-            console.log('🎨 Atualizando layout dashboard v31...');
+        // Dashboard Reconstruído v32
+        if (!localStorage.getItem('dashboard_rebuilt_v32')) {
+            console.log('🎨 Dashboard reconstruído v32...');
             // Limpar flags antigas
-            localStorage.removeItem('system_hybrid_v21');
-            localStorage.removeItem('system_hybrid_v20');
-            localStorage.removeItem('system_optimized_v30');
-            localStorage.setItem('layout_improved_v31', 'true');
-            console.log('✅ Layout profissional e responsivo ativado!');
-            console.log('📱 Grid otimizado para mobile, tablet e desktop');
+            localStorage.removeItem('layout_improved_v31');
+            localStorage.setItem('dashboard_rebuilt_v32', 'true');
+            console.log('✅ Cards limpos e modernos ativados!');
+            console.log('📊 Layout minimalista e profissional');
         }
     </script>
 </head>
@@ -544,73 +542,49 @@
                     <!-- Alertas de Estoque Baixo -->
                     <div id="stockAlerts" class="hidden"></div>
                     
-                    <!-- Cards de Estatísticas com Gradientes -->
+                    <!-- Cards de Estatísticas Modernos -->
                     <div class="stats-grid">
-                        <div class="stat-card stat-gradient-blue">
-                            <div class="stat-content">
-                                <div class="stat-icon-modern">
-                                    <i class="fas fa-boxes"></i>
-                                </div>
-                                <div class="stat-info-modern">
-                                    <h3 id="statTotalProdutos">0</h3>
-                                    <p>TOTAL DE PRODUTOS</p>
-                                    <small class="stat-subtitle">Cadastrados no estoque</small>
-                                </div>
+                        <!-- Card 1: Total de Produtos -->
+                        <div class="stat-card blue">
+                            <div class="stat-icon">
+                                <i class="fas fa-boxes"></i>
                             </div>
-                            <div class="stat-footer">
-                                <i class="fas fa-arrow-up"></i>
-                                <span>Atualizado agora</span>
+                            <div class="stat-info">
+                                <h3 id="statTotalProdutos">0</h3>
+                                <p>Total de Produtos</p>
                             </div>
                         </div>
                         
-                        <div class="stat-card stat-gradient-green">
-                            <div class="stat-content">
-                                <div class="stat-icon-modern">
-                                    <i class="fas fa-cubes"></i>
-                                </div>
-                                <div class="stat-info-modern">
-                                    <h3 id="statTotalItens">0</h3>
-                                    <p>TOTAL DE ITENS</p>
-                                    <small class="stat-subtitle">Unidades disponíveis</small>
-                                </div>
+                        <!-- Card 2: Total de Itens -->
+                        <div class="stat-card green">
+                            <div class="stat-icon">
+                                <i class="fas fa-cubes"></i>
                             </div>
-                            <div class="stat-footer">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Em estoque</span>
+                            <div class="stat-info">
+                                <h3 id="statTotalItens">0</h3>
+                                <p>Itens em Estoque</p>
                             </div>
                         </div>
                         
-                        <div class="stat-card stat-gradient-purple">
-                            <div class="stat-content">
-                                <div class="stat-icon-modern">
-                                    <i class="fas fa-dollar-sign"></i>
-                                </div>
-                                <div class="stat-info-modern">
-                                    <h3 id="statValorTotal">R$ 0,00</h3>
-                                    <p>VALOR EM ESTOQUE</p>
-                                    <small class="stat-subtitle">Capital investido</small>
-                                </div>
+                        <!-- Card 3: Valor em Estoque -->
+                        <div class="stat-card purple">
+                            <div class="stat-icon">
+                                <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <div class="stat-footer">
-                                <i class="fas fa-wallet"></i>
-                                <span>Patrimônio</span>
+                            <div class="stat-info">
+                                <h3 id="statValorTotal">R$ 0,00</h3>
+                                <p>Valor em Estoque</p>
                             </div>
                         </div>
                         
-                        <div class="stat-card stat-gradient-orange">
-                            <div class="stat-content">
-                                <div class="stat-icon-modern">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                                <div class="stat-info-modern">
-                                    <h3 id="statVendasMes">R$ 0,00</h3>
-                                    <p>VENDAS DO MÊS</p>
-                                    <small class="stat-subtitle">Receita mensal</small>
-                                </div>
+                        <!-- Card 4: Vendas do Mês -->
+                        <div class="stat-card orange">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
                             </div>
-                            <div class="stat-footer">
-                                <i class="fas fa-trending-up"></i>
-                                <span>Dezembro 2025</span>
+                            <div class="stat-info">
+                                <h3 id="statVendasMes">R$ 0,00</h3>
+                                <p>Vendas do Mês</p>
                             </div>
                         </div>
                     </div>

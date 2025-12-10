@@ -1,52 +1,189 @@
 // ============================================================================
-// MÓDULO FINANCEIRO
+// MÓDULO FINANCEIRO - LAYOUT MODERNO v31
 // ============================================================================
 
 function loadFinanceiroModule(container) {
     const html = `
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-chart-line"></i> Cálculo Financeiro
+        <div class="financeiro-module">
+            <!-- Header -->
+            <div class="welcome-header">
+                <div>
+                    <h2><i class="fas fa-chart-line"></i> Financeiro</h2>
+                    <p>Gestão completa de receitas, despesas e fluxo de caixa.</p>
+                </div>
             </div>
-            
-            <form id="formFinanceiro" onsubmit="calcularFinanceiro(event)">
-                <div class="financeiro-form-grid">
-                    <div class="form-group">
-                        <label for="agua"><i class="fas fa-water"></i> Conta de Água (R$)</label>
-                        <input type="number" id="agua" name="agua" required min="0" step="0.01" placeholder="Ex: 1000.00">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="luz"><i class="fas fa-lightbulb"></i> Conta de Luz (R$)</label>
-                        <input type="number" id="luz" name="luz" required min="0" step="0.01" placeholder="Ex: 2500.00">
-                    </div>
 
-                    <div class="form-group">
-                        <label for="impostos"><i class="fas fa-file-invoice-dollar"></i> Impostos (R$)</label>
-                        <input type="number" id="impostos" name="impostos" required min="0" step="0.01" placeholder="Ex: 3000.00">
+            <!-- Cards de Estatísticas Financeiras -->
+            <div class="stats-grid" id="financeiroStats">
+                <div class="stat-card blue">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-dollar-sign"></i>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="salarios"><i class="fas fa-money-bill-wave"></i> Salários (R$)</label>
-                        <input type="number" id="salarios" name="salarios" required min="0" step="0.01" placeholder="Ex: 20000.00">
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label for="totalPallets"><i class="fas fa-boxes"></i> Total de Pallets/Mês</label>
-                        <input type="number" id="totalPallets" name="totalPallets" required min="1" placeholder="Ex: 1000">
+                    <div class="stat-info">
+                        <h3 id="saldoAtual">R$ 0,00</h3>
+                        <p>Saldo Atual</p>
                     </div>
                 </div>
-                
-                <button type="submit" class="btn btn-calcular">
-                    <i class="fas fa-calculator"></i> Calcular Custos e Lucros
+
+                <div class="stat-card green">
+                    <div class="stat-icon green">
+                        <i class="fas fa-arrow-trend-up"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="receitasTotal">+R$ 0,00</h3>
+                        <p>Receitas</p>
+                    </div>
+                </div>
+
+                <div class="stat-card orange">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-arrow-trend-down"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="despesasTotal">-R$ 0,00</h3>
+                        <p>Despesas</p>
+                    </div>
+                </div>
+
+                <div class="stat-card purple">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="previsaoSaldo">R$ 0,00</h3>
+                        <p>Previsão</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros e Busca -->
+            <div class="financeiro-filters">
+                <div class="filter-group">
+                    <input type="text" id="searchTransacao" class="search-input" placeholder="🔍 Buscar transações...">
+                </div>
+                <div class="filter-group">
+                    <select id="filterTipo" class="filter-select">
+                        <option value="">Todos os tipos</option>
+                        <option value="receita">Receitas</option>
+                        <option value="despesa">Despesas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="filterStatus" class="filter-select">
+                        <option value="">Todos os status</option>
+                        <option value="pago">Pago</option>
+                        <option value="pendente">Pendente</option>
+                        <option value="vencido">Vencido</option>
+                    </select>
+                </div>
+                <button onclick="abrirModalNovaTransacao()" class="btn-novo">
+                    <i class="fas fa-plus"></i> Nova Transação
                 </button>
-            </form>
-            
-            <div id="resultadoFinanceiro" class="mt-3 hidden"></div>
+            </div>
+
+            <!-- Área de Transações -->
+            <div class="chart-card">
+                <h3><i class="fas fa-list"></i> Transações Recentes</h3>
+                <div id="listaTransacoes" class="empty-state">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <h4>Nenhuma transação registrada</h4>
+                    <p>Registre entradas ou saídas de valores para visualizar o histórico</p>
+                    <button onclick="abrirModalNovaTransacao()" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nova Transação
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Nova Transação -->
+        <div id="modalNovaTransacao" class="modal hidden">
+            <div class="modal-content modal-medium">
+                <div class="modal-header">
+                    <h3><i class="fas fa-plus-circle"></i> Nova Transação</h3>
+                    <button onclick="fecharModalNovaTransacao()" class="modal-close">&times;</button>
+                </div>
+                <form id="formNovaTransacao" onsubmit="salvarTransacao(event)">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tipoTransacao">
+                                    <i class="fas fa-exchange-alt"></i> Tipo
+                                </label>
+                                <select id="tipoTransacao" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="receita">💰 Receita</option>
+                                    <option value="despesa">💸 Despesa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="valorTransacao">
+                                    <i class="fas fa-dollar-sign"></i> Valor (R$)
+                                </label>
+                                <input type="number" id="valorTransacao" step="0.01" min="0" required placeholder="0,00">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descricaoTransacao">
+                                <i class="fas fa-align-left"></i> Descrição
+                            </label>
+                            <input type="text" id="descricaoTransacao" required placeholder="Ex: Venda de produto X">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="categoriaTransacao">
+                                    <i class="fas fa-tag"></i> Categoria
+                                </label>
+                                <select id="categoriaTransacao" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="vendas">Vendas</option>
+                                    <option value="servicos">Serviços</option>
+                                    <option value="fornecedores">Fornecedores</option>
+                                    <option value="salarios">Salários</option>
+                                    <option value="impostos">Impostos</option>
+                                    <option value="contas">Contas (água, luz)</option>
+                                    <option value="outros">Outros</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dataTransacao">
+                                    <i class="fas fa-calendar"></i> Data
+                                </label>
+                                <input type="date" id="dataTransacao" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="statusTransacao">
+                                <i class="fas fa-check-circle"></i> Status
+                            </label>
+                            <select id="statusTransacao" required>
+                                <option value="pago">✅ Pago/Recebido</option>
+                                <option value="pendente">⏳ Pendente</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="fecharModalNovaTransacao()" class="btn btn-secondary">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salvar Transação
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     `;
     
     container.innerHTML = html;
+    
+    // Definir data atual no campo de data
+    document.getElementById('dataTransacao').valueAsDate = new Date();
+    
+    // Carregar transações salvas
+    carregarTransacoes();
 }
 
 async function calcularFinanceiro(event) {
