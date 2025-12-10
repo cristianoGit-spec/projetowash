@@ -9,6 +9,68 @@ let funcionariosCache = [];
 let lastCalculatedFolha = null;
 
 // ============================================================================
+// FUNÇÕES AUXILIARES
+// ============================================================================
+
+/**
+ * Exibe toast de notificação (usa função global ou fallback)
+ */
+function mostrarToastRH(mensagem, tipo = 'info') {
+    if (typeof mostrarToast === 'function') {
+        mostrarToast(mensagem, tipo);
+    } else if (typeof showToast === 'function') {
+        showToast(mensagem, tipo);
+    } else {
+        console.log(`[TOAST ${tipo.toUpperCase()}] ${mensagem}`);
+        alert(mensagem);
+    }
+}
+
+/**
+ * Verifica se Firebase está inicializado
+ */
+function isFirebaseAvailable() {
+    return typeof firebaseInitialized !== 'undefined' && firebaseInitialized && typeof db !== 'undefined';
+}
+
+/**
+ * Obtém usuário atual
+ */
+function getCurrentUser() {
+    if (typeof currentUser !== 'undefined' && currentUser) {
+        return currentUser;
+    }
+    // Fallback: tentar obter do localStorage
+    const localUser = localStorage.getItem('currentUser');
+    if (localUser) {
+        try {
+            return JSON.parse(localUser);
+        } catch (e) {
+            console.error('Erro ao parse do usuário local:', e);
+        }
+    }
+    return null;
+}
+
+/**
+ * Mostra loading (usa função global ou fallback)
+ */
+function showLoadingRH(message = 'Carregando...') {
+    if (typeof showLoading === 'function') {
+        showLoading(message);
+    }
+}
+
+/**
+ * Esconde loading (usa função global ou fallback)
+ */
+function hideLoadingRH() {
+    if (typeof hideLoading === 'function') {
+        hideLoading();
+    }
+}
+
+// ============================================================================
 // VALORES POR CARGO (Base: 220h mensais)
 // ============================================================================
 const CARGOS = {
@@ -273,25 +335,26 @@ async function cadastrarFuncionario(event) {
     const admissao = document.getElementById('novoAdmissao').value;
     
     if (!nome || !cargo || !admissao) {
-        mostrarToast('Preencha todos os campos', 'error');
+        mostrarToastRH('Preencha todos os campos', 'error');
         return;
     }
     
+    const user = getCurrentUser();
     const funcionario = {
         id: Date.now().toString(),
         nome,
         cargo,
         admissao,
         horasExtras: 0,
-        companyId: currentUser?.companyId || 'local',
+        companyId: user?.companyId || 'local',
         createdAt: new Date().toISOString()
     };
     
     try {
-        if (typeof showLoading === 'function') showLoading();
+        showLoadingRH();
         
         // Salvar no Firebase
-        if (firebaseInitialized && currentUser) {
+        if (isFirebaseAvailable() && user) {
             await db.collection('funcionarios').add(funcionario);
         } else {
             // Fallback localStorage
@@ -300,15 +363,15 @@ async function cadastrarFuncionario(event) {
             localStorage.setItem('funcionarios', JSON.stringify(funcionarios));
         }
         
-        mostrarToast('Funcionário cadastrado com sucesso!', 'success');
+        mostrarToastRH('Funcionário cadastrado com sucesso!', 'success');
         document.getElementById('formCadastroFuncionario').reset();
         await carregarFuncionarios();
         
     } catch (error) {
         console.error('Erro ao cadastrar funcionário:', error);
-        mostrarToast('Erro ao cadastrar funcionário', 'error');
+        mostrarToastRH('Erro ao cadastrar funcionário', 'error');
     } finally {
-        if (typeof hideLoading === 'function') hideLoading();
+        hideLoadingRH();
     }
 }
 
@@ -318,11 +381,12 @@ async function cadastrarFuncionario(event) {
 async function carregarFuncionarios() {
     try {
         let funcionarios = [];
+        const user = getCurrentUser();
         
         // Carregar do Firebase
-        if (firebaseInitialized && currentUser) {
+        if (isFirebaseAvailable() && user) {
             const snapshot = await db.collection('funcionarios')
-                .where('companyId', '==', currentUser.companyId)
+                .where('companyId', '==', user.companyId)
                 .get();
             
             snapshot.forEach(doc => {
@@ -338,7 +402,7 @@ async function carregarFuncionarios() {
         
     } catch (error) {
         console.error('Erro ao carregar funcionários:', error);
-        mostrarToast('Erro ao carregar funcionários', 'error');
+        mostrarToastRH('Erro ao carregar funcionários', 'error');
     }
 }
 
@@ -446,8 +510,9 @@ function renderizarListaFuncionarios(funcionarios) {
 async function atualizarHorasExtras(funcId, horasExtras) {
     try {
         const horas = parseFloat(horasExtras) || 0;
+        const user = getCurrentUser();
         
-        if (firebaseInitialized && currentUser) {
+        if (isFirebaseAvailable() && user) {
             await db.collection('funcionarios').doc(funcId).update({
                 horasExtras: horas
             });
@@ -468,7 +533,7 @@ async function atualizarHorasExtras(funcId, horasExtras) {
         
     } catch (error) {
         console.error('Erro ao atualizar horas extras:', error);
-        mostrarToast('Erro ao atualizar horas extras', 'error');
+        mostrarToastRH('Erro ao atualizar horas extras', 'error');
     }
 }
 
@@ -479,9 +544,10 @@ async function deletarFuncionario(funcId) {
     if (!confirm('Deseja realmente excluir este funcionário?')) return;
     
     try {
-        if (typeof showLoading === 'function') showLoading();
+        showLoadingRH();
+        const user = getCurrentUser();
         
-        if (firebaseInitialized && currentUser) {
+        if (isFirebaseAvailable() && user) {
             await db.collection('funcionarios').doc(funcId).delete();
         } else {
             let funcionarios = JSON.parse(localStorage.getItem('funcionarios') || '[]');
@@ -489,14 +555,14 @@ async function deletarFuncionario(funcId) {
             localStorage.setItem('funcionarios', JSON.stringify(funcionarios));
         }
         
-        mostrarToast('Funcionário excluído com sucesso', 'success');
+        mostrarToastRH('Funcionário excluído com sucesso', 'success');
         await carregarFuncionarios();
         
     } catch (error) {
         console.error('Erro ao deletar funcionário:', error);
-        mostrarToast('Erro ao deletar funcionário', 'error');
+        mostrarToastRH('Erro ao deletar funcionário', 'error');
     } finally {
-        if (typeof hideLoading === 'function') hideLoading();
+        hideLoadingRH();
     }
 }
 
@@ -523,12 +589,13 @@ function filtrarFuncionarios() {
  */
 async function calcularFolhaPagamento() {
     if (funcionariosCache.length === 0) {
-        mostrarToast('Nenhum funcionário cadastrado', 'error');
+        mostrarToastRH('Nenhum funcionário cadastrado', 'error');
         return;
     }
     
     try {
-        if (typeof showLoading === 'function') showLoading('Calculando folha de pagamento...');
+        showLoadingRH('Calculando folha de pagamento...');
+        const user = getCurrentUser();
         
         const folha = {
             mes: new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }),
@@ -611,21 +678,21 @@ async function calcularFolhaPagamento() {
         }
         
         // Salvar no Firebase
-        if (firebaseInitialized && currentUser) {
+        if (isFirebaseAvailable() && user) {
             await db.collection('folha_pagamento').add({
                 ...folha,
-                companyId: currentUser.companyId,
+                companyId: user.companyId,
                 createdAt: new Date()
             });
         }
         
-        mostrarToast('Folha calculada com sucesso!', 'success');
+        mostrarToastRH('Folha calculada com sucesso!', 'success');
         
     } catch (error) {
         console.error('Erro ao calcular folha:', error);
-        mostrarToast('Erro ao calcular folha de pagamento', 'error');
+        mostrarToastRH('Erro ao calcular folha de pagamento', 'error');
     } finally {
-        if (typeof hideLoading === 'function') hideLoading();
+        hideLoadingRH();
     }
 }
 
@@ -802,11 +869,11 @@ function exibirResultadoFolha(folha) {
  */
 function exportarPDF() {
     if (!lastCalculatedFolha) {
-        mostrarToast('Calcule a folha primeiro', 'error');
+        mostrarToastRH('Calcule a folha primeiro', 'error');
         return;
     }
     
-    mostrarToast('Funcionalidade de PDF em desenvolvimento', 'info');
+    mostrarToastRH('Funcionalidade de PDF em desenvolvimento', 'info');
     console.log('Dados da folha:', lastCalculatedFolha);
 }
 

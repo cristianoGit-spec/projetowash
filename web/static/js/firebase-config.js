@@ -41,19 +41,20 @@ let useFirebase = true; // ATIVADO: Usar Firebase na nuvem por padrão
 
 // Inicializar Firebase
 try {
-    firebase.initializeApp(firebaseConfig);
-    auth = firebase.auth();
-    db = firebase.firestore();
-    
-    // Configurar persistência offline
-    db.enablePersistence({ synchronizeTabs: true })
-        .catch((err) => {
-            if (err.code == 'failed-precondition') {
-                console.warn('⚠️ Persistência desabilitada - múltiplas abas abertas');
-            } else if (err.code == 'unimplemented') {
-                console.warn('⚠️ Persistência não suportada neste navegador');
-            }
-        });
+    if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length === 0) {
+        firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.firestore();
+        
+        // Configurar persistência offline
+        db.enablePersistence({ synchronizeTabs: true })
+            .catch((err) => {
+                if (err.code == 'failed-precondition') {
+                    console.warn('⚠️ Persistência desabilitada - múltiplas abas abertas');
+                } else if (err.code == 'unimplemented') {
+                    console.warn('⚠️ Persistência não suportada neste navegador');
+                }
+            });
         
         // Configurar persistência local
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)

@@ -185,6 +185,12 @@ async function loadChartsAndAlerts() {
 // Verificar estoque baixo
 function checkLowStock(produtos) {
     const container = document.getElementById('stockAlerts');
+    
+    if (!container) {
+        console.warn('⚠️ Container de alertas de estoque não encontrado');
+        return;
+    }
+    
     const threshold = 10; // Limite para alerta
     
     const lowStockItems = produtos.filter(p => p.quantidade <= threshold);
@@ -204,9 +210,17 @@ function checkLowStock(produtos) {
                 </ul>
             </div>
         `;
-        container.classList.remove('hidden');
+        if (container.classList) {
+            container.classList.remove('hidden');
+        } else {
+            container.className = container.className.replace(/\bhidden\b/g, '');
+        }
     } else {
-        container.classList.add('hidden');
+        if (container.classList) {
+            container.classList.add('hidden');
+        } else {
+            container.className += ' hidden';
+        }
         container.innerHTML = '';
     }
 }
