@@ -1,6 +1,6 @@
 ﻿// ============================================================================
 // MÓDULO DE ADMINISTRAÇÃO - SUPER ADMIN
-// Versão: 29 - Dados Firebase sempre atualizados (SEM CACHE)
+// Versão: 30 - Sistema otimizado, dados Firebase sempre atualizados (SEM CACHE)
 // ============================================================================
 // Este módulo permite ao super administrador visualizar todas as empresas
 // cadastradas no sistema, seus dados e estatísticas gerais.

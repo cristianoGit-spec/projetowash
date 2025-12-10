@@ -1,9 +1,9 @@
 // Servicos de dados do Firestore
-// Versão: 29 - Busca sempre atualizada do Firebase (source: 'server')
+// Versão: 30 - Sistema otimizado, código duplicado removido
 // Sistema Multi-Tenant: Todos os dados são isolados por companyId
 // Sistema Híbrido: Firebase (nuvem) + localStorage (cache offline)
 
-console.log('🔄 Firestore Service v29 - Modo Híbrido com Sincronização SEM CACHE');
+console.log('🔄 Firestore Service v30 - Modo Híbrido Otimizado SEM CACHE');
 
 // ===== SINCRONIZAÇÃO HÍBRIDA =====
 
