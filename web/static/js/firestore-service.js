@@ -718,7 +718,7 @@ async function realizarBackup() {
  * COM CACHE DESABILITADO - sempre busca dados atualizados
  */
 async function buscarTodasEmpresasFirebase() {
-    if (!firebaseInitialized) {
+    if (typeof firebaseInitialized === 'undefined' || !firebaseInitialized) {
         console.warn('⚠️ Firebase não disponível - usando dados locais');
         return [];
     }

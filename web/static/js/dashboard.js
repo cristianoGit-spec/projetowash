@@ -202,21 +202,23 @@ function checkLowStock(produtos) {
             </li>
         `).join('');
         
-        container.innerHTML = `
-            <div class="alert alert-warning" style="display: block; margin-bottom: 20px;">
-                <h4><i class="fas fa-exclamation-triangle"></i> Alerta de Estoque Baixo</h4>
-                <ul style="margin-top: 10px; padding-left: 20px;">
-                    ${itemsHtml}
-                </ul>
-            </div>
-        `;
-        if (container.classList) {
-            container.classList.remove('hidden');
-        } else {
-            container.className = container.className.replace(/\bhidden\b/g, '');
+        if (container) {
+            container.innerHTML = `
+                <div class="alert alert-warning" style="display: block; margin-bottom: 20px;">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Alerta de Estoque Baixo</h4>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        ${itemsHtml}
+                    </ul>
+                </div>
+            `;
+            if (container.classList) {
+                container.classList.remove('hidden');
+            } else {
+                container.className = container.className.replace(/\bhidden\b/g, '');
+            }
         }
     } else {
-        if (container.classList) {
+        if (container && container.classList) {
             container.classList.add('hidden');
         } else {
             container.className += ' hidden';

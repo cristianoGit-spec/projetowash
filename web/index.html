@@ -13,8 +13,8 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS - Novo Layout PrescrMed -->
-    <link rel="stylesheet" href="/static/css/prescrimed-layout.css?v=40">
-    <link rel="stylesheet" href="/static/css/admin.css?v=40">
+    <link rel="stylesheet" href="/static/css/prescrimed-layout.css?v=41">
+    <link rel="stylesheet" href="/static/css/admin.css?v=41">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -48,7 +48,7 @@
             if ('caches' in window) {
                 caches.keys().then(function(names) {
                     for (let name of names) {
-                        if (name !== 'estoque-certo-v40') {
+                        if (name !== 'estoque-certo-v41') {
                             console.log('[CACHE] Removendo cache antigo:', name);
                             caches.delete(name);
                         }
@@ -57,12 +57,13 @@
             }
         }
         
-        // Sistema Profissional v40 - Layout PrescrMed
-        if (!localStorage.getItem('system_prescrimed_v40')) {
-            console.log('[SYSTEM] Quatro Cantos v40 - Layout PrescrMed Inspirado');
+        // Sistema Profissional v41 - Layout PrescrMed
+        if (!localStorage.getItem('system_prescrimed_v41')) {
+            console.log('[SYSTEM] Quatro Cantos v41 - Layout PrescrMed Inspirado');
             // Limpar flags antigas
             localStorage.removeItem('system_professional_v39');
-            localStorage.setItem('system_prescrimed_v40', 'true');
+            localStorage.removeItem('system_prescrimed_v40');
+            localStorage.setItem('system_prescrimed_v41', 'true');
             console.log('[INFO] Novo layout com sidebar lateral e design moderno');
         }
     </script>
@@ -862,14 +863,15 @@
     <!-- Configuração Global -->
     <script>
         // SISTEMA HÍBRIDO COM LAYOUT PRESCRIMED - Firebase Cloud + Fallback Local
-        // Versão 40.0 - Layout moderno com sidebar lateral
-        const APP_VERSION = '40';
+        // Versão 41.0 - Layout moderno com sidebar lateral
+        const APP_VERSION = '41';
         const IS_PRODUCTION = window.location.hostname.includes('netlify.app');
         const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         
         // Sistema tenta usar Firebase primeiro, fallback para localStorage se falhar
         console.log('[ENV] Ambiente:', IS_PRODUCTION ? 'PRODUÇÃO (Netlify)' : IS_LOCALHOST ? 'LOCAL (Dev)' : 'OUTRO');
         console.log('[SYSTEM] Versão:', APP_VERSION, '- Layout PrescrMed Inspirado');
+        console.log('[HOTFIX] v41 - Correção de erros console + módulo operacional integrado');
         
         // Toggle Mobile Menu
         function toggleMobileMenu() {
@@ -904,21 +906,21 @@
     <!-- JavaScript - Ordem: Firebase Config > Firestore Service > Local Fallback > Auth > App -->
     
     <!-- 1. Configuração Firebase (Sistema Híbrido) -->
-    <script src="/static/js/firebase-config.js?v=40"></script>
-    <script src="/static/js/firestore-service.js?v=40"></script>
+    <script src="/static/js/firebase-config.js?v=41"></script>
+    <script src="/static/js/firestore-service.js?v=41"></script>
     
     <!-- 2. Fallback Local (se Firebase falhar) -->
-    <script src="/static/js/local-auth.js?v=40"></script>
-    <script src="/static/js/local-firestore.js?v=40"></script>
+    <script src="/static/js/local-auth.js?v=41"></script>
+    <script src="/static/js/local-firestore.js?v=41"></script>
     
     <!-- 3. Scripts de Interface e Módulos -->
-    <script src="/static/js/auth.js?v=40"></script>
-    <script src="/static/js/admin-module.js?v=40"></script>
-    <script src="/static/js/app.js?v=40"></script>
-    <script src="/static/js/modules.js?v=40"></script>
-    <script src="/static/js/dashboard.js?v=40"></script>
-    <script src="/static/js/modules/gestao-empresas.js?v=40"></script>
-    <script src="/static/js/pwa.js?v=40"></script>
+    <script src="/static/js/auth.js?v=41"></script>
+    <script src="/static/js/admin-module.js?v=41"></script>
+    <script src="/static/js/app.js?v=41"></script>
+    <script src="/static/js/modules.js?v=41"></script>
+    <script src="/static/js/dashboard.js?v=41"></script>
+    <script src="/static/js/modules/gestao-empresas.js?v=41"></script>
+    <script src="/static/js/pwa.js?v=41"></script>
     
     <!-- Inicialização do formulário de cadastro -->
     <script>
