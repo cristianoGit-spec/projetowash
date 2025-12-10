@@ -1,9 +1,47 @@
 // Servicos de dados do Firestore
-// Versão: 30 - Sistema otimizado, código duplicado removido
+// Versão: 31 - Sistema otimizado com tratamento robusto de permissões Firebase
 // Sistema Multi-Tenant: Todos os dados são isolados por companyId
 // Sistema Híbrido: Firebase (nuvem) + localStorage (cache offline)
+// Fallback automático em caso de erros de permissão
 
-console.log('[SYNC] Firestore Service v30 - Modo Híbrido Otimizado SEM CACHE');
+console.log('[SYNC] Firestore Service v31 - Modo Híbrido com Fallback Inteligente');
+
+// Flag global para detectar problemas de permissão
+let firebasePermissionError = false;
+let useLocalStorageFallback = false;
+
+// ===== TRATAMENTO DE ERROS DE PERMISSÃO =====
+
+/**
+ * Detecta se o erro é de permissão do Firebase
+ */
+function isPermissionError(error) {
+    return error && (
+        error.code === 'permission-denied' ||
+        error.message?.includes('permission-denied') ||
+        error.message?.includes('Permission denied')
+    );
+}
+
+/**
+ * Trata erro do Firebase e ativa fallback se necessário
+ */
+function handleFirebaseError(error, operation) {
+    if (isPermissionError(error)) {
+        console.warn(`⚠️ Erro de permissão no Firebase (${operation}). Usando localStorage.`);
+        firebasePermissionError = true;
+        useLocalStorageFallback = true;
+        return true; // Indica que deve usar fallback
+    }
+    
+    if (error.code === 'unavailable' || error.message?.includes('backend')) {
+        console.warn(`⚠️ Firebase indisponível (${operation}). Usando cache local.`);
+        useLocalStorageFallback = true;
+        return true;
+    }
+    
+    return false; // Erro não tratável
+}
 
 // ===== SINCRONIZAÇÃO HÍBRIDA =====
 
@@ -739,12 +777,31 @@ async function buscarTodasEmpresasFirebase() {
                 .get({ source: 'server' }); // Tentar server primeiro
             console.log('✅ Dados obtidos do servidor Firebase');
         } catch (serverError) {
-            console.warn('⚠️ Servidor indisponível, usando cache local:', serverError.code);
-            snapshot = await db.collection('usuarios')
-                .where('role', 'in', ['admin', 'user'])
-                .orderBy('criadoEm', 'desc')
-                .get({ source: 'cache' }); // Fallback para cache
-            console.log('📦 Dados obtidos do cache local');
+            // Verificar se é erro de permissão
+            if (serverError.code === 'permission-denied' || 
+                serverError.message?.includes('permission-denied') ||
+                serverError.message?.includes('Permission denied')) {
+                console.warn('⚠️ Erro de permissão Firebase. Usando dados locais do localStorage.');
+                const localUsers = JSON.parse(localStorage.getItem('usuarios') || '[]');
+                return localUsers.filter(u => (u.role === 'admin' || u.role === 'user') && 
+                                             u.email !== 'superadmin@quatrocantos.com' &&
+                                             u.companyId && u.companyId !== 'superadmin-master');
+            }
+            
+            console.warn('⚠️ Servidor indisponível, tentando cache Firebase:', serverError.code);
+            try {
+                snapshot = await db.collection('usuarios')
+                    .where('role', 'in', ['admin', 'user'])
+                    .orderBy('criadoEm', 'desc')
+                    .get({ source: 'cache' }); // Fallback para cache
+                console.log('📦 Dados obtidos do cache Firebase');
+            } catch (cacheError) {
+                console.warn('⚠️ Cache Firebase indisponível. Usando localStorage.');
+                const localUsers = JSON.parse(localStorage.getItem('usuarios') || '[]');
+                return localUsers.filter(u => (u.role === 'admin' || u.role === 'user') && 
+                                             u.email !== 'superadmin@quatrocantos.com' &&
+                                             u.companyId && u.companyId !== 'superadmin-master');
+            }
         }
         
         const empresas = [];

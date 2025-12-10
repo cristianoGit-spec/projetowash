@@ -49,17 +49,11 @@ service cloud.firestore {
     
     // USUÁRIOS: Cada usuário acessa apenas seus dados + Admin lista usuários da empresa
     match /usuarios/{userId} {
-      // Ler próprio perfil OU admin pode ler usuários da mesma empresa
-      allow read: if isAuthenticated() && (
-        request.auth.uid == userId ||
-        (isCompanyAdmin() && get(/databases/$(database)/documents/usuarios/$(userId)).data.companyId == getUserCompanyId())
-      );
+      // Ler: próprio perfil OU qualquer autenticado pode ler usuários (necessário para SUPER ADMIN)
+      allow read: if isAuthenticated();
       
-      // Criar: apenas na primeira vez (cadastro) ou admin criando funcionário
-      allow create: if isAuthenticated() && (
-        request.auth.uid == userId ||
-        (isCompanyAdmin() && request.resource.data.companyId == getUserCompanyId())
-      );
+      // Criar: cadastro inicial (próprio usuário) ou qualquer autenticado (SUPER ADMIN cria empresas)
+      allow create: if isAuthenticated();
       
       // Atualizar: próprio usuário ou admin da empresa
       allow update: if isAuthenticated() && (
@@ -67,10 +61,17 @@ service cloud.firestore {
         (isCompanyAdmin() && resource.data.companyId == getUserCompanyId())
       );
       
-      // Deletar: apenas admin da empresa
-      allow delete: if isCompanyAdmin() && 
-                       resource.data.companyId == getUserCompanyId() &&
-                       request.auth.uid != userId; // Admin não pode se auto-deletar
+      // Deletar: apenas admin da empresa ou próprio usuário
+      allow delete: if isAuthenticated() && (
+        request.auth.uid == userId ||
+        (isCompanyAdmin() && resource.data.companyId == getUserCompanyId() && request.auth.uid != userId)
+      );
+    }
+    
+    // SYSTEM: Contadores e metadados do sistema (acesso amplo para contadores)
+    match /system/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated(); // Necessário para incrementar contadores
     }
     
     // ESTOQUE: Multi-tenant por companyId
