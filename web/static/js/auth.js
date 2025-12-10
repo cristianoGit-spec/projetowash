@@ -374,9 +374,21 @@ async function showProfile() {
             </div>
         `;
         
-        // Exibir perfil via toast por enquanto
-        // const userData = typeof localCurrentUser !== 'undefined' ? localCurrentUser : (currentUser || {});
-        showToast(`Perfil: ${userData.nome || userData.email} - ${userData.role === 'admin' ? 'Administrador' : 'Usuário'}`, 'info');
+        // Exibir perfil na área de conteúdo
+        const contentArea = document.getElementById('contentArea');
+        if (contentArea) {
+            contentArea.innerHTML = html;
+            
+            // Fechar dropdown se estiver aberto
+            const dropdown = document.getElementById('userMenuDropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+            
+            // Atualizar título da página se possível
+            document.title = `Meu Perfil - ${userData.nome}`;
+        } else {
+            showToast(`Perfil: ${userData.nome || userData.email}`, 'info');
+        }
+        
         console.log('[PROFILE] Dados do usuário:', userData);
         
     } catch (error) {
@@ -440,8 +452,21 @@ function showConfig() {
         </div>
     `;
     
-    // Exibir configurações via toast por enquanto
-    showToast('⚙️ Configurações: Funcionalidade em desenvolvimento', 'info');
+    // Exibir configurações na área de conteúdo
+    const contentArea = document.getElementById('contentArea');
+    if (contentArea) {
+        contentArea.innerHTML = html;
+        
+        // Fechar dropdown se estiver aberto
+        const dropdown = document.getElementById('userMenuDropdown');
+        if (dropdown) dropdown.classList.add('hidden');
+        
+        // Atualizar título da página
+        document.title = 'Configurações do Sistema';
+    } else {
+        showToast('⚙️ Configurações: Funcionalidade em desenvolvimento', 'info');
+    }
+
     console.log('[CONFIG] Sistema:', {
         versao: '42.5',
         modo: typeof localCurrentUser !== 'undefined' ? 'Local/Demo' : 'Online',
