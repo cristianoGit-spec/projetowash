@@ -170,7 +170,7 @@ async function loadChartsAndAlerts() {
         loadChartMovimentacoes(movimentacoes);
         
         // Grafico de Top Produtos
-        loadChartTopProdutos(produtos);
+        loadChartTopProdutos();
 
         // Grafico de Eficiencia (Gauge)
         loadChartEficiencia();
@@ -379,6 +379,9 @@ async function loadChartTopProdutos() {
         // Canvas não existe no layout atual - isso é normal
         return;
     }
+    
+    // Buscar produtos atualizados
+    const produtos = await obterDadosEstoque();
     
     // Se não há produtos, mostrar mensagem
     if (!produtos || produtos.length === 0) {

@@ -467,11 +467,122 @@ function verDetalhesEmpresa(uid) {
 }
 
 function toggleStatusEmpresa(uid) {
-    showToast('Funcionalidade em desenvolvimento', 'info');
+    const empresa = window.todasEmpresas.find(e => e.uid === uid || e.email === uid);
+    
+    if (!empresa) {
+        showToast('Empresa não encontrada!', 'error');
+        return;
+    }
+    
+    const novoStatus = empresa.ativo === false;
+    const acao = novoStatus ? 'ativar' : 'desativar';
+    
+    if (!confirm(`Deseja realmente ${acao} a empresa "${empresa.nomeEmpresa}"?`)) {
+        return;
+    }
+    
+    showLoading(`${novoStatus ? 'Ativando' : 'Desativando'} empresa...`);
+    
+    // Atualizar no LocalStorage
+    if (empresa.origem === 'local' || !empresa.origem) {
+        const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+        const index = localUsers.findIndex(u => u.email === empresa.email);
+        
+        if (index !== -1) {
+            localUsers[index].ativo = novoStatus;
+            localStorage.setItem('localUsers', JSON.stringify(localUsers));
+            console.log(`✅ Status atualizado no LocalStorage: ${empresa.email} -> ${novoStatus ? 'ATIVA' : 'INATIVA'}`);
+        }
+    }
+    
+    // Atualizar no Firebase (se disponível)
+    if (empresa.origem === 'firebase' && typeof atualizarEmpresaFirebase === 'function') {
+        atualizarEmpresaFirebase(empresa.uid, { ativo: novoStatus })
+            .then(() => {
+                console.log(`✅ Status atualizado no Firebase: ${empresa.email} -> ${novoStatus ? 'ATIVA' : 'INATIVA'}`);
+            })
+            .catch(err => {
+                console.warn('⚠️ Erro ao atualizar no Firebase:', err.message);
+            });
+    }
+    
+    hideLoading();
+    showToast(`Empresa ${novoStatus ? 'ativada' : 'desativada'} com sucesso!`, 'success');
+    
+    // Recarregar lista
+    setTimeout(() => carregarEmpresas(), 500);
 }
 
 function excluirEmpresa(uid) {
-    showToast('Funcionalidade em desenvolvimento', 'info');
+    const empresa = window.todasEmpresas.find(e => e.uid === uid || e.email === uid);
+    
+    if (!empresa) {
+        showToast('Empresa não encontrada!', 'error');
+        return;
+    }
+    
+    // Confirmação dupla para segurança
+    const confirmacao1 = confirm(`⚠️ ATENÇÃO: Deseja realmente EXCLUIR a empresa "${empresa.nomeEmpresa}"?\n\nEsta ação NÃO pode ser desfeita!`);
+    
+    if (!confirmacao1) {
+        return;
+    }
+    
+    const confirmacao2 = prompt(`Para confirmar a exclusão, digite o nome da empresa:\n"${empresa.nomeEmpresa}"`);
+    
+    if (confirmacao2 !== empresa.nomeEmpresa) {
+        showToast('Nome incorreto. Exclusão cancelada.', 'warning');
+        return;
+    }
+    
+    showLoading('Excluindo empresa...');
+    
+    // Excluir do LocalStorage
+    if (empresa.origem === 'local' || !empresa.origem) {
+        const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+        const filteredUsers = localUsers.filter(u => u.email !== empresa.email);
+        localStorage.setItem('localUsers', JSON.stringify(filteredUsers));
+        console.log(`🗑️ Empresa excluída do LocalStorage: ${empresa.email}`);
+        
+        // Também limpar dados da empresa no localStorage
+        const companyId = empresa.companyId || empresa.uid;
+        if (companyId) {
+            // Limpar estoque
+            const estoqueKey = `estoque_${companyId}`;
+            localStorage.removeItem(estoqueKey);
+            
+            // Limpar movimentações
+            const movKey = `movimentacoes_${companyId}`;
+            localStorage.removeItem(movKey);
+            
+            // Limpar financeiro
+            const financeiroKey = `lancamentos_${companyId}`;
+            localStorage.removeItem(financeiroKey);
+            
+            // Limpar RH
+            const rhKey = `funcionarios_${companyId}`;
+            localStorage.removeItem(rhKey);
+            
+            console.log(`🧹 Dados da empresa limpos do localStorage: ${companyId}`);
+        }
+    }
+    
+    // Excluir do Firebase (se disponível)
+    if (empresa.origem === 'firebase' && typeof deletarEmpresaFirebase === 'function') {
+        deletarEmpresaFirebase(empresa.uid)
+            .then(() => {
+                console.log(`🗑️ Empresa excluída do Firebase: ${empresa.email}`);
+            })
+            .catch(err => {
+                console.warn('⚠️ Erro ao excluir do Firebase:', err.message);
+            });
+    }
+    
+    hideLoading();
+    showToast('Empresa excluída com sucesso!', 'success');
+    
+    // Recarregar lista
+    setTimeout(() => carregarEmpresas(), 500);
 }
 
 function exportarEmpresas() {

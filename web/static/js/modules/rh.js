@@ -873,8 +873,121 @@ function exportarPDF() {
         return;
     }
     
-    mostrarToastRH('Funcionalidade de PDF em desenvolvimento', 'info');
-    console.log('Dados da folha:', lastCalculatedFolha);
+    showLoadingRH('Gerando PDF da folha de pagamento...');
+    
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        const user = getCurrentUser();
+        const nomeEmpresa = user ? user.nomeEmpresa : 'Empresa';
+        
+        // ===== CABEÇALHO =====
+        doc.setFontSize(16);
+        doc.setTextColor(59, 130, 246);
+        doc.setFont(undefined, 'bold');
+        doc.text(nomeEmpresa, 14, 20);
+        
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Folha de Pagamento - ' + lastCalculatedFolha.mes, 14, 28);
+        
+        doc.setFontSize(9);
+        doc.setTextColor(100, 100, 100);
+        doc.setFont(undefined, 'normal');
+        doc.text(`Emitido em: ${lastCalculatedFolha.data}`, 14, 34);
+        
+        // ===== TABELA DE FUNCIONÁRIOS =====
+        const tableColumn = ["Nome", "Cargo", "Sal. Base", "H. Extras", "Sal. Bruto", "INSS", "IR", "Líquido"];
+        const tableRows = [];
+        
+        lastCalculatedFolha.funcionarios.forEach(func => {
+            const row = [
+                func.nome,
+                func.cargo.replace(/_/g, ' '),
+                formatCurrency(func.salarioBase),
+                formatCurrency(func.valorHorasExtras),
+                formatCurrency(func.salarioBruto),
+                formatCurrency(func.inss),
+                formatCurrency(func.ir),
+                formatCurrency(func.salarioLiquido)
+            ];
+            tableRows.push(row);
+        });
+        
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 42,
+            theme: 'grid',
+            styles: { 
+                fontSize: 8,
+                cellPadding: 2
+            },
+            headStyles: { 
+                fillColor: [59, 130, 246],
+                textColor: 255,
+                fontStyle: 'bold',
+                fontSize: 8
+            },
+            columnStyles: {
+                0: { cellWidth: 35 },  // Nome
+                1: { cellWidth: 25 },  // Cargo
+                2: { cellWidth: 22 },  // Salário Base
+                3: { cellWidth: 20 },  // H. Extras
+                4: { cellWidth: 22 },  // Salário Bruto
+                5: { cellWidth: 18 },  // INSS
+                6: { cellWidth: 18 },  // IR
+                7: { cellWidth: 22 }   // Líquido
+            }
+        });
+        
+        // ===== RESUMO GERAL =====
+        const finalY = doc.lastAutoTable.finalY + 10;
+        
+        doc.setFillColor(59, 130, 246);
+        doc.rect(14, finalY, 182, 40, 'F');
+        
+        doc.setFontSize(11);
+        doc.setTextColor(255, 255, 255);
+        doc.setFont(undefined, 'bold');
+        doc.text('RESUMO GERAL DA FOLHA', 20, finalY + 8);
+        
+        doc.setFontSize(9);
+        doc.setFont(undefined, 'normal');
+        doc.text(`Total de Funcionários: ${lastCalculatedFolha.funcionarios.length}`, 20, finalY + 16);
+        doc.text(`Salários Base: ${formatCurrency(lastCalculatedFolha.totais.salarioBase)}`, 20, finalY + 22);
+        doc.text(`Horas Extras: ${formatCurrency(lastCalculatedFolha.totais.horasExtras)}`, 20, finalY + 28);
+        doc.text(`Salário Bruto Total: ${formatCurrency(lastCalculatedFolha.totais.salarioBruto)}`, 20, finalY + 34);
+        
+        doc.text(`INSS Total: ${formatCurrency(lastCalculatedFolha.totais.inss)}`, 110, finalY + 16);
+        doc.text(`IR Total: ${formatCurrency(lastCalculatedFolha.totais.ir)}`, 110, finalY + 22);
+        doc.text(`Descontos Totais: ${formatCurrency(lastCalculatedFolha.totais.descontos)}`, 110, finalY + 28);
+        
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'bold');
+        doc.text(`LÍQUIDO A PAGAR: ${formatCurrency(lastCalculatedFolha.totais.salarioLiquido)}`, 110, finalY + 34);
+        
+        // ===== RODAPÉ =====
+        doc.setFontSize(7);
+        doc.setTextColor(150, 150, 150);
+        doc.setFont(undefined, 'normal');
+        doc.text('Documento gerado automaticamente pelo sistema Quatro Cantos', 14, 285);
+        doc.text(`Página 1 de 1 | ${new Date().toLocaleString('pt-BR')}`, 14, 290);
+        
+        // ===== SALVAR PDF =====
+        const nomeArquivo = `Folha_Pagamento_${lastCalculatedFolha.mes.replace(/ /g, '_')}_${new Date().getTime()}.pdf`;
+        doc.save(nomeArquivo);
+        
+        mostrarToastRH('PDF exportado com sucesso!', 'success');
+        console.log('✅ PDF gerado:', nomeArquivo);
+        
+    } catch (error) {
+        console.error('❌ Erro ao gerar PDF:', error);
+        mostrarToastRH('Erro ao gerar PDF. Verifique se jsPDF está carregado.', 'error');
+    } finally {
+        hideLoadingRH();
+    }
 }
 
 // ============================================================================

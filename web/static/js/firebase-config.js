@@ -83,12 +83,6 @@ try {
     console.log("[STORAGE] Dados serão armazenados apenas no localStorage do navegador");
     firebaseInitialized = false;
     useFirebase = false;
-} finally {
-    // Garantir que as variáveis estão sempre definidas
-    if (typeof firebaseInitialized === 'undefined') {
-        window.firebaseInitialized = false;
-        window.useFirebase = false;
-    }
 }
 
 // ============================================================================
