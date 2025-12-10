@@ -730,10 +730,22 @@ async function buscarTodasEmpresasFirebase() {
         
         // SUPER ADMIN: Buscar TODAS empresas cadastradas no sistema
         // Busca usuarios com role='admin' (empresas) E também usuários comuns se necessário
-        const snapshot = await db.collection('usuarios')
-            .where('role', 'in', ['admin', 'user']) // Admin = empresas, User = funcionários
-            .orderBy('criadoEm', 'desc')
-            .get({ source: 'server' }); // FORÇA buscar do servidor, não do cache
+        // Tenta server primeiro, fallback para cache se indisponível
+        let snapshot;
+        try {
+            snapshot = await db.collection('usuarios')
+                .where('role', 'in', ['admin', 'user'])
+                .orderBy('criadoEm', 'desc')
+                .get({ source: 'server' }); // Tentar server primeiro
+            console.log('✅ Dados obtidos do servidor Firebase');
+        } catch (serverError) {
+            console.warn('⚠️ Servidor indisponível, usando cache local:', serverError.code);
+            snapshot = await db.collection('usuarios')
+                .where('role', 'in', ['admin', 'user'])
+                .orderBy('criadoEm', 'desc')
+                .get({ source: 'cache' }); // Fallback para cache
+            console.log('📦 Dados obtidos do cache local');
+        }
         
         const empresas = [];
         const empresasSet = new Set(); // Para evitar duplicatas

@@ -336,13 +336,9 @@
 
                 <div class="nav-group superadmin-only hidden">
                     <div class="nav-group-title">Super Admin</div>
-                    <a href="#" class="nav-item" onclick="showModule('gestao-empresas'); return false;">
+                    <a href="#" class="nav-item" onclick="showModule('admin'); return false;">
                         <i class="fas fa-building"></i>
                         <span>Gestão de Empresas</span>
-                    </a>
-                    <a href="#" class="nav-item" onclick="showModule('admin'); return false;">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Painel Admin</span>
                     </a>
                 </div>
             </nav>
@@ -526,276 +522,6 @@
                     </div>
                 </section>
 
-                <!-- GESTÃO DE EMPRESAS (SUPER ADMIN ONLY) -->
-                <section id="gestaoEmpresasSection" class="section-module hidden">
-                    <div class="module-header">
-                        <div>
-                            <h1 style="font-size: 1.875rem; font-weight: 600; color: #111827; margin: 0;">
-                                <i class="fas fa-building" style="color: #3b82f6; margin-right: 0.5rem;"></i>
-                                Gestão de Empresas
-                            </h1>
-                            <p style="color: #6b7280; margin: 0.5rem 0 0 0; font-size: 0.875rem;">Visualize, crie, edite e gerencie todas as empresas cadastradas no sistema</p>
-                        </div>
-                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                            <button id="btn-nova-empresa" style="padding: 0.625rem 1.25rem; background: #10b981; color: white; border: none; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;"
-                                    onmouseover="this.style.background='#059669'" 
-                                    onmouseout="this.style.background='#10b981'">
-                                <i class="fas fa-plus"></i>
-                                Nova Empresa
-                            </button>
-                            <button id="btn-refresh-empresas" style="padding: 0.625rem 1.25rem; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;"
-                                    onmouseover="this.style.background='#2563eb'" 
-                                    onmouseout="this.style.background='#3b82f6'">
-                                <i class="fas fa-sync-alt"></i>
-                                Atualizar
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Barra de Filtros e Busca -->
-                    <div style="background: white; border-radius: 12px; padding: 1.25rem; margin-top: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-                            <!-- Busca -->
-                            <div style="flex: 1; min-width: 280px;">
-                                <div style="position: relative;">
-                                    <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.875rem;"></i>
-                                    <input type="text" 
-                                           id="search-empresas" 
-                                           placeholder="Buscar por nome, email, segmento ou ID..."
-                                           style="width: 100%; padding: 0.625rem 0.75rem 0.625rem 2.5rem; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.875rem; transition: all 0.2s;"
-                                           onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
-                                           onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
-                                </div>
-                            </div>
-                            
-                            <!-- Filtros -->
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button id="filtro-todas" 
-                                        style="padding: 0.625rem 1rem; background: #3b82f6; color: white; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;">
-                                    Todas
-                                </button>
-                                <button id="filtro-ativas" 
-                                        style="padding: 0.625rem 1rem; background: white; color: #6b7280; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;">
-                                    Ativas
-                                </button>
-                                <button id="filtro-inativas" 
-                                        style="padding: 0.625rem 1rem; background: white; color: #6b7280; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;">
-                                    Inativas
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Lista de Empresas -->
-                    <div style="margin-top: 1.5rem;">
-                        <div id="empresas-list-container" style="min-height: 400px;">
-                            <!-- Preenchido via JS -->
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Modal de Nova Empresa -->
-                <div id="modal-nova-empresa" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
-                    <div style="background: white; border-radius: 12px; max-width: 520px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
-                        <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                            <h2 style="font-size: 1.5rem; font-weight: 600; color: white; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-plus-circle"></i>
-                                Cadastrar Nova Empresa
-                            </h2>
-                            <p style="color: rgba(255,255,255,0.9); margin: 0.5rem 0 0 0; font-size: 0.875rem;">Preencha os dados da empresa e do administrador</p>
-                        </div>
-                        
-                        <div style="padding: 1.5rem;">
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-building" style="color: #10b981; margin-right: 0.25rem;"></i>
-                                    Nome da Empresa *
-                                </label>
-                                <input type="text" id="nova-nome-empresa" placeholder="Ex: Lavanderia São Paulo" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
-                            </div>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-tag" style="color: #10b981; margin-right: 0.25rem;"></i>
-                                    Segmento *
-                                </label>
-                                <select id="nova-segmento" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
-                                    <option value="Lavanderia">🧺 Lavanderia</option>
-                                    <option value="Restaurante">🍽️ Restaurante</option>
-                                    <option value="Varejo">🛒 Varejo</option>
-                                    <option value="Serviços">🤝 Serviços</option>
-                                    <option value="Saúde">❤️ Saúde</option>
-                                    <option value="Educação">📚 Educação</option>
-                                    <option value="Tecnologia">💻 Tecnologia</option>
-                                    <option value="Construção">🏗️ Construção</option>
-                                    <option value="Transporte">🚚 Transporte</option>
-                                    <option value="Outro">📦 Outro</option>
-                                </select>
-                            </div>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-envelope" style="color: #10b981; margin-right: 0.25rem;"></i>
-                                    Email do Administrador *
-                                </label>
-                                <input type="email" id="nova-email" placeholder="admin@empresa.com" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
-                                <p style="color: #6b7280; font-size: 0.75rem; margin-top: 0.25rem;">Este email será usado para login do administrador</p>
-                            </div>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-phone" style="color: #10b981; margin-right: 0.25rem;"></i>
-                                    Contato (Opcional)
-                                </label>
-                                <input type="text" id="nova-contato" placeholder="(11) 98765-4321" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
-                            </div>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-lock" style="color: #10b981; margin-right: 0.25rem;"></i>
-                                    Senha Inicial *
-                                </label>
-                                <input type="password" id="nova-senha" placeholder="Mínimo 6 caracteres" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
-                                <p style="color: #6b7280; font-size: 0.75rem; margin-top: 0.25rem;">O administrador poderá alterar após o primeiro login</p>
-                            </div>
-                        </div>
-                        
-                        <div style="padding: 1rem 1.5rem; background: #f9fafb; border-top: 1px solid #e5e7eb; display: flex; gap: 0.75rem; justify-content: flex-end; border-radius: 0 0 12px 12px;">
-                            <button onclick="fecharModalNovaEmpresa()" style="padding: 0.625rem 1.25rem; background: #f3f4f6; color: #374151; border: none; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;">
-                                Cancelar
-                            </button>
-                            <button onclick="cadastrarNovaEmpresa()" style="padding: 0.625rem 1.25rem; background: #10b981; color: white; border: none; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;"
-                                    onmouseover="this.style.background='#059669'" 
-                                    onmouseout="this.style.background='#10b981'">
-                                <i class="fas fa-check"></i>
-                                Cadastrar Empresa
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal de Edição de Empresa -->
-                <div id="modal-editar-empresa" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
-                    <div style="background: white; border-radius: 12px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
-                        <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
-                            <h2 style="font-size: 1.5rem; font-weight: 600; color: white; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-edit"></i>
-                                Editar Empresa
-                            </h2>
-                        </div>
-                        
-                        <div style="padding: 1.5rem;">
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-building" style="color: #3b82f6; margin-right: 0.25rem;"></i>
-                                    Nome da Empresa
-                                </label>
-                                <input type="text" id="edit-nome-empresa" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
-                            </div>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-tag" style="color: #3b82f6; margin-right: 0.25rem;"></i>
-                                    Segmento
-                                </label>
-                                <select id="edit-segmento" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
-                                    <option value="Lavanderia">🧺 Lavanderia</option>
-                                    <option value="Restaurante">🍽️ Restaurante</option>
-                                    <option value="Varejo">🛒 Varejo</option>
-                                    <option value="Serviços">🤝 Serviços</option>
-                                    <option value="Saúde">❤️ Saúde</option>
-                                    <option value="Educação">📚 Educação</option>
-                                    <option value="Tecnologia">💻 Tecnologia</option>
-                                    <option value="Construção">🏗️ Construção</option>
-                                    <option value="Transporte">🚚 Transporte</option>
-                                    <option value="Outro">📦 Outro</option>
-                                </select>
-                            </div>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-envelope" style="color: #3b82f6; margin-right: 0.25rem;"></i>
-                                    Email
-                                </label>
-                                <input type="email" id="edit-email" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
-                            </div>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-phone" style="color: #3b82f6; margin-right: 0.25rem;"></i>
-                                    Contato
-                                </label>
-                                <input type="text" id="edit-contato" style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
-                            </div>
-                        </div>
-                        
-                        <div style="padding: 1rem 1.5rem; background: #f9fafb; border-top: 1px solid #e5e7eb; display: flex; gap: 0.75rem; justify-content: flex-end; border-radius: 0 0 12px 12px;">
-                            <button onclick="fecharModalEdicao()" style="padding: 0.625rem 1.25rem; background: #f3f4f6; color: #374151; border: none; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;">
-                                Cancelar
-                            </button>
-                            <button onclick="salvarEdicaoEmpresa()" style="padding: 0.625rem 1.25rem; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;"
-                                    onmouseover="this.style.background='#2563eb'" 
-                                    onmouseout="this.style.background='#3b82f6'">
-                                <i class="fas fa-check"></i>
-                                Salvar Alterações
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal de Confirmação de Exclusão -->
-                <div id="modal-confirmar-exclusao" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
-                    <div style="background: white; border-radius: 12px; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
-                        <div style="padding: 1.5rem; border-bottom: 1px solid #fee2e2; background: #fef2f2; border-radius: 12px 12px 0 0;">
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem; color: #ef4444;"></i>
-                                <h2 style="font-size: 1.5rem; font-weight: 600; color: #991b1b; margin: 0;">Confirmar Exclusão</h2>
-                            </div>
-                        </div>
-                        
-                        <div style="padding: 1.5rem;">
-                            <p style="color: #374151; font-size: 0.9375rem; line-height: 1.5; margin-bottom: 1rem;">
-                                Você está prestes a excluir permanentemente a empresa:
-                            </p>
-                            
-                            <div style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-building" style="color: #6b7280;"></i>
-                                    <strong id="confirm-nome-empresa" style="color: #0f172a; font-size: 1rem;"></strong>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <i class="fas fa-fingerprint" style="color: #6b7280; font-size: 0.875rem;"></i>
-                                    <code id="confirm-company-id" style="color: #6b7280; font-size: 0.8125rem; font-family: monospace;"></code>
-                                </div>
-                            </div>
-                            
-                            <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem;">
-                                <p style="color: #991b1b; font-size: 0.875rem; margin: 0; line-height: 1.5;">
-                                    <strong>⚠️ Atenção:</strong> Esta ação irá excluir a empresa e <strong>todos os seus dados</strong> (produtos, movimentações, funcionários, transações financeiras). Esta ação não pode ser desfeita!
-                                </p>
-                            </div>
-                            
-                            <p style="color: #374151; font-size: 0.875rem; line-height: 1.5; margin-bottom: 0.5rem;">
-                                Digite <strong style="color: #ef4444; font-family: monospace;">EXCLUIR</strong> para confirmar:
-                            </p>
-                            
-                            <input type="text" id="confirm-text-input" placeholder="Digite EXCLUIR" style="width: 100%; padding: 0.625rem; border: 2px solid #d1d5db; border-radius: 6px; font-size: 0.875rem; font-family: monospace; text-transform: uppercase;">
-                        </div>
-                        
-                        <div style="padding: 1rem 1.5rem; background: #f9fafb; border-top: 1px solid #e5e7eb; display: flex; gap: 0.75rem; justify-content: flex-end; border-radius: 0 0 12px 12px;">
-                            <button onclick="fecharModalExclusao()" style="padding: 0.625rem 1.25rem; background: #f3f4f6; color: #374151; border: none; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;">
-                                Cancelar
-                            </button>
-                            <button onclick="excluirEmpresa()" style="padding: 0.625rem 1.25rem; background: #ef4444; color: white; border: none; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;"
-                                    onmouseover="this.style.background='#dc2626'" 
-                                    onmouseout="this.style.background='#ef4444'">
-                                <i class="fas fa-trash-alt"></i>
-                                Confirmar Exclusão
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Modal de Confirmação de Limpeza -->
                 <div id="modal-confirmar-limpeza" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
                     <div style="background: white; border-radius: 12px; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
@@ -864,14 +590,14 @@
     <script>
         // SISTEMA HÍBRIDO COM LAYOUT PRESCRIMED - Firebase Cloud + Fallback Local
         // Versão 42.1 - Layout moderno com sidebar lateral
-        const APP_VERSION = '42.1';
+        const APP_VERSION = '42.2';
         const IS_PRODUCTION = window.location.hostname.includes('netlify.app');
         const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         
         // Sistema tenta usar Firebase primeiro, fallback para localStorage se falhar
         console.log('[ENV] Ambiente:', IS_PRODUCTION ? 'PRODUÇÃO (Netlify)' : IS_LOCALHOST ? 'LOCAL (Dev)' : 'OUTRO');
         console.log('[SYSTEM] Versão:', APP_VERSION, '- Layout PrescrMed Inspirado');
-        console.log('[v42.1] Gestão de Empresas COMPLETA: Busca híbrida (Firebase+Local), CRUD total, badges origem, layout profissional responsivo');
+        console.log('[v42.2] Consolidação: Admin module unificado, Firebase cache fallback, código duplicado removido');
         
         // Toggle Mobile Menu
         function toggleMobileMenu() {
@@ -915,8 +641,7 @@
     
     <!-- 3. Scripts de Interface e Módulos -->
     <script src="/static/js/auth.js?v=42"></script>
-    <script src="/static/js/admin-module.js?v=1.1"></script>
-    <script src="/static/js/modules/gestao-empresas.js?v=42"></script>
+    <script src="/static/js/admin-module.js?v=42"></script>
     <script src="/static/js/app.js?v=42"></script>
     <script src="/static/js/modules.js?v=42"></script>
     <script src="/static/js/dashboard.js?v=42"></script>
