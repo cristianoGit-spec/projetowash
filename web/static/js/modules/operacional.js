@@ -7,38 +7,35 @@ console.log('[MODULE] Módulo Operacional v39 carregado');
 function loadOperacionalModule(container) {
     const html = `
         <div class="operacional-module">
-            <!-- Header Moderno com Gradiente -->
-            <div class="modern-header">
-                <div class="header-content">
-                    <div class="header-icon">
-                        <i class="fas fa-industry"></i>
-                    </div>
-                    <div>
-                        <h2>Módulo Operacional</h2>
-                        <p>Capacidade de Produção</p>
-                    </div>
+            <!-- Header com Breadcrumb -->
+            <div style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; color: #6b7280; font-size: 0.875rem; margin-bottom: 0.5rem;">
+                    <i class="fas fa-industry"></i>
+                    <span>Módulo Operacional</span>
                 </div>
+                <h2 style="font-size: 1.875rem; font-weight: 700; color: #0f172a; margin: 0;">Capacidade de Produção</h2>
             </div>
 
-            <!-- Card Principal -->
-            <div class="modern-card" style="margin-bottom: 30px;">
-                <div class="modern-body">
-                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #1e40af;">
-                        <i class="fas fa-calculator"></i>
+            <!-- Card Principal com estilo PrescrMed -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <div class="card-header" style="background: white; border-bottom: 1px solid #f1f5f9;">
+                    <h3 style="display: flex; align-items: center; gap: 10px; margin: 0; color: #0f172a; font-size: 1.125rem; font-weight: 600;">
+                        <i class="fas fa-calculator" style="color: #3b82f6;"></i>
                         Cálculo de Capacidade de Produção
                     </h3>
-                    <p style="color: #6b7280; margin-bottom: 25px; font-size: 14px;">
+                </div>
+                <div class="card-body">
+                    <p style="color: #64748b; margin-bottom: 1.5rem; font-size: 0.9375rem;">
                         Configure os turnos para análise operacional
                     </p>
                     
                     <form id="formOperacional" onsubmit="calcularOperacional(event)">
-                        <div class="form-group" style="margin-bottom: 20px;">
-                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; color: #374151; font-weight: 600; font-size: 14px;">
-                                <i class="fas fa-clock"></i>
+                        <div class="form-group">
+                            <label class="form-label" style="display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-clock" style="color: #3b82f6;"></i>
                                 Número de Turnos Ativos
                             </label>
-                            <select id="turnos" name="turnos" required 
-                                    style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: white;">
+                            <select id="turnos" name="turnos" required class="form-select">
                                 <option value="">Selecione...</option>
                                 <option value="1">1 Turno (Manhã ou Tarde ou Noite - 24h)</option>
                                 <option value="2">2 Turnos (Manhã + Tarde ou Manhã + Noite, etc - 24h)</option>
@@ -46,8 +43,7 @@ function loadOperacionalModule(container) {
                             </select>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary" 
-                                style="width: 100%; padding: 14px; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
                             <i class="fas fa-calculator"></i>
                             Calcular Capacidade
                         </button>
@@ -111,70 +107,154 @@ function exibirResultadoOperacional(data) {
     const resultado = document.getElementById('resultadoOperacional');
     
     const html = `
-        <div class="modern-card">
-            <div class="modern-body">
-                <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; color: #1e40af;">
-                    <i class="fas fa-chart-line"></i>
+        <div class="card">
+            <div class="card-header" style="background: white; border-bottom: 1px solid #f1f5f9;">
+                <h3 style="display: flex; align-items: center; gap: 10px; margin: 0; color: #0f172a; font-size: 1.125rem; font-weight: 600;">
+                    <i class="fas fa-chart-line" style="color: #3b82f6;"></i>
                     Análise de Capacidade - ${data.turnos} Turno(s)
                 </h3>
-                
-                <!-- Cards de Destaque - 2 Colunas 1 Linha -->
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;">
-                    <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);">
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; font-size: 28px;">
-                                <i class="fas fa-clock"></i>
+            </div>
+            <div class="card-body">
+                <!-- Cards de Destaque Estilo PrescrMed -->
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+                    <!-- Card 1 - Azul -->
+                    <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(37, 99, 235, 0.05) 100%); 
+                                border: 1px solid rgba(59, 130, 246, 0.2); 
+                                border-left: 4px solid #3b82f6; 
+                                padding: 1.5rem; 
+                                border-radius: 0.75rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="background: linear-gradient(135deg, #3b82f6, #2563eb); 
+                                        width: 56px; 
+                                        height: 56px; 
+                                        border-radius: 0.75rem; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        justify-content: center; 
+                                        color: white; 
+                                        font-size: 1.5rem;
+                                        flex-shrink: 0;">
+                                <i class="fas fa-boxes"></i>
                             </div>
-                            <div>
-                                <div style="font-size: 32px; font-weight: 700; margin-bottom: 4px;">${formatNumber(data.capacidade_por_turno)}</div>
-                                <div style="font-size: 14px; opacity: 0.9;">Capacidade/Turno</div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.25rem;">Total de Produtos</div>
+                                <div style="font-size: 2rem; font-weight: 700; color: #0f172a;">${formatNumber(data.capacidade_por_turno)}</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);">
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; font-size: 28px;">
-                                <i class="fas fa-calendar-day"></i>
+                    <!-- Card 2 - Ciano -->
+                    <div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, rgba(8, 145, 178, 0.05) 100%); 
+                                border: 1px solid rgba(6, 182, 212, 0.2); 
+                                border-left: 4px solid #06b6d4; 
+                                padding: 1.5rem; 
+                                border-radius: 0.75rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="background: linear-gradient(135deg, #06b6d4, #0891b2); 
+                                        width: 56px; 
+                                        height: 56px; 
+                                        border-radius: 0.75rem; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        justify-content: center; 
+                                        color: white; 
+                                        font-size: 1.5rem;
+                                        flex-shrink: 0;">
+                                <i class="fas fa-cubes"></i>
                             </div>
-                            <div>
-                                <div style="font-size: 32px; font-weight: 700; margin-bottom: 4px;">${formatNumber(data.capacidade_diaria)}</div>
-                                <div style="font-size: 14px; opacity: 0.9;">Capacidade Diária</div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.25rem;">Itens em Estoque</div>
+                                <div style="font-size: 2rem; font-weight: 700; color: #0f172a;">${formatNumber(data.capacidade_diaria)}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3 - Roxo -->
+                    <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(124, 58, 237, 0.05) 100%); 
+                                border: 1px solid rgba(139, 92, 246, 0.2); 
+                                border-left: 4px solid #8b5cf6; 
+                                padding: 1.5rem; 
+                                border-radius: 0.75rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
+                                        width: 56px; 
+                                        height: 56px; 
+                                        border-radius: 0.75rem; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        justify-content: center; 
+                                        color: white; 
+                                        font-size: 1.5rem;
+                                        flex-shrink: 0;">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.25rem;">Valor em Estoque</div>
+                                <div style="font-size: 2rem; font-weight: 700; color: #0f172a;">R$ ${formatNumber(data.capacidade_mensal)}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 4 - Azul Claro -->
+                    <div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(2, 132, 199, 0.05) 100%); 
+                                border: 1px solid rgba(14, 165, 233, 0.2); 
+                                border-left: 4px solid #0ea5e9; 
+                                padding: 1.5rem; 
+                                border-radius: 0.75rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="background: linear-gradient(135deg, #0ea5e9, #0284c7); 
+                                        width: 56px; 
+                                        height: 56px; 
+                                        border-radius: 0.75rem; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        justify-content: center; 
+                                        color: white; 
+                                        font-size: 1.5rem;
+                                        flex-shrink: 0;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.25rem;">Vendas do Mês</div>
+                                <div style="font-size: 2rem; font-weight: 700; color: #0f172a;">R$ ${formatNumber(data.capacidade_anual)}</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Informações Detalhadas -->
-                <div class="info-grid" style="margin-bottom: 25px;">
-                    <div class="info-row">
-                        <span class="info-label"><i class="fas fa-calendar-alt" style="color: #3b82f6;"></i> Capacidade Anual:</span>
-                        <span class="info-value" style="font-weight: 600; color: #1e40af;">${formatNumber(data.capacidade_anual)} unidades</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label"><i class="fas fa-cogs" style="color: #8b5cf6;"></i> Capacidade Máxima (3 turnos):</span>
-                        <span class="info-value" style="font-weight: 600;">${formatNumber(data.capacidade_maxima)} unidades/dia</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label"><i class="fas fa-chart-bar" style="color: #f59e0b;"></i> Capacidade Ociosa:</span>
-                        <span class="info-value" style="font-weight: 600; color: ${data.diferenca_diaria > 0 ? '#f59e0b' : '#10b981'};">${formatNumber(data.diferenca_diaria)} unidades/dia</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label"><i class="fas fa-business-time" style="color: #06b6d4;"></i> Horas de Operação:</span>
-                        <span class="info-value" style="font-weight: 600;">${data.horas_dia}h/dia (${data.horas_por_turno}h/turno)</span>
+                <div style="background: #f8fafc; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+                    <h4 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin-bottom: 1rem;">Detalhes da Análise</h4>
+                    <div style="display: grid; gap: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 0.5rem;">
+                            <span style="color: #64748b; font-size: 0.9375rem;"><i class="fas fa-calendar-alt" style="color: #3b82f6; margin-right: 0.5rem;"></i>Capacidade Anual:</span>
+                            <span style="font-weight: 600; color: #0f172a;">${formatNumber(data.capacidade_anual)} unidades</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 0.5rem;">
+                            <span style="color: #64748b; font-size: 0.9375rem;"><i class="fas fa-cogs" style="color: #8b5cf6; margin-right: 0.5rem;"></i>Capacidade Máxima (3 turnos):</span>
+                            <span style="font-weight: 600; color: #0f172a;">${formatNumber(data.capacidade_maxima)} unidades/dia</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 0.5rem;">
+                            <span style="color: #64748b; font-size: 0.9375rem;"><i class="fas fa-chart-bar" style="color: #f59e0b; margin-right: 0.5rem;"></i>Capacidade Ociosa:</span>
+                            <span style="font-weight: 600; color: ${data.diferenca_diaria > 0 ? '#f59e0b' : '#10b981'};">${formatNumber(data.diferenca_diaria)} unidades/dia</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 0.5rem;">
+                            <span style="color: #64748b; font-size: 0.9375rem;"><i class="fas fa-business-time" style="color: #06b6d4; margin-right: 0.5rem;"></i>Horas de Operação:</span>
+                            <span style="font-weight: 600; color: #0f172a;">${data.horas_dia}h/dia (${data.horas_por_turno}h/turno)</span>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Alert -->
                 ${data.percentual_uso < 100 ? 
-                    `<div class="simple-alert" style="background: #fef3c7; border-left: 4px solid #f59e0b; color: #92400e;">
-                        <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
+                    `<div class="alert alert-warning" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 1.25rem;"></i>
                         <div>
                             <strong>Atenção:</strong> Existe capacidade ociosa de ${formatNumber(data.diferenca_diaria)} unidades/dia. Percentual de uso: ${data.percentual_uso}%
                         </div>
                     </div>` : 
-                    `<div class="simple-alert" style="background: #d1fae5; border-left: 4px solid #10b981; color: #065f46;">
-                        <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                    `<div class="alert alert-success" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-check-circle" style="font-size: 1.25rem;"></i>
                         <div>
                             <strong>Excelente!</strong> A fábrica está operando em capacidade MÁXIMA (100%)!
                         </div>
@@ -183,10 +263,15 @@ function exibirResultadoOperacional(data) {
             </div>
         </div>
         
-        <!-- CSS Responsivo Inline -->
+        <!-- CSS Responsivo -->
         <style>
-            @media (max-width: 768px) {
-                .modern-card > .modern-body > div:first-of-type {
+            @media (max-width: 1024px) {
+                .card-body > div:first-child {
+                    grid-template-columns: repeat(2, 1fr) !important;
+                }
+            }
+            @media (max-width: 640px) {
+                .card-body > div:first-child {
                     grid-template-columns: 1fr !important;
                 }
             }
