@@ -81,6 +81,9 @@ function initSeedData() {
     
     console.log('🌱 Dados de exemplo inicializados:', localEstoque.length, 'produtos,', localMovimentacoes.length, 'movimentações');
     saveLocalData();
+    
+    // Marcar que dados de exemplo foram criados
+    localStorage.setItem('seedDataInitialized', 'true');
 }
 
 // Carregar dados do localStorage

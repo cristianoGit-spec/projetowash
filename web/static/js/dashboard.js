@@ -23,6 +23,18 @@ async function loadDashboard() {
             loadLocalData();
         }
         
+        // Verificar se é a primeira vez que carrega com dados de exemplo
+        const seedDataInitialized = localStorage.getItem('seedDataInitialized');
+        if (seedDataInitialized === 'true') {
+            // Remover flag para não mostrar novamente
+            localStorage.removeItem('seedDataInitialized');
+            
+            // Mostrar mensagem informativa
+            setTimeout(() => {
+                showToast('🌱 Dados de exemplo carregados! Explore o sistema e depois cadastre seus próprios produtos.', 'success', 6000);
+            }, 1000);
+        }
+        
         const stats = await obterEstatisticas();
         console.log('📊 Estatísticas obtidas:', stats);
         
