@@ -13,8 +13,8 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css?v=30">
-    <link rel="stylesheet" href="/static/css/admin.css?v=30">
+    <link rel="stylesheet" href="/static/css/style.css?v=31">
+    <link rel="stylesheet" href="/static/css/admin.css?v=31">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -30,7 +30,7 @@
     <!-- Segments Config -->
     <script src="/static/js/segments-config.js?v=17"></script>
     
-    <!-- Limpeza de Cache v17 - Força reload de arquivos novos -->
+    <!-- Limpeza de Cache v31 - Layout Dashboard Melhorado -->
     <script>
         // Limpar cache antigo do Service Worker
         if ('serviceWorker' in navigator) {
@@ -44,7 +44,7 @@
             if ('caches' in window) {
                 caches.keys().then(function(names) {
                     for (let name of names) {
-                        if (name !== 'estoque-certo-v17') {
+                        if (name !== 'estoque-certo-v31') {
                             console.log('🗑️ Removendo cache antigo:', name);
                             caches.delete(name);
                         }
@@ -53,13 +53,16 @@
             }
         }
         
-        // Migração para sistema híbrido v21
-        if (!localStorage.getItem('system_hybrid_v21')) {
-            console.log('🔄 Migrando para sistema híbrido v21...');
-            localStorage.removeItem('system_hybrid_v20'); // Limpar flag antiga
-            localStorage.setItem('system_hybrid_v21', 'true');
-            console.log('✅ Sistema híbrido v21 ativado!');
-            console.log('📡 Mensagens de erro melhoradas + Login automático após cadastro');
+        // Layout Dashboard Melhorado v31
+        if (!localStorage.getItem('layout_improved_v31')) {
+            console.log('🎨 Atualizando layout dashboard v31...');
+            // Limpar flags antigas
+            localStorage.removeItem('system_hybrid_v21');
+            localStorage.removeItem('system_hybrid_v20');
+            localStorage.removeItem('system_optimized_v30');
+            localStorage.setItem('layout_improved_v31', 'true');
+            console.log('✅ Layout profissional e responsivo ativado!');
+            console.log('📱 Grid otimizado para mobile, tablet e desktop');
         }
     </script>
 </head>
@@ -683,15 +686,15 @@
 
     <!-- Configuração Global -->
     <script>
-        // SISTEMA HÍBRIDO OTIMIZADO - Firebase Cloud + Fallback Local
-        // Versão 30.0 - Sistema otimizado, código duplicado removido
-        const APP_VERSION = '30';
+        // SISTEMA HÍBRIDO COM LAYOUT PROFISSIONAL - Firebase Cloud + Fallback Local
+        // Versão 31.0 - Layout dashboard responsivo e moderno
+        const APP_VERSION = '31';
         const IS_PRODUCTION = window.location.hostname.includes('netlify.app');
         const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         
         // Sistema tenta usar Firebase primeiro, fallback para localStorage se falhar
         console.log('🌐 Ambiente:', IS_PRODUCTION ? 'PRODUÇÃO (Netlify)' : IS_LOCALHOST ? 'LOCAL (Dev)' : 'OUTRO');
-        console.log('📦 Versão:', APP_VERSION, '- Otimizado');
+        console.log('📦 Versão:', APP_VERSION, '- Layout Responsivo');
     </script>
 
     <!-- JavaScript - Ordem: Firebase Config > Firestore Service > Local Fallback > Auth > App -->
