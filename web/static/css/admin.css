@@ -70,21 +70,39 @@
 
 .stat-card {
     background: white;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: 1.5rem;
     display: flex;
     align-items: center;
     gap: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid rgba(0, 0, 0, 0.05);
     cursor: default;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 50%, #8b5cf6 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover::before {
+    transform: scaleX(1);
 }
 
 .stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-    border-color: rgba(37, 99, 235, 0.2);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-color: rgba(59, 130, 246, 0.2);
 }
 
 .stat-icon {
@@ -100,10 +118,10 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.stat-icon.blue { background: linear-gradient(135deg, #0066cc 0%, #004c99 100%); }
-.stat-icon.green { background: linear-gradient(135deg, #06d6a0 0%, #00b894 100%); }
-.stat-icon.orange { background: linear-gradient(135deg, #ffc300 0%, #ffb700 100%); }
-.stat-icon.purple { background: linear-gradient(135deg, #48cae4 0%, #00b4d8 100%); }
+.stat-icon.blue { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); box-shadow: 0 8px 16px rgba(30, 58, 138, 0.3); }
+.stat-icon.green { background: linear-gradient(135deg, #10b981 0%, #34d399 100%); box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3); }
+.stat-icon.orange { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); box-shadow: 0 8px 16px rgba(245, 158, 11, 0.3); }
+.stat-icon.purple { background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3); }
 
 .stat-info {
     flex: 1;
@@ -241,24 +259,42 @@
 /* Card de Empresa */
 .empresa-card {
     background: white;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
     animation: slideUp 0.3s ease-out;
+    position: relative;
+}
+
+.empresa-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 50%, #10b981 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.empresa-card:hover::before {
+    opacity: 1;
 }
 
 .empresa-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06);
-    border-color: rgba(0, 0, 0, 0.08);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+    border-color: rgba(59, 130, 246, 0.2);
 }
 
 .empresa-card.empresa-inativa {
-    opacity: 0.7;
+    opacity: 0.6;
+    filter: grayscale(0.5);
 }
 
 /* Header do Card */
@@ -521,36 +557,42 @@
 }
 
 .btn-card-action.btn-view {
-    color: #0066cc;
-    border-color: #0066cc20;
+    color: #1e3a8a;
+    border-color: rgba(30, 58, 138, 0.2);
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
 }
 
 .btn-card-action.btn-view:hover {
-    background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
-    border-color: #0066cc;
-    color: #004c99;
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: #1e3a8a;
+    color: #1e40af;
+    box-shadow: 0 8px 16px rgba(30, 58, 138, 0.2);
 }
 
 .btn-card-action.btn-toggle {
-    color: #00b4d8;
-    border-color: #00b4d820;
+    color: #0891b2;
+    border-color: rgba(8, 145, 178, 0.2);
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.05) 0%, rgba(34, 211, 238, 0.05) 100%);
 }
 
 .btn-card-action.btn-toggle:hover {
-    background: linear-gradient(135deg, #e0f7fa 0%, #f8f9fa 100%);
-    border-color: #00b4d8;
-    color: #0096c7;
+    background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
+    border-color: #0891b2;
+    color: #06b6d4;
+    box-shadow: 0 8px 16px rgba(8, 145, 178, 0.2);
 }
 
 .btn-card-action.btn-delete {
-    color: #ef476f;
-    border-color: #ef476f20;
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.2);
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.05) 0%, rgba(239, 68, 68, 0.05) 100%);
 }
 
 .btn-card-action.btn-delete:hover {
-    background: linear-gradient(135deg, #ffe3e9 0%, #fff5f7 100%);
-    border-color: #ef476f;
-    color: #d63754;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-color: #dc2626;
+    color: #b91c1c;
+    box-shadow: 0 8px 16px rgba(220, 38, 38, 0.2);
 }
 
 .btn-card-action.btn-delete i {
