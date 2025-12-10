@@ -21,54 +21,63 @@ async function loadVisualizarModule(container) {
             });
             
             const html = `
-                <div class="visualizar-module">
-                    <!-- Header Moderno -->
-                    <div class="modern-header">
-                        <div class="header-content">
-                            <div class="header-icon">
-                                <i class="fas fa-warehouse"></i>
-                            </div>
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden;">
+                    <!-- Header -->
+                    <div style="padding: 1.25rem; border-bottom: 1px solid #f3f4f6;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
                             <div>
-                                <h2>Visualizar Estoque Completo</h2>
-                                <p>Gestão e visualização de produtos</p>
+                                <h3 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-warehouse" style="color: #3b82f6; font-size: 0.875rem;"></i>
+                                    Visualizar Estoque Completo
+                                </h3>
+                                <p style="color: #6b7280; font-size: 0.8125rem; margin: 0;">Gestão e visualização de produtos</p>
+                            </div>
+                            <button onclick="exportarEstoquePDF()" 
+                                    style="padding: 0.5rem 1rem; background: #ef4444; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
+                                    onmouseover="this.style.background='#dc2626'"
+                                    onmouseout="this.style.background='#ef4444'">
+                                <i class="fas fa-file-pdf"></i> Exportar PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Estatísticas -->
+                    <div style="padding: 1.25rem; background: #f9fafb; border-bottom: 1px solid #f3f4f6;">
+                        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 40px; height: 40px; background: rgba(59, 130, 246, 0.1); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #3b82f6;">
+                                    <i class="fas fa-boxes"></i>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; color: #6b7280;">Total de Produtos</div>
+                                    <div style="font-size: 1.25rem; font-weight: 700; color: #0f172a;">${produtos.length}</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #10b981;">
+                                    <i class="fas fa-cubes"></i>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; color: #6b7280;">Total de Itens</div>
+                                    <div style="font-size: 1.25rem; font-weight: 700; color: #0f172a;">${formatNumber(totalItens)}</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 40px; height: 40px; background: rgba(139, 92, 246, 0.1); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #8b5cf6;">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; color: #6b7280;">Valor Total</div>
+                                    <div style="font-size: 1.25rem; font-weight: 700; color: #0f172a;">${formatCurrency(totalValor)}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Resumo e Ação -->
-                    <div class="modern-card" style="margin-bottom: 30px;">
-                        <div class="modern-body">
-                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px;">
-                                <h3 style="display: flex; align-items: center; gap: 10px; margin: 0; color: #1e40af;">
-                                    <i class="fas fa-box"></i>
-                                    Estoque Completo
-                                </h3>
-                                <button onclick="exportarEstoquePDF()" class="btn btn-danger" 
-                                        style="padding: 10px 20px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                                    <i class="fas fa-file-pdf"></i> Exportar PDF
-                                </button>
-                            </div>
-
-                            <!-- Estatísticas -->
-                            <div class="info-grid" style="margin-bottom: 25px;">
-                                <div class="info-row">
-                                    <span class="info-label"><i class="fas fa-boxes" style="color: #3b82f6;"></i> Total de Produtos:</span>
-                                    <span class="info-value" style="color: #3b82f6; font-weight: 700; font-size: 18px;">${produtos.length}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label"><i class="fas fa-cubes" style="color: #10b981;"></i> Total de Itens:</span>
-                                    <span class="info-value" style="color: #10b981; font-weight: 700; font-size: 18px;">${formatNumber(totalItens)}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label"><i class="fas fa-dollar-sign" style="color: #8b5cf6;"></i> Valor Total:</span>
-                                    <span class="info-value" style="color: #8b5cf6; font-weight: 700; font-size: 18px;">${formatCurrency(totalValor)}</span>
-                                </div>
-                            </div>
-
-                            <!-- Lista de Produtos -->
-                            <div id="listaProdutos">
-                                ${gerarListaProdutos(produtos)}
-                            </div>
+                    <!-- Lista de Produtos -->
+                    <div style="padding: 1.5rem;">
+                        <div id="listaProdutos">
+                            ${gerarListaProdutos(produtos)}
                         </div>
                     </div>
                 </div>
@@ -126,23 +135,24 @@ async function loadVisualizarModule(container) {
             container.innerHTML = html;
         } else {
             container.innerHTML = `
-                <div class="modern-header">
-                    <div class="header-content">
-                        <div class="header-icon">
-                            <i class="fas fa-warehouse"></i>
-                        </div>
-                        <div>
-                            <h2>Visualizar Estoque Completo</h2>
-                            <p>Gestão e visualização de produtos</p>
-                        </div>
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden;">
+                    <div style="padding: 1.25rem; border-bottom: 1px solid #f3f4f6;">
+                        <h3 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-warehouse" style="color: #3b82f6; font-size: 0.875rem;"></i>
+                            Visualizar Estoque Completo
+                        </h3>
+                        <p style="color: #6b7280; font-size: 0.8125rem; margin: 0.375rem 0 0 0;">Gestão e visualização de produtos</p>
                     </div>
-                </div>
-                <div class="modern-card">
-                    <div class="modern-body" style="text-align: center; padding: 60px 20px;">
-                        <i class="fas fa-box-open" style="font-size: 80px; color: #e5e7eb; margin-bottom: 20px;"></i>
-                        <h3 style="color: #6b7280; margin: 15px 0;">Estoque Vazio</h3>
-                        <p style="color: #9ca3af; margin: 0 0 20px 0;">Nenhum produto cadastrado ainda.</p>
-                        <button onclick="loadModule('estoque_entrada')" class="btn btn-primary">
+                    <div style="padding: 4rem 1.5rem; text-align: center;">
+                        <div style="width: 80px; height: 80px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                            <i class="fas fa-box-open" style="font-size: 2.5rem; color: #9ca3af;"></i>
+                        </div>
+                        <h3 style="color: #0f172a; margin-bottom: 0.5rem; font-weight: 600; font-size: 1.125rem;">Estoque Vazio</h3>
+                        <p style="color: #6b7280; margin-bottom: 1.5rem; font-size: 0.875rem;">Nenhum produto cadastrado ainda.</p>
+                        <button onclick="showModule('estoque-entrada')" 
+                                style="padding: 0.75rem 1.5rem; background: #3b82f6; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
+                                onmouseover="this.style.background='#2563eb'"
+                                onmouseout="this.style.background='#3b82f6'">
                             <i class="fas fa-plus"></i> Cadastrar Primeiro Produto
                         </button>
                     </div>
@@ -165,70 +175,76 @@ async function loadVisualizarModule(container) {
 
 function gerarListaProdutos(produtos) {
     return `
-        <div style="display: grid; gap: 15px;">
+        <div style="display: grid; gap: 1rem;">
             ${produtos.map((produto, idx) => {
                 const valorTotal = produto.quantidade * produto.valor;
                 return `
-                    <div class="info-row" style="padding: 20px; border-radius: 12px; background: #f9fafb; border: 1px solid #e5e7eb; display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center;">
+                    <div style="padding: 1.25rem; border-radius: 0.5rem; background: #f9fafb; border: 1px solid #e5e7eb; display: flex; gap: 1rem; align-items: center; transition: all 0.2s ease;"
+                         onmouseover="this.style.borderColor='#d1d5db'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.05)'"
+                         onmouseout="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
                         <!-- Número -->
-                        <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px;">
+                        <div style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; width: 40px; height: 40px; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0;">
                             ${idx + 1}
                         </div>
                         
                         <!-- Informações -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                        <div style="flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; min-width: 0;">
                             <div>
-                                <div style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
-                                    <i class="fas fa-barcode"></i> Código
+                                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">
+                                    <i class="fas fa-barcode" style="font-size: 0.625rem;"></i> Código
                                 </div>
-                                <div style="font-weight: 600; color: #1f2937;">${produto.codigo}</div>
+                                <div style="font-weight: 600; color: #0f172a; font-size: 0.875rem;">${produto.codigo}</div>
                             </div>
                             <div>
-                                <div style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
-                                    <i class="fas fa-tag"></i> Nome
+                                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">
+                                    <i class="fas fa-tag" style="font-size: 0.625rem;"></i> Nome
                                 </div>
-                                <div style="font-weight: 600; color: #1f2937;">${produto.nome}</div>
+                                <div style="font-weight: 600; color: #0f172a; font-size: 0.875rem;">${produto.nome}</div>
                             </div>
                             <div>
-                                <div style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
-                                    <i class="fas fa-boxes"></i> Quantidade
+                                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">
+                                    <i class="fas fa-boxes" style="font-size: 0.625rem;"></i> Quantidade
                                 </div>
-                                <div style="font-weight: 600; color: #10b981;">${formatNumber(produto.quantidade)}</div>
+                                <div style="font-weight: 600; color: #10b981; font-size: 0.875rem;">${formatNumber(produto.quantidade)}</div>
                             </div>
                             <div>
-                                <div style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
-                                    <i class="fas fa-dollar-sign"></i> Valor Unit.
+                                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">
+                                    <i class="fas fa-dollar-sign" style="font-size: 0.625rem;"></i> Valor Unit.
                                 </div>
-                                <div style="font-weight: 600; color: #3b82f6;">${formatCurrency(produto.valor)}</div>
+                                <div style="font-weight: 600; color: #3b82f6; font-size: 0.875rem;">${formatCurrency(produto.valor)}</div>
                             </div>
                             <div>
-                                <div style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
-                                    <i class="fas fa-calculator"></i> Valor Total
+                                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">
+                                    <i class="fas fa-calculator" style="font-size: 0.625rem;"></i> Valor Total
                                 </div>
-                                <div style="font-weight: 700; color: #8b5cf6; font-size: 16px;">${formatCurrency(valorTotal)}</div>
+                                <div style="font-weight: 700; color: #8b5cf6; font-size: 0.9375rem;">${formatCurrency(valorTotal)}</div>
                             </div>
                             <div>
-                                <div style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
-                                    <i class="fas fa-map-marker-alt"></i> Local
+                                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">
+                                    <i class="fas fa-map-marker-alt" style="font-size: 0.625rem;"></i> Local
                                 </div>
-                                <div style="font-weight: 600; color: #1f2937;">${produto.local}</div>
+                                <div style="font-weight: 600; color: #0f172a; font-size: 0.875rem;">${produto.local}</div>
                             </div>
                             <div>
-                                <div style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
-                                    <i class="fas fa-truck"></i> Fornecedor
+                                <div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.25rem;">
+                                    <i class="fas fa-truck" style="font-size: 0.625rem;"></i> Fornecedor
                                 </div>
-                                <div style="font-weight: 600; color: #1f2937;">${produto.fornecedor}</div>
+                                <div style="font-weight: 600; color: #0f172a; font-size: 0.875rem;">${produto.fornecedor}</div>
                             </div>
                         </div>
                         
                         <!-- Ações -->
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
                             <button onclick="abrirModalEditar(${idx})" 
-                                    style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+                                    style="padding: 0.5rem 0.75rem; background: #3b82f6; color: white; border: none; border-radius: 0.375rem; cursor: pointer; font-size: 0.8125rem; font-weight: 500; display: flex; align-items: center; gap: 0.375rem; transition: all 0.2s ease;"
+                                    onmouseover="this.style.background='#2563eb'"
+                                    onmouseout="this.style.background='#3b82f6'">
                                 <i class="fas fa-edit"></i> Editar
                             </button>
                             <button onclick="excluirProduto(${idx})" 
-                                    style="padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+                                    style="padding: 0.5rem 0.75rem; background: #ef4444; color: white; border: none; border-radius: 0.375rem; cursor: pointer; font-size: 0.8125rem; font-weight: 500; display: flex; align-items: center; gap: 0.375rem; transition: all 0.2s ease;"
+                                    onmouseover="this.style.background='#dc2626'"
+                                    onmouseout="this.style.background='#ef4444'">
                                 <i class="fas fa-trash"></i> Excluir
                             </button>
                         </div>
