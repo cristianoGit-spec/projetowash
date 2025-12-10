@@ -149,19 +149,19 @@ function exibirResultadoVenda(data) {
             
             <div class="info-grid">
                 <div class="info-row">
-                    <span class="info-label">Produto:</span>
+                    <span class="info-label"><i class="fas fa-tag"></i> Produto</span>
                     <span class="info-value">${data.produto}</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Valor Unitário:</span>
+                    <span class="info-label"><i class="fas fa-dollar-sign"></i> Valor Unitário</span>
                     <span class="info-value">${formatCurrency(data.valorUnitario)}</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Estoque Anterior:</span>
+                    <span class="info-label"><i class="fas fa-boxes"></i> Estoque Anterior</span>
                     <span class="info-value">${formatNumber(data.estoqueAnterior)} unidades</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Estoque Atual:</span>
+                    <span class="info-label"><i class="fas fa-warehouse"></i> Estoque Atual</span>
                     <span class="info-value highlight">${formatNumber(data.estoqueAtual)} unidades</span>
                 </div>
             </div>

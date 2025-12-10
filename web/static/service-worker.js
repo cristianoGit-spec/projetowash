@@ -2,18 +2,18 @@
 // SERVICE WORKER - PWA OFFLINE SUPPORT
 // Arquivo: service-worker.js
 // Descrição: Gerencia cache e funcionamento offline do aplicativo
-// Versão: 37 (operacional layout organizado)
+// Versão: 38 (estoque saída reorganizado)
 // ============================================================================
 
-const CACHE_NAME = 'estoque-certo-v37';
+const CACHE_NAME = 'estoque-certo-v38';
 const CACHE_MAX_AGE_DAYS = 30; // Cache expira após 30 dias
 const CACHE_MAX_ITEMS = 50; // Máximo de itens no cache
 
 // Lista de URLs essenciais para cache (apenas arquivos que realmente existem)
 const urlsToCache = [
     '/',
-    '/static/css/style.css?v=37',
-    '/static/css/admin.css?v=37',
+    '/static/css/style.css?v=38',
+    '/static/css/admin.css?v=38',
     '/static/js/app.js?v=30',
     '/static/js/modules.js?v=30',
     '/static/js/dashboard.js?v=30',

@@ -13,8 +13,8 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css?v=37">
-    <link rel="stylesheet" href="/static/css/admin.css?v=37">
+    <link rel="stylesheet" href="/static/css/style.css?v=38">
+    <link rel="stylesheet" href="/static/css/admin.css?v=38">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -30,7 +30,7 @@
     <!-- Segments Config -->
     <script src="/static/js/segments-config.js?v=17"></script>
     
-    <!-- Limpeza de Cache v37 - Operacional Layout Organizado -->
+    <!-- Limpeza de Cache v38 - Estoque Saída Reorganizado -->
     <script>
         // Limpar cache antigo do Service Worker
         if ('serviceWorker' in navigator) {
@@ -44,7 +44,7 @@
             if ('caches' in window) {
                 caches.keys().then(function(names) {
                     for (let name of names) {
-                        if (name !== 'estoque-certo-v37') {
+                        if (name !== 'estoque-certo-v38') {
                             console.log('🗑️ Removendo cache antigo:', name);
                             caches.delete(name);
                         }
@@ -53,14 +53,14 @@
             }
         }
         
-        // Operacional Layout Organizado v37
-        if (!localStorage.getItem('operacional_organized_v37')) {
-            console.log('📊 Organizando Operacional v37...');
+        // Estoque Saída Reorganizado v38
+        if (!localStorage.getItem('estoque_saida_organized_v38')) {
+            console.log('📦 Reorganizando Estoque Saída v38...');
             // Limpar flags antigas
-            localStorage.removeItem('estoque_saida_v36');
-            localStorage.setItem('operacional_organized_v37', 'true');
-            console.log('✅ Layout reorganizado: 2 cards + info grid!');
-            console.log('🏭 Sem duplicações, informações bem organizadas');
+            localStorage.removeItem('operacional_organized_v37');
+            localStorage.setItem('estoque_saida_organized_v38', 'true');
+            console.log('✅ Ícones inline nas labels!');
+            console.log('🎯 Layout padronizado com outros módulos');
         }
     </script>
 </head>
