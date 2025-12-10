@@ -1,5 +1,6 @@
 ﻿// ============================================================================
 // MÓDULO DE ADMINISTRAÇÃO - SUPER ADMIN
+// Versão: 29 - Dados Firebase sempre atualizados (SEM CACHE)
 // ============================================================================
 // Este módulo permite ao super administrador visualizar todas as empresas
 // cadastradas no sistema, seus dados e estatísticas gerais.
@@ -27,8 +28,11 @@ function loadAdminModule(container) {
                 <div class="admin-title">
                     <i class="fas fa-shield-alt"></i>
                     <h2>Painel de Administração - Gestão de Empresas</h2>
+                    <button onclick="carregarEmpresas()" class="btn btn-primary" style="margin-left: auto;">
+                        <i class="fas fa-sync-alt"></i> Atualizar Dados
+                    </button>
                 </div>
-                <p class="admin-subtitle">Visão geral de todas as empresas cadastradas no sistema</p>
+                <p class="admin-subtitle">Visão geral de todas as empresas cadastradas no sistema (dados em tempo real)</p>
             </div>
 
             <!-- Estatísticas Gerais -->
@@ -155,7 +159,7 @@ async function carregarEmpresas() {
     // Tentar buscar do Firebase primeiro
     if (typeof buscarTodasEmpresasFirebase === 'function') {
         try {
-            console.log('🔍 Buscando empresas do Firebase...');
+            console.log("🔍 [${timestamp}] Buscando empresas do Firebase Cloud...");
             const empresasFirebase = await buscarTodasEmpresasFirebase();
             if (empresasFirebase && empresasFirebase.length > 0) {
                 empresas = empresasFirebase;
