@@ -6,6 +6,83 @@ let localMovimentacoes = [];
 let localFinanceiro = [];
 let localFolhaPagamento = [];
 
+// Inicializar dados de exemplo (seed data)
+function initSeedData() {
+    const hoje = new Date();
+    const companyId = 'comp-default';
+    
+    // Produtos de exemplo
+    const produtosExemplo = [
+        { codigo: 'PROD001', nome: 'Sabão em Pó 1kg', quantidade: 50, valor: 8.50, fornecedor: 'Distribuidora ABC', local: 'Prateleira A1' },
+        { codigo: 'PROD002', nome: 'Amaciante 2L', quantidade: 30, valor: 12.00, fornecedor: 'Fornecedor XYZ', local: 'Prateleira A2' },
+        { codigo: 'PROD003', nome: 'Detergente 500ml', quantidade: 80, valor: 3.50, fornecedor: 'Distribuidora ABC', local: 'Prateleira B1' },
+        { codigo: 'PROD004', nome: 'Alvejante 1L', quantidade: 40, valor: 6.00, fornecedor: 'Fornecedor XYZ', local: 'Prateleira B2' },
+        { codigo: 'PROD005', nome: 'Esponja Multiuso', quantidade: 100, valor: 2.00, fornecedor: 'Distribuidora ABC', local: 'Prateleira C1' }
+    ];
+    
+    localEstoque = produtosExemplo.map((p, index) => ({
+        id: 'prod-seed-' + (index + 1),
+        companyId,
+        ...p,
+        data: new Date(hoje.getTime() - (30 - index * 5) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        criadoEm: new Date(hoje.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        atualizadoEm: new Date().toISOString()
+    }));
+    
+    // Movimentações de exemplo (entradas e saídas dos últimos 30 dias)
+    localMovimentacoes = [];
+    
+    // Entradas (15 entradas nos últimos 30 dias)
+    for (let i = 0; i < 15; i++) {
+        const produtoIndex = Math.floor(Math.random() * produtosExemplo.length);
+        const produto = produtosExemplo[produtoIndex];
+        const diasAtras = Math.floor(Math.random() * 30);
+        const quantidade = Math.floor(Math.random() * 30) + 10;
+        
+        localMovimentacoes.push({
+            id: 'mov-entrada-' + i,
+            companyId,
+            tipo: 'entrada',
+            produtoId: 'prod-seed-' + (produtoIndex + 1),
+            codigo: produto.codigo,
+            nome: produto.nome,
+            quantidade,
+            valorUnitario: produto.valor,
+            fornecedor: produto.fornecedor,
+            timestamp: new Date(hoje.getTime() - diasAtras * 24 * 60 * 60 * 1000).toISOString()
+        });
+    }
+    
+    // Saídas (20 saídas nos últimos 30 dias)
+    for (let i = 0; i < 20; i++) {
+        const produtoIndex = Math.floor(Math.random() * produtosExemplo.length);
+        const produto = produtosExemplo[produtoIndex];
+        const diasAtras = Math.floor(Math.random() * 30);
+        const quantidade = Math.floor(Math.random() * 10) + 1;
+        const valorVenda = produto.valor * (1.3 + Math.random() * 0.5); // Margem de 30% a 80%
+        
+        localMovimentacoes.push({
+            id: 'mov-saida-' + i,
+            companyId,
+            tipo: 'saida',
+            produtoId: 'prod-seed-' + (produtoIndex + 1),
+            codigo: produto.codigo,
+            nome: produto.nome,
+            quantidade,
+            quantidadeVendida: quantidade,
+            valorUnitario: produto.valor,
+            valorVenda,
+            timestamp: new Date(hoje.getTime() - diasAtras * 24 * 60 * 60 * 1000).toISOString()
+        });
+    }
+    
+    // Ordenar por timestamp
+    localMovimentacoes.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    
+    console.log('🌱 Dados de exemplo inicializados:', localEstoque.length, 'produtos,', localMovimentacoes.length, 'movimentações');
+    saveLocalData();
+}
+
 // Carregar dados do localStorage
 function loadLocalData() {
     const estoque = localStorage.getItem('localEstoque');
@@ -13,7 +90,9 @@ function loadLocalData() {
         localEstoque = JSON.parse(estoque);
         console.log('📦 Estoque carregado:', localEstoque.length, 'produtos');
     } else {
-        console.log('📦 Nenhum estoque encontrado no localStorage');
+        console.log('📦 Nenhum estoque encontrado no localStorage - Inicializando dados de exemplo...');
+        initSeedData();
+        return; // Retorna pois initSeedData já salva os dados
     }
     
     const movimentacoes = localStorage.getItem('localMovimentacoes');
