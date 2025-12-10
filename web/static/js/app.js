@@ -19,79 +19,148 @@ const isProduction = window.location.hostname.includes('netlify.app');
 // ============================================================================
 
 /**
- * Exibe o modal com o modulo selecionado
+ * Exibe o módulo na área de conteúdo (SEM MODAL - estilo PrescrMed)
  * @param {string} moduleName - Nome do modulo a ser exibido
  */
 function showModule(moduleName) {
-    // Dashboard é especial - não usa modal, apenas mostra a seção
+    console.log('[NAV] Carregando módulo:', moduleName);
+    
+    // Obter área de conteúdo
+    const contentArea = document.getElementById('contentArea');
+    if (!contentArea) {
+        console.error('[ERROR] contentArea não encontrada');
+        return;
+    }
+    
+    // Atualizar navegação ativa
+    updateActiveSidebarItem(moduleName);
+    
+    // Dashboard é a página principal
     if (moduleName === 'dashboard') {
-        // Esconder modal se estiver aberto
-        const modal = document.getElementById('modalContainer');
-        if (modal) modal.classList.add('hidden');
-        
-        // Mostrar seção do dashboard
-        const dashboardSection = document.getElementById('dashboardSection');
-        if (dashboardSection) {
-            dashboardSection.style.display = 'block';
-        }
-        
-        // Atualizar estados ativos da sidebar
-        updateActiveSidebarItem('dashboard');
+        // Esconder todo conteúdo e mostrar apenas dashboard
+        contentArea.innerHTML = `
+            <section id="dashboardSection" class="dashboard-section">
+                <!-- Alertas de Estoque Baixo -->
+                <div id="stockAlerts" class="hidden"></div>
+                
+                <!-- Cards de Estatísticas -->
+                <div class="cards-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Total de Produtos</div>
+                            <div class="stat-value" id="statTotalProdutos">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-cubes"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Itens em Estoque</div>
+                            <div class="stat-value" id="statTotalItens">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Valor em Estoque</div>
+                            <div class="stat-value" id="statValorTotal">R$ 0,00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Vendas do Mês</div>
+                            <div class="stat-value" id="statVendasMes">R$ 0,00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gráficos -->
+                <div class="cards-grid mt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Movimentações Recentes</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="chartMovimentacoes"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Top 5 Produtos</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="chartTopProdutos"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3>Eficiência da Linha</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chartEficiencia"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Histórico Recente -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3>Últimas Movimentações</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="historicoRecente" class="history-list">
+                            <!-- Preenchido via JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        `;
         
         // Carregar dados do dashboard
         if (typeof loadDashboard === 'function') {
-            loadDashboard().catch(err => {
-                console.error('❌ Erro ao carregar dashboard:', err);
-                showToast('Erro ao carregar módulo. Tente novamente.', 'error');
-            });
-        } else {
-            console.error('❌ Função loadDashboard não disponível');
+            setTimeout(() => {
+                loadDashboard().catch(err => {
+                    console.error('[ERROR] Erro ao carregar dashboard:', err);
+                    showToast('Erro ao carregar módulo. Tente novamente.', 'error');
+                });
+            }, 100);
         }
         return;
     }
     
-    // Para outros módulos, usar modal
-    const modal = document.getElementById('modalContainer');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
+    // Para outros módulos, carregar na área de conteúdo (SEM MODAL)
+    contentArea.innerHTML = '<div id="moduleContent" style="width: 100%;"></div>';
+    const moduleContent = document.getElementById('moduleContent');
     
-    // Esconder dashboard section se estiver visível
-    const dashboardSection = document.getElementById('dashboardSection');
-    if (dashboardSection) {
-        dashboardSection.style.display = 'none';
-    }
-    
-    // Definir titulo baseado no modulo
-    const titles = {
-        'operacional': 'Modulo Operacional - Capacidade de Producao',
-        'estoque-entrada': 'Modulo Estoque - Entrada de Produtos',
-        'estoque-saida': 'Modulo Estoque - Saida de Produtos',
-        'financeiro': 'Modulo Financeiro - Custos e Lucros',
-        'rh': 'Modulo RH - Folha de Pagamento',
-        'visualizar': 'Visualizar Estoque Completo',
-        'historico': 'Historico de Movimentacoes',
-        'admin': 'Painel de Administração - Gestão de Empresas'
-    };
-    
-    modalTitle.textContent = titles[moduleName] || 'Modulo';
-    
-    // Atualizar estados ativos da sidebar
-    updateActiveSidebarItem(moduleName);
-    
-    // Carregar conteudo do modulo usando o loader modular
+    // Carregar conteúdo do módulo
     if (moduleName === 'admin') {
-        // Admin é especial e não está no loader modular
-        loadAdminModule(modalBody);
+        // Admin é especial
+        if (typeof loadAdminModule === 'function') {
+            loadAdminModule(moduleContent);
+        } else {
+            moduleContent.innerHTML = '<div class="alert alert-danger">Módulo admin não disponível</div>';
+        }
     } else if (typeof loadModuleContent === 'function') {
         // Usar o loader modular para os outros módulos
-        loadModuleContent(moduleName, modalBody);
+        loadModuleContent(moduleName, moduleContent);
     } else {
-        console.error('❌ loadModuleContent não está disponível');
-        modalBody.innerHTML = '<p>Erro ao carregar módulo. Recarregue a página.</p>';
+        console.error('[ERROR] loadModuleContent não está disponível');
+        moduleContent.innerHTML = '<div class="alert alert-danger">Erro ao carregar módulo. Recarregue a página.</div>';
     }
-    
-    // Mostrar modal
-    modal.classList.remove('hidden');
 }
 
 /**
@@ -172,13 +241,10 @@ function updateActiveSidebarItem(moduleName) {
 }
 
 /**
- * Fecha o modal e volta para o dashboard
+ * Fecha o modal e volta para o dashboard (REMOVIDO - Agora tudo na mesma área)
  */
 function closeModule() {
-    const modal = document.getElementById('modalContainer');
-    modal.classList.add('hidden');
-    
-    // Voltar para o dashboard
+    console.log('[NAV] Voltando para dashboard');
     showModule('dashboard');
 }
 
