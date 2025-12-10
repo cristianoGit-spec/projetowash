@@ -912,22 +912,23 @@
 .modal-header {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: none;
+    min-height: 60px;
 }
 
 .modal-header h3 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.375rem;
+    font-weight: 600;
     display: flex;
     align-items: center;
     gap: 0.75rem;
     color: white;
-    border: none;
-    padding: 0;
+    letter-spacing: -0.01em;
 }
 
 .modal-close {
@@ -1164,22 +1165,7 @@
     animation: slideUp 0.3s ease-out;
 }
 
-.modal-header {
-    padding: 1.5rem;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-}
-
-.modal-header h3 {
-    margin: 0;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
+/* Modal header já definido acima - removendo duplicação */
 
 .modal-close {
     background: rgba(255, 255, 255, 0.2);

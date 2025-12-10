@@ -13,6 +13,9 @@ let localCurrentUser = null;
 let localIsAdmin = false;
 let localIsSuperAdmin = false;
 
+// Contador de empresas para numeração automática
+let empresaCounter = 0;
+
 // Senhas padrão em texto simples (modo desenvolvimento)
 const DEFAULT_PASSWORDS = {
     superadmin: 'admin@2025',
@@ -26,6 +29,29 @@ const DEFAULT_PASSWORDS = {
 // ============================================================================
 
 /**
+ * Gerar próximo número de empresa
+ */
+function getNextEmpresaNumber() {
+    const counterKey = 'empresaCounter';
+    let counter = parseInt(localStorage.getItem(counterKey) || '0', 10);
+    counter++;
+    localStorage.setItem(counterKey, counter.toString());
+    return counter.toString().padStart(4, '0');
+}
+
+/**
+ * Adicionar numeração ao nome da empresa se não existir
+ */
+function addEmpresaNumber(nomeEmpresa) {
+    // Verificar se já tem número no formato [0001]
+    if (/^\[\d{4}\]/.test(nomeEmpresa)) {
+        return nomeEmpresa;
+    }
+    const numero = getNextEmpresaNumber();
+    return `[${numero}] ${nomeEmpresa}`;
+}
+
+/**
  * Carregar usuários do localStorage
  */
 function loadLocalUsers() {
@@ -33,12 +59,23 @@ function loadLocalUsers() {
     if (stored) {
         localUsers = JSON.parse(stored);
         
+        // Inicializar contador baseado nas empresas existentes
+        const empresasComNumero = localUsers.filter(u => u.nomeEmpresa && /^\[\d{4}\]/.test(u.nomeEmpresa));
+        if (empresasComNumero.length > 0) {
+            const numeros = empresasComNumero.map(u => {
+                const match = u.nomeEmpresa.match(/^\[(\d{4})\]/);
+                return match ? parseInt(match[1], 10) : 0;
+            });
+            const maxNumero = Math.max(...numeros);
+            localStorage.setItem('empresaCounter', maxNumero.toString());
+        }
+        
         // Garantir que o super admin exista
         const superAdminIndex = localUsers.findIndex(u => u.email === 'superadmin@quatrocantos.com');
         const defaultSuperAdmin = {
             uid: 'superadmin-master-001',
             nome: 'Super Administrador',
-            nomeEmpresa: 'Quatro Cantos - Administração',
+            nomeEmpresa: '[0000] Quatro Cantos - Administração',
             email: 'superadmin@quatrocantos.com',
             senha: DEFAULT_PASSWORDS.superadmin,
             role: 'superadmin',
@@ -62,7 +99,7 @@ function loadLocalUsers() {
         const defaultAdmin = {
             uid: 'admin-local-001',
             nome: 'Administrador',
-            nomeEmpresa: 'Empresa Local Demo',
+            nomeEmpresa: '[0001] Empresa Local Demo',
             email: 'admin@local.com',
             contato: '(00) 00000-0000',
             loginUsuario: 'admin',
@@ -81,7 +118,7 @@ function loadLocalUsers() {
             // Atualizar campos faltantes se necessário
             if (!admin.companyId || !admin.nomeEmpresa) {
                 admin.companyId = 'comp-default';
-                admin.nomeEmpresa = 'Empresa Local Demo';
+                admin.nomeEmpresa = '[0001] Empresa Local Demo';
                 localUsers[adminIndex] = admin;
                 saveLocalUsers();
             }
@@ -92,9 +129,9 @@ function loadLocalUsers() {
             {
                 uid: 'superadmin-master-001',
                 nome: 'Super Administrador',
-                nomeEmpresa: 'Quatro Cantos - Administração',
+                nomeEmpresa: '[0000] Quatro Cantos - Administração',
                 email: 'superadmin@quatrocantos.com',
-                senha: DEFAULT_PASSWORDS.superadmin, // Hash bcrypt de 'admin@2025'
+                senha: DEFAULT_PASSWORDS.superadmin,
                 role: 'superadmin',
                 segmento: 'construcao',
                 companyId: 'superadmin-master',
@@ -104,11 +141,11 @@ function loadLocalUsers() {
             {
                 uid: 'admin-local-001',
                 nome: 'Administrador',
-                nomeEmpresa: 'Empresa Local Demo',
+                nomeEmpresa: '[0001] Empresa Local Demo',
                 email: 'admin@local.com',
                 contato: '(00) 00000-0000',
                 loginUsuario: 'admin',
-                senha: DEFAULT_PASSWORDS.admin, // Hash bcrypt de 'admin123'
+                senha: DEFAULT_PASSWORDS.admin,
                 role: 'admin',
                 companyId: 'comp-default',
                 ativo: true,
@@ -117,11 +154,11 @@ function loadLocalUsers() {
             {
                 uid: 'user-local-alice',
                 nome: 'Alice',
-                nomeEmpresa: 'Empresa Local Demo',
+                nomeEmpresa: '[0001] Empresa Local Demo',
                 email: 'alice@gmail.com',
                 contato: '(00) 91234-5678',
                 loginUsuario: 'alice',
-                senha: DEFAULT_PASSWORDS.admin, // admin123
+                senha: DEFAULT_PASSWORDS.admin,
                 role: 'user',
                 companyId: 'comp-default',
                 ativo: true,
@@ -130,11 +167,11 @@ function loadLocalUsers() {
             {
                 uid: 'user-local-gaby',
                 nome: 'Gabriela Silva',
-                nomeEmpresa: 'Empresa Local Demo',
+                nomeEmpresa: '[0001] Empresa Local Demo',
                 email: 'gaby@gmail.com',
                 contato: '(00) 92345-6789',
                 loginUsuario: 'gaby',
-                senha: DEFAULT_PASSWORDS.admin, // admin123 (mesma senha padrão)
+                senha: DEFAULT_PASSWORDS.admin,
                 role: 'user',
                 companyId: 'comp-default',
                 ativo: true,
@@ -143,12 +180,12 @@ function loadLocalUsers() {
             {
                 uid: 'user-local-superacao',
                 nome: 'Superação',
-                nomeEmpresa: 'Empresa Local Demo',
+                nomeEmpresa: '[0001] Empresa Local Demo',
                 email: 'alice@gmail.com',
                 contato: '(11) 99999-9999',
                 loginUsuario: 'alice',
-                senha: DEFAULT_PASSWORDS.alice, // alice123
-                role: 'admin', // Dando permissão de admin para facilitar testes
+                senha: DEFAULT_PASSWORDS.alice,
+                role: 'admin',
                 companyId: 'comp-default',
                 cargo: 'Diretor',
                 ativo: true,
@@ -157,11 +194,11 @@ function loadLocalUsers() {
             {
                 uid: 'user-local-superacao',
                 nome: 'Cristiano Superacao',
-                nomeEmpresa: 'Superação Ltda',
+                nomeEmpresa: '[0002] Superação Ltda',
                 email: 'superacao@gmail.com',
                 contato: '(00) 00000-0000',
                 loginUsuario: 'superacao',
-                senha: DEFAULT_PASSWORDS.superacao, // super123
+                senha: DEFAULT_PASSWORDS.superacao,
                 role: 'admin',
                 companyId: 'comp-superacao',
                 cargo: 'CEO',
@@ -311,12 +348,12 @@ async function cadastrarUsuarioLocal(nome, email, contato, loginUsuario, senha, 
     };
 
     if (extraData.role === 'admin') {
-        // Cadastro de Empresa
+        // Cadastro de Empresa - Adicionar numeração automática
         newUser.role = 'admin';
         newUser.cargo = 'Administrador';
-        newUser.nomeEmpresa = extraData.nomeEmpresa;
-        newUser.segmento = extraData.segmento; // Adicionar segmento
-        newUser.companyId = 'comp-' + Date.now(); // Gerar ID da empresa
+        newUser.nomeEmpresa = addEmpresaNumber(extraData.nomeEmpresa);
+        newUser.segmento = extraData.segmento;
+        newUser.companyId = 'comp-' + Date.now();
         newUser.allowedModules = ['operacional', 'estoque-entrada', 'estoque-saida', 'financeiro', 'rh', 'visualizar'];
         
         console.log('✅ Empresa criada:', {
