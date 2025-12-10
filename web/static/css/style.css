@@ -4200,6 +4200,22 @@ select {
     font-weight: 700;
 }
 
+.info-value.warning {
+    color: var(--warning-color);
+    font-weight: 700;
+}
+
+.info-value.success {
+    color: var(--success-color);
+    font-weight: 700;
+}
+
+.info-label i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+    font-size: 0.875rem;
+}
+
 /* Responsividade Estoque Saída */
 @media (max-width: 768px) {
     .grid-2 {

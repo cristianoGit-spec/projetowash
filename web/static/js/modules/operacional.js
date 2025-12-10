@@ -100,7 +100,7 @@ function exibirResultadoOperacional(data) {
                 <span>Análise de Capacidade - ${data.turnos} Turno(s)</span>
             </div>
             
-            <div class="stats-grid">
+            <div class="stats-grid grid-2">
                 <div class="stat-card blue">
                     <div class="stat-icon">
                         <i class="fas fa-clock"></i>
@@ -120,25 +120,24 @@ function exibirResultadoOperacional(data) {
                         <p>Capacidade Diária</p>
                     </div>
                 </div>
-                
-                <div class="stat-card purple">
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>${formatNumber(data.capacidade_mensal)}</h3>
-                        <p>Capacidade Mensal</p>
-                    </div>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-industry"></i> Capacidade Anual</span>
+                    <span class="info-value">${formatNumber(data.capacidade_anual)} unidades</span>
                 </div>
-                
-                <div class="stat-card orange">
-                    <div class="stat-icon">
-                        <i class="fas fa-percentage"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>${data.percentual_uso}%</h3>
-                        <p>Utilização</p>
-                    </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-cogs"></i> Capacidade Máxima (3 turnos)</span>
+                    <span class="info-value">${formatNumber(data.capacidade_maxima)} unidades/dia</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-chart-bar"></i> Capacidade Ociosa</span>
+                    <span class="info-value ${data.diferenca_diaria > 0 ? 'warning' : 'success'}">${formatNumber(data.diferenca_diaria)} unidades/dia</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-business-time"></i> Horas de Operação</span>
+                    <span class="info-value">${data.horas_dia}h/dia (${data.horas_por_turno}h/turno)</span>
                 </div>
             </div>
             
