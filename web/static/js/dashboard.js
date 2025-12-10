@@ -102,15 +102,17 @@ function loadHistoricoRecente(movimentacoes) {
     
     if (!movimentacoes || movimentacoes.length === 0) {
         container.innerHTML = `
-            <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #6b7280;">
-                <i class="fas fa-inbox" style="font-size: 4rem; margin-bottom: 20px; opacity: 0.3; color: #9ca3af;"></i>
-                <h4 style="color: #1a1a1a; margin-bottom: 10px; font-weight: 700;">Nenhuma movimentação recente</h4>
-                <p style="font-size: 0.9rem; color: #6b7280;">Registre entradas ou saídas de produtos para visualizar o histórico</p>
-                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="showModule('estoque-entrada')" class="btn btn-success btn-sm">
+            <div class="empty-state" style="text-align: center; padding: 3rem 1.5rem; color: #6b7280;">
+                <div style="width: 64px; height: 64px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-inbox" style="font-size: 2rem; color: #9ca3af;"></i>
+                </div>
+                <h4 style="color: #0f172a; margin-bottom: 0.5rem; font-weight: 600; font-size: 1rem;">Nenhuma movimentação recente</h4>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 1.5rem;">Registre entradas ou saídas de produtos para visualizar o histórico</p>
+                <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="showModule('estoque-entrada')" class="btn btn-success" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
                         <i class="fas fa-plus"></i> Nova Entrada
                     </button>
-                    <button onclick="showModule('estoque-saida')" class="btn btn-primary btn-sm">
+                    <button onclick="showModule('estoque-saida')" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
                         <i class="fas fa-minus"></i> Nova Saída
                     </button>
                 </div>
@@ -121,22 +123,24 @@ function loadHistoricoRecente(movimentacoes) {
     
     const html = movimentacoes.map(mov => {
         const tipo = mov.tipo;
-        const icon = tipo === 'entrada' ? 'box-open' : 'truck-loading';
+        const icon = tipo === 'entrada' ? 'arrow-down' : 'arrow-up';
         const quantidade = mov.quantidade || mov.quantidadeVendida || 0;
         const valor = mov.valorVenda || 0;
+        const iconColor = tipo === 'entrada' ? '#10b981' : '#3b82f6';
+        const iconBg = tipo === 'entrada' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)';
         
         return `
-            <div class="history-item ${tipo}">
-                <div class="history-info">
-                    <div class="history-icon">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: white; border: 1px solid #f3f4f6; border-radius: 0.5rem; margin-bottom: 0.75rem; transition: all 0.2s ease;" onmouseover="this.style.borderColor='#e5e7eb'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.05)'" onmouseout="this.style.borderColor='#f3f4f6'; this.style.boxShadow='none'">
+                <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                    <div style="width: 40px; height: 40px; background: ${iconBg}; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: ${iconColor}; flex-shrink: 0;">
                         <i class="fas fa-${icon}"></i>
                     </div>
-                    <div class="history-details">
-                        <h4>${mov.produtoNome}</h4>
-                        <p>${tipo === 'entrada' ? 'Entrada' : 'Saida'} de ${quantidade} unidade(s)</p>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 600; color: #0f172a; font-size: 0.9375rem; margin-bottom: 0.125rem;">${mov.produtoNome}</div>
+                        <div style="font-size: 0.8125rem; color: #6b7280;">${tipo === 'entrada' ? 'Entrada' : 'Saída'} de ${quantidade} unidade(s)</div>
                     </div>
                 </div>
-                <div class="history-value">
+                <div style="font-weight: 600; color: #0f172a; font-size: 0.9375rem;">
                     ${tipo === 'saida' ? formatCurrency(valor) : `${quantidade}x`}
                 </div>
             </div>

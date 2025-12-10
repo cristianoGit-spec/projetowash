@@ -43,45 +43,53 @@ function showModule(moduleName) {
                 <!-- Alertas de Estoque Baixo -->
                 <div id="stockAlerts" class="hidden"></div>
                 
-                <!-- Cards de Estatísticas -->
-                <div class="cards-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon blue">
-                            <i class="fas fa-boxes"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-label">Total de Produtos</div>
-                            <div class="stat-value" id="statTotalProdutos">0</div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon green">
-                            <i class="fas fa-cubes"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-label">Itens em Estoque</div>
-                            <div class="stat-value" id="statTotalItens">0</div>
+                <!-- Cards de Estatísticas - Estilo Limpo -->
+                <div class="cards-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; border-left: 4px solid #3b82f6; transition: all 0.2s ease;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: rgba(59, 130, 246, 0.1); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #3b82f6; font-size: 1.25rem; flex-shrink: 0;">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="color: #6b7280; font-size: 0.875rem; margin-bottom: 0.25rem;">Total de Produtos</div>
+                                <div style="font-size: 1.875rem; font-weight: 700; color: #0f172a;" id="statTotalProdutos">0</div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="stat-card">
-                        <div class="stat-icon purple">
-                            <i class="fas fa-dollar-sign"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-label">Valor em Estoque</div>
-                            <div class="stat-value" id="statValorTotal">R$ 0,00</div>
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; border-left: 4px solid #10b981; transition: all 0.2s ease;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: rgba(16, 185, 129, 0.1); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.25rem; flex-shrink: 0;">
+                                <i class="fas fa-cubes"></i>
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="color: #6b7280; font-size: 0.875rem; margin-bottom: 0.25rem;">Itens em Estoque</div>
+                                <div style="font-size: 1.875rem; font-weight: 700; color: #0f172a;" id="statTotalItens">0</div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="stat-card">
-                        <div class="stat-icon orange">
-                            <i class="fas fa-chart-line"></i>
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; border-left: 4px solid #8b5cf6; transition: all 0.2s ease;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: rgba(139, 92, 246, 0.1); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #8b5cf6; font-size: 1.25rem; flex-shrink: 0;">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="color: #6b7280; font-size: 0.875rem; margin-bottom: 0.25rem;">Valor em Estoque</div>
+                                <div style="font-size: 1.875rem; font-weight: 700; color: #0f172a;" id="statValorTotal">R$ 0,00</div>
+                            </div>
                         </div>
-                        <div class="stat-content">
-                            <div class="stat-label">Vendas do Mês</div>
-                            <div class="stat-value" id="statVendasMes">R$ 0,00</div>
+                    </div>
+                    
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; border-left: 4px solid #0ea5e9; transition: all 0.2s ease;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: rgba(14, 165, 233, 0.1); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #0ea5e9; font-size: 1.25rem; flex-shrink: 0;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="color: #6b7280; font-size: 0.875rem; margin-bottom: 0.25rem;">Vendas do Mês</div>
+                                <div style="font-size: 1.875rem; font-weight: 700; color: #0f172a;" id="statVendasMes">R$ 0,00</div>
+                            </div>
                         </div>
                     </div>
                 </div>
