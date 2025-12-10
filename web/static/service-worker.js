@@ -2,28 +2,28 @@
 // SERVICE WORKER - PWA OFFLINE SUPPORT
 // Arquivo: service-worker.js
 // Descrição: Gerencia cache e funcionamento offline do aplicativo
-// Versão: 39 (logs profissionais sem emojis)
+// Versão: 42 (HOTFIX - console errors corrigidos)
 // ============================================================================
 
-const CACHE_NAME = 'estoque-certo-v39';
+const CACHE_NAME = 'estoque-certo-v42';
 const CACHE_MAX_AGE_DAYS = 30; // Cache expira após 30 dias
 const CACHE_MAX_ITEMS = 50; // Máximo de itens no cache
 
 // Lista de URLs essenciais para cache (apenas arquivos que realmente existem)
 const urlsToCache = [
     '/',
-    '/static/css/style.css?v=39',
-    '/static/css/admin.css?v=39',
-    '/static/js/app.js?v=30',
-    '/static/js/modules.js?v=30',
-    '/static/js/dashboard.js?v=30',
-    '/static/js/auth.js?v=30',
-    '/static/js/firebase-config.js?v=30',
-    '/static/js/firestore-service.js?v=30',
-    '/static/js/admin-module.js?v=30',
-    '/static/js/local-auth.js?v=30',
-    '/static/js/local-firestore.js?v=30',
-    '/static/js/pwa.js?v=30'
+    '/static/css/style.css?v=42',
+    '/static/css/admin.css?v=42',
+    '/static/js/app.js?v=42',
+    '/static/js/modules.js?v=42',
+    '/static/js/dashboard.js?v=42',
+    '/static/js/auth.js?v=42',
+    '/static/js/firebase-config.js?v=42',
+    '/static/js/firestore-service.js?v=42',
+    '/static/js/admin-module.js?v=42',
+    '/static/js/local-auth.js?v=42',
+    '/static/js/local-firestore.js?v=42',
+    '/static/js/pwa.js?v=42'
 ];
 
 // ============================================================================

@@ -90,7 +90,6 @@ try {
         window.useFirebase = false;
     }
 }
-}
 
 // ============================================================================
 // ESTADO GLOBAL E OBSERVADORES

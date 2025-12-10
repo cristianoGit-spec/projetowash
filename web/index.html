@@ -863,15 +863,15 @@
     <!-- Configuração Global -->
     <script>
         // SISTEMA HÍBRIDO COM LAYOUT PRESCRIMED - Firebase Cloud + Fallback Local
-        // Versão 41.0 - Layout moderno com sidebar lateral
-        const APP_VERSION = '41';
+        // Versão 42.0 - Layout moderno com sidebar lateral
+        const APP_VERSION = '42';
         const IS_PRODUCTION = window.location.hostname.includes('netlify.app');
         const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         
         // Sistema tenta usar Firebase primeiro, fallback para localStorage se falhar
         console.log('[ENV] Ambiente:', IS_PRODUCTION ? 'PRODUÇÃO (Netlify)' : IS_LOCALHOST ? 'LOCAL (Dev)' : 'OUTRO');
         console.log('[SYSTEM] Versão:', APP_VERSION, '- Layout PrescrMed Inspirado');
-        console.log('[HOTFIX] v41 - Correção de erros console + módulo operacional integrado');
+        console.log('[HOTFIX] v42 - Corrige syntax error firebase-config, warnings dashboard, conflito gestao-empresas, null checks Chart.js');
         
         // Toggle Mobile Menu
         function toggleMobileMenu() {
@@ -914,12 +914,12 @@
     <script src="/static/js/local-firestore.js?v=41"></script>
     
     <!-- 3. Scripts de Interface e Módulos -->
-    <script src="/static/js/auth.js?v=41"></script>
-    <script src="/static/js/admin-module.js?v=42"></script>
-    <script src="/static/js/app.js?v=41"></script>
-    <script src="/static/js/modules.js?v=41"></script>
-    <script src="/static/js/dashboard.js?v=41"></script>
-    <script src="/static/js/modules/gestao-empresas.js?v=41"></script>
+    <script src="/static/js/auth.js?v=42"></script>
+    <script src="/static/js/admin-module.js?v=1.1"></script>
+    <script src="/static/js/app.js?v=42"></script>
+    <script src="/static/js/modules.js?v=42"></script>
+    <script src="/static/js/dashboard.js?v=42"></script>
+    <!-- gestao-empresas.js removido - funcionalidade integrada em admin-module.js -->
     <script src="/static/js/pwa.js?v=41"></script>
     
     <!-- Inicialização do formulário de cadastro -->

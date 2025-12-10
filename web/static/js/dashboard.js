@@ -96,7 +96,7 @@ function loadHistoricoRecente(movimentacoes) {
     const container = document.getElementById('historicoRecente');
     
     if (!container) {
-        console.warn('⚠️ Container de histórico não encontrado');
+        // Container não existe no layout atual - normal
         return;
     }
     
@@ -187,7 +187,7 @@ function checkLowStock(produtos) {
     const container = document.getElementById('stockAlerts');
     
     if (!container) {
-        console.warn('⚠️ Container de alertas de estoque não encontrado');
+        // Container não existe no layout atual - normal
         return;
     }
     
@@ -232,7 +232,7 @@ function loadChartMovimentacoes(movimentacoes) {
     const ctx = document.getElementById('chartMovimentacoes');
     
     if (!ctx) {
-        console.warn('⚠️ Canvas chartMovimentacoes não encontrado');
+        // Canvas não existe no layout atual - normal
         return;
     }
     
@@ -372,11 +372,11 @@ function loadChartMovimentacoes(movimentacoes) {
 }
 
 // Grafico de Top Produtos
-function loadChartTopProdutos(produtos) {
+async function loadChartTopProdutos() {
     const ctx = document.getElementById('chartTopProdutos');
     
     if (!ctx) {
-        console.warn('⚠️ Canvas chartTopProdutos não encontrado');
+        // Canvas não existe no layout atual - isso é normal
         return;
     }
     
@@ -495,6 +495,11 @@ function loadChartTopProdutos(produtos) {
 // Grafico de Eficiencia (Gauge)
 async function loadChartEficiencia() {
     const ctx = document.getElementById('chartEficiencia');
+    
+    if (!ctx) {
+        // Canvas não existe no layout atual - normal
+        return;
+    }
     
     // Calcular eficiência real baseada nos dados do sistema
     const eficiencia = await calcularOEE();
