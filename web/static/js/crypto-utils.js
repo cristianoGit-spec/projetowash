@@ -53,7 +53,7 @@
             const saltRounds = Number(SECURITY_CONFIG.saltRounds) || 10;
             const salt = bcrypt.genSaltSync(saltRounds);
             const hash = bcrypt.hashSync(password, salt);
-            console.log('🔐 Hash de senha gerado com sucesso');
+            console.log('[AUTH] Hash de senha gerado com sucesso');
             return hash;
         } catch (error) {
             console.error('❌ Erro ao gerar hash:', error);
@@ -88,9 +88,9 @@
         try {
             const isValid = bcrypt.compareSync(password, hash);
             if (isValid) {
-                console.log('✅ Senha verificada com sucesso');
+                console.log('[OK] Senha verificada com sucesso');
             } else {
-                console.log('❌ Senha incorreta');
+                console.log('[ERROR] Senha incorreta');
             }
             return isValid;
         } catch (error) {
@@ -243,6 +243,6 @@
         SECURITY_CONFIG
     };
 
-    console.log('🔐 CryptoUtils v1.0 carregado - Sistema de criptografia ativo');
+    console.log('[AUTH] CryptoUtils v1.0 carregado - Sistema de criptografia ativo');
 
 })(window);

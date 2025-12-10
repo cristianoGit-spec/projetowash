@@ -21,7 +21,7 @@
 //
 // ============================================================================
 
-console.log('🔧 Inicializando Firebase Config v15.0...');
+console.log('[CONFIG] Inicializando Firebase Config v15.0...');
 
 const firebaseConfig = {
     apiKey: "AIzaSyDqK6vK9xN8mJ5pL7tR3wU2vY4zX6bC8dA", // Configuração de produção
@@ -58,7 +58,7 @@ try {
         // Configurar persistência local
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
             .then(() => {
-                console.log('✅ Persistência de autenticação configurada');
+                console.log('[OK] Persistência de autenticação configurada');
             })
             .catch((error) => {
                 console.warn('⚠️ Erro ao configurar persistência:', error.message);
@@ -67,19 +67,19 @@ try {
         firebaseInitialized = true;
         useFirebase = true;
         
-        console.log("✅ Firebase inicializado com sucesso!");
+        console.log("[OK] Firebase inicializado com sucesso!");
         console.log("🌐 Modo: PRODUÇÃO - Dados na nuvem Google Cloud");
-        console.log("📍 Região: southamerica-east1 (São Paulo, Brasil)");
-        console.log("🔐 Multi-tenant: Isolamento completo por empresa (companyId)");
-        console.log("🔄 Sistema híbrido: Firebase ativo com backup local");
+        console.log("[REGION] Região: southamerica-east1 (São Paulo, Brasil)");
+        console.log("[SECURITY] Multi-tenant: Isolamento completo por empresa (companyId)");
+        console.log("[SYSTEM] Sistema híbrido: Firebase ativo com backup local");
         
     } else {
         throw new Error("Firebase SDK não disponível ou configuração inválida");
     }
 } catch (e) {
     console.warn("⚠️ Firebase não disponível:", e.message);
-    console.log("📦 Usando modo LOCAL como fallback");
-    console.log("💾 Dados serão armazenados apenas no localStorage do navegador");
+    console.log("[MODE] Usando modo LOCAL como fallback");
+    console.log("[STORAGE] Dados serão armazenados apenas no localStorage do navegador");
     firebaseInitialized = false;
     useFirebase = false;
 }
@@ -117,8 +117,8 @@ if (firebaseInitialized && auth) {
                     isAdmin = userData.role === 'admin';
                     isSuperAdmin = userData.role === 'superadmin';
                     
-                    console.log('✅ Usuário autenticado:', userData.nome);
-                    console.log('🏢 Empresa:', userData.nomeEmpresa);
+                    console.log('[OK] Usuário autenticado:', userData.nome);
+                    console.log('[INFO] Empresa:', userData.nomeEmpresa);
                     console.log('🔑 Role:', userData.role);
                 }
             } catch (e) {
@@ -260,8 +260,8 @@ async function cadastrarUsuarioFirebase(nome, email, senha, extraData = {}) {
             showToast('Conta criada com sucesso!', 'success');
         }
         
-        console.log('✅ Usuário cadastrado:', userData.nome);
-        console.log('🏢 Empresa criada:', empresaData.nome);
+        console.log('[OK] Usuário cadastrado:', userData.nome);
+        console.log('[INFO] Empresa criada:', empresaData.nome);
         
         return userData;
     } catch (error) {

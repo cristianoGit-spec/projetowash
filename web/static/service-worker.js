@@ -2,18 +2,18 @@
 // SERVICE WORKER - PWA OFFLINE SUPPORT
 // Arquivo: service-worker.js
 // Descrição: Gerencia cache e funcionamento offline do aplicativo
-// Versão: 38 (estoque saída reorganizado)
+// Versão: 39 (logs profissionais sem emojis)
 // ============================================================================
 
-const CACHE_NAME = 'estoque-certo-v38';
+const CACHE_NAME = 'estoque-certo-v39';
 const CACHE_MAX_AGE_DAYS = 30; // Cache expira após 30 dias
 const CACHE_MAX_ITEMS = 50; // Máximo de itens no cache
 
 // Lista de URLs essenciais para cache (apenas arquivos que realmente existem)
 const urlsToCache = [
     '/',
-    '/static/css/style.css?v=38',
-    '/static/css/admin.css?v=38',
+    '/static/css/style.css?v=39',
+    '/static/css/admin.css?v=39',
     '/static/js/app.js?v=30',
     '/static/js/modules.js?v=30',
     '/static/js/dashboard.js?v=30',
@@ -130,7 +130,7 @@ self.addEventListener('activate', (event) => {
             // Limita tamanho do cache (com tratamento de erro)
             limitCacheSize().catch(err => console.warn('Erro ao limitar cache:', err))
         ]).then(() => {
-            console.log('Service Worker: ✅ Ativado e caches limpos');
+            console.log('[SW] Service Worker: Ativado e caches limpos');
             return self.clients.claim();
         }).catch((error) => {
             console.error('Service Worker: Erro na ativação:', error);

@@ -90,7 +90,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, '0.0.0.0', () => {
     console.log('\n' + '='.repeat(60));
-    console.log('🚀 SERVIDOR QUATRO CANTOS INICIADO COM SUCESSO!');
+    console.log('[START] SERVIDOR QUATRO CANTOS INICIADO COM SUCESSO!');
     console.log('='.repeat(60));
     console.log(`\n📡 Endereço: http://localhost:${PORT}`);
     console.log(`📁 Diretório: ${path.join(__dirname, 'web')}`);

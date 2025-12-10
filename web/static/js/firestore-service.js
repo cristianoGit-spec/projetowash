@@ -3,7 +3,7 @@
 // Sistema Multi-Tenant: Todos os dados são isolados por companyId
 // Sistema Híbrido: Firebase (nuvem) + localStorage (cache offline)
 
-console.log('🔄 Firestore Service v30 - Modo Híbrido Otimizado SEM CACHE');
+console.log('[SYNC] Firestore Service v30 - Modo Híbrido Otimizado SEM CACHE');
 
 // ===== SINCRONIZAÇÃO HÍBRIDA =====
 
@@ -14,7 +14,7 @@ async function syncFirebaseToLocal() {
     if (!firebaseInitialized || !currentUser) return;
     
     try {
-        console.log('⬇️ Sincronizando Firebase → localStorage...');
+        console.log('[SYNC] Sincronizando Firebase → localStorage...');
         
         const companyId = currentUser.companyId;
         
@@ -49,7 +49,7 @@ async function syncFirebaseToLocal() {
         
         localStorage.setItem('localMovimentacoes', JSON.stringify(movimentacoes));
         
-        console.log('✅ Sincronização concluída:', {
+        console.log('[OK] Sincronização concluída:', {
             estoque: estoque.length,
             movimentacoes: movimentacoes.length
         });
@@ -114,7 +114,7 @@ async function cadastrarEmpresaFirebase(nome, email, contato, loginUsuario, senh
     }
     
     try {
-        console.log('🏢 Cadastrando empresa no Firebase Cloud...');
+        console.log('[COMPANY] Cadastrando empresa no Firebase Cloud...');
         
         // Adicionar numeração ao nome da empresa
         const nomeEmpresaComNumero = await addEmpresaNumberFirebase(extraData.nomeEmpresa);
@@ -151,12 +151,12 @@ async function cadastrarEmpresaFirebase(nome, email, contato, loginUsuario, senh
         
         await db.collection('usuarios').doc(user.uid).set(userData);
         
-        console.log('✅ Empresa cadastrada no Firebase:', {
+        console.log('[OK] Empresa cadastrada no Firebase:', {
             nome: userData.nomeEmpresa,
             email: userData.email,
             companyId: userData.companyId
         });
-        console.log('☁️ Dados na nuvem - acessível de qualquer lugar!');
+        console.log('[CLOUD] Dados na nuvem - acessível de qualquer lugar!');
         
         return userData;
         
@@ -180,7 +180,7 @@ async function cadastrarUsuarioFirebase(nome, email, senha, extraData) {
     }
     
     try {
-        console.log('📝 Cadastrando usuário no Firebase...');
+        console.log('[USER] Cadastrando usuário no Firebase...');
         
         // Criar usuário no Authentication
         const userCredential = await auth.createUserWithEmailAndPassword(email, senha);
@@ -216,7 +216,7 @@ async function cadastrarUsuarioFirebase(nome, email, senha, extraData) {
         });
         localStorage.setItem('localUsers', JSON.stringify(localUsers));
         
-        console.log('✅ Usuário cadastrado:', {
+        console.log('[OK] Usuário cadastrado:', {
             nome: userData.nome,
             empresa: userData.nomeEmpresa,
             companyId: userData.companyId
@@ -239,7 +239,7 @@ async function loginFirebase(email, senha) {
     }
     
     try {
-        console.log('🔐 Fazendo login no Firebase...');
+        console.log('[AUTH] Fazendo login no Firebase...');
         
         const userCredential = await auth.signInWithEmailAndPassword(email, senha);
         const user = userCredential.user;
@@ -263,8 +263,8 @@ async function loginFirebase(email, senha) {
             // Sincronizar dados para acesso offline
             await syncFirebaseToLocal();
             
-            console.log('✅ Login Firebase bem-sucedido');
-            console.log('🏢 Empresa:', userData.nomeEmpresa);
+            console.log('[OK] Login Firebase bem-sucedido');
+            console.log('[INFO] Empresa:', userData.nomeEmpresa);
             console.log('🆔 CompanyID:', userData.companyId);
             
             // Mostrar app

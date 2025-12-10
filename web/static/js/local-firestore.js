@@ -91,9 +91,9 @@ function loadLocalData() {
     const estoque = localStorage.getItem('localEstoque');
     if (estoque) {
         localEstoque = JSON.parse(estoque);
-        console.log('📦 Estoque carregado:', localEstoque.length, 'produtos');
+        console.log('[LOAD] Estoque carregado:', localEstoque.length, 'produtos');
     } else {
-        console.log('📦 Nenhum estoque encontrado no localStorage - Inicializando dados de exemplo...');
+        console.log('[INIT] Nenhum estoque encontrado no localStorage - Inicializando dados de exemplo...');
         initSeedData();
         return; // Retorna pois initSeedData já salva os dados
     }
@@ -101,9 +101,9 @@ function loadLocalData() {
     const movimentacoes = localStorage.getItem('localMovimentacoes');
     if (movimentacoes) {
         localMovimentacoes = JSON.parse(movimentacoes);
-        console.log('📊 Movimentações carregadas:', localMovimentacoes.length);
+        console.log('[DATA] Movimentações carregadas:', localMovimentacoes.length);
     } else {
-        console.log('📊 Nenhuma movimentação encontrada');
+        console.log('[DATA] Nenhuma movimentação encontrada');
     }
     
     const financeiro = localStorage.getItem('localFinanceiro');

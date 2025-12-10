@@ -159,11 +159,11 @@ async function carregarEmpresas() {
     // Tentar buscar do Firebase primeiro
     if (typeof buscarTodasEmpresasFirebase === 'function') {
         try {
-            console.log("🔍 [${timestamp}] Buscando empresas do Firebase Cloud...");
+            console.log("[CLOUD] [${timestamp}] Buscando empresas do Firebase Cloud...");
             const empresasFirebase = await buscarTodasEmpresasFirebase();
             if (empresasFirebase && empresasFirebase.length > 0) {
                 empresas = empresasFirebase;
-                console.log('✅ Empresas carregadas do Firebase:', empresas.length);
+                console.log('[OK] Empresas carregadas do Firebase:', empresas.length);
             }
         } catch (error) {
             console.warn('⚠️ Erro ao buscar do Firebase, usando localStorage:', error);
@@ -172,7 +172,7 @@ async function carregarEmpresas() {
     
     // Se não encontrou no Firebase, buscar do localStorage
     if (empresas.length === 0) {
-        console.log('📦 Buscando empresas do localStorage...');
+        console.log('[STORAGE] Buscando empresas do localStorage...');
         const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
         
         // Filtrar apenas empresas (role = 'admin'), excluindo o super admin
@@ -182,7 +182,7 @@ async function carregarEmpresas() {
             u.companyId && 
             u.companyId !== 'superadmin-master'
         );
-        console.log('✅ Empresas carregadas do localStorage:', empresas.length);
+        console.log('[OK] Empresas carregadas do localStorage:', empresas.length);
     }
     
     console.log('ðŸ“Š Total de empresas encontradas:', empresas.length);

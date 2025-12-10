@@ -7,7 +7,7 @@ let chartEficiencia = null;
 // Carregar dashboard
 async function loadDashboard() {
     try {
-        console.log('🔄 Carregando dashboard...');
+        console.log('[LOAD] Carregando dashboard...');
         showLoading('Carregando dashboard...');
         
         // Verificar se Chart.js está disponível
@@ -36,7 +36,7 @@ async function loadDashboard() {
         }
         
         const stats = await obterEstatisticas();
-        console.log('📊 Estatísticas obtidas:', stats);
+        console.log('[DATA] Estatísticas obtidas:', stats);
         
         // Atualizar cards de estatisticas com animação
         const elements = {
@@ -58,7 +58,7 @@ async function loadDashboard() {
             }
         });
         
-        console.log('✅ Cards atualizados');
+        console.log('[OK] Cards atualizados');
         
         // Carregar historico
         loadHistoricoRecente(stats.movimentacoes || []);
@@ -66,7 +66,7 @@ async function loadDashboard() {
         // Carregar graficos e verificar estoque baixo
         await loadChartsAndAlerts();
         
-        console.log('✅ Dashboard carregado com sucesso');
+        console.log('[OK] Dashboard carregado com sucesso');
         hideLoading();
         
     } catch (error) {
@@ -149,15 +149,15 @@ function loadHistoricoRecente(movimentacoes) {
 // Carregar graficos e alertas
 async function loadChartsAndAlerts() {
     try {
-        console.log('📈 Carregando gráficos e alertas...');
+        console.log('[CHART] Carregando gráficos e alertas...');
         
         const [produtos, movimentacoes] = await Promise.all([
             obterDadosEstoque(),
             obterHistoricoMovimentacoes()
         ]);
         
-        console.log('📦 Produtos obtidos:', produtos.length);
-        console.log('📊 Movimentações obtidas:', movimentacoes.length);
+        console.log('[LOAD] Produtos obtidos:', produtos.length);
+        console.log('[DATA] Movimentações obtidas:', movimentacoes.length);
         
         // Verificar estoque baixo
         checkLowStock(produtos);
@@ -171,7 +171,7 @@ async function loadChartsAndAlerts() {
         // Grafico de Eficiencia (Gauge)
         loadChartEficiencia();
         
-        console.log('✅ Gráficos carregados');
+        console.log('[OK] Gráficos carregados');
         
     } catch (error) {
         console.error('❌ Erro ao carregar graficos:', error);

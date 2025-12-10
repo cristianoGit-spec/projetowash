@@ -347,7 +347,7 @@ function showAuth() {
  * Exibir container da aplicacao
  */
 function showApp() {
-    console.log('🚀 Mostrando aplicação...');
+    console.log('[START] Mostrando aplicação...');
     
     // Carregar dados locais antes de mostrar o app
     if (typeof loadLocalData === 'function') {
@@ -365,7 +365,7 @@ function showApp() {
     const userName = user ? (user.email || user.nome || user.displayName || 'Usuario') : 'Usuario';
     
     console.log('👤 Usuário atual:', userName);
-    console.log('🏢 Empresa:', user?.nomeEmpresa || 'N/A');
+    console.log('[INFO] Empresa:', user?.nomeEmpresa || 'N/A');
     
     const userDisplayElement = document.getElementById('userEmail');
     if (userDisplayElement) {
@@ -639,7 +639,7 @@ function atualizarDashboardSeAtivo() {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('✅ Sistema Quatro Cantos v2.0 iniciado');
+    console.log('[OK] Sistema Quatro Cantos v2.0 iniciado');
     
     // Configurar modal para fechar ao clicar fora
     const modalContainer = document.getElementById('modalContainer');
@@ -653,9 +653,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Verificar modo de operacao
     if (typeof localCurrentUser !== 'undefined' && localCurrentUser) {
-        console.log('📦 Modo Local/Demo ativado');
+        console.log('[MODE] Modo Local/Demo ativado');
     } else {
-        console.log('☁️ Modo Firebase ativado');
+        console.log('[MODE] Modo Firebase ativado');
     }
 });
 

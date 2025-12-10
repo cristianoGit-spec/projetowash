@@ -102,7 +102,7 @@ async function venderProduto(event) {
         document.getElementById('formEstoqueSaida').reset();
         
         // Atualizar Dashboard automaticamente
-        console.log('✅ Saída registrada - Atualizando dashboard...');
+        console.log('[OK] Saída registrada - Atualizando dashboard...');
         if (typeof loadDashboard === 'function') {
             setTimeout(() => loadDashboard(), 500);
         }

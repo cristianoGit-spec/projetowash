@@ -2,7 +2,7 @@
 // SISTEMA DE AUTENTICAÇÃO - INTERFACE (v15.0 - Híbrido)
 // ============================================================================
 
-console.log('🔐 Auth UI v15.0 carregado - Sistema Híbrido');
+console.log('[AUTH] Auth UI v15.0 carregado - Sistema Híbrido');
 
 // ============================================================================
 // LOGIN RÁPIDO (Desenvolvimento/Demo)
@@ -215,9 +215,9 @@ async function handleRegister(event) {
         
         if (isFirebaseActive && typeof cadastrarEmpresaFirebase !== 'undefined') {
             // Modo Firebase Cloud - PRIORITÁRIO
-            console.log('☁️ Cadastrando empresa no Firebase Cloud...');
+            console.log('[CLOUD] Cadastrando empresa no Firebase Cloud...');
             const userData = await cadastrarEmpresaFirebase(nome, email, contato, loginUsuario, password, extraData);
-            console.log('✅ Empresa cadastrada na nuvem:', userData.nomeEmpresa);
+            console.log('[OK] Empresa cadastrada na nuvem:', userData.nomeEmpresa);
             
             showToast(`✅ Empresa ${userData.nomeEmpresa} cadastrada com sucesso! Fazendo login...`, 'success', 5000);
             
@@ -234,10 +234,10 @@ async function handleRegister(event) {
             
         } else if (typeof cadastrarUsuarioLocal !== 'undefined') {
             // Modo Local (fallback apenas se Firebase estiver offline)
-            console.log('⚠️ Firebase offline - Cadastrando localmente...');
+            console.log('[WARN] Firebase offline - Cadastrando localmente...');
             console.warn('⚠️ ATENÇÃO: Dados locais não serão acessíveis de outros dispositivos!');
             await cadastrarUsuarioLocal(nome, email, contato, loginUsuario, password, extraData);
-            console.log('✅ Cadastro local bem-sucedido');
+            console.log('[OK] Cadastro local bem-sucedido');
             
             showToast('⚠️ Cadastro local realizado. Dados apenas neste navegador.', 'warning', 6000);
             
@@ -463,7 +463,7 @@ async function listarUsuarios() {
         const currentCompanyId = currentUserData.companyId;
         const isSuperAdmin = currentUserData.role === 'superadmin';
         
-        console.log('🔍 Filtrando usuários para empresa:', currentCompanyId);
+        console.log('[FILTER] Filtrando usuários para empresa:', currentCompanyId);
         console.log('👤 Usuário atual:', currentUserData.email || currentUserData.nome);
         console.log('🛡️ É SuperAdmin?', isSuperAdmin);
         
@@ -488,7 +488,7 @@ async function listarUsuarios() {
                     return false;
                 });
                 console.log(`✅ Filtrado: ${users.length} usuários da empresa ${currentCompanyId}`);
-                console.log('📋 Usuários filtrados:', users.map(u => `${u.nome} (${u.email})`));
+                console.log('[DATA] Usuários filtrados:', users.map(u => `${u.nome} (${u.email})`));
             } else {
                 console.warn('⚠️ CompanyId não encontrado. Acesso restrito.');
                 // SEGURANÇA: Se não tem companyId, não mostra nada (exceto talvez o próprio usuário se ele estivesse na lista)
@@ -501,7 +501,7 @@ async function listarUsuarios() {
             }
         }
         
-        console.log('📊 Total de usuários retornados:', users.length);
+        console.log('[DATA] Total de usuários retornados:', users.length);
         
         hideLoading();
         

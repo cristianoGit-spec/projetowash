@@ -7,7 +7,7 @@
 // Cada módulo está em seu próprio arquivo em /static/js/modules/
 // ============================================================================
 
-console.log('📦 Modules Loader v2.0 - Carregando módulos individuais...');
+console.log('[LOAD] Modules Loader v2.0 - Carregando módulos individuais...');
 
 // ============================================================================
 // CONFIGURAÇÃO DE MÓDULOS DISPONÍVEIS
@@ -154,7 +154,7 @@ function preloadPopularModules() {
                 // Silenciosamente ignora erros de pré-carga
             });
         });
-        console.log('🚀 Módulos populares pré-carregados');
+        console.log('[PRELOAD] Módulos populares pré-carregados');
     }, 2000); // Após 2s da página carregar
 }
 
@@ -169,5 +169,5 @@ if (document.readyState === 'loading') {
 window.loadModuleContent = loadModuleContent;
 window.loadModule = loadModule;
 
-console.log('✅ Modules Loader pronto!');
+console.log('[OK] Modules Loader pronto!');
 

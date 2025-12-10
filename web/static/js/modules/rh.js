@@ -2,7 +2,7 @@
 // MÓDULO RH (SISTEMA HÍBRIDO - FIREBASE + LOCALSTORAGE)
 // ============================================================================
 
-console.log('📋 Módulo RH carregado - v18');
+console.log('[MODULE] Módulo RH carregado - v18');
 
 let funcionariosCache = []; // Cache local para pesquisa e cálculo
 let lastCalculatedFolha = null; // Cache para exportação PDF
@@ -132,7 +132,7 @@ async function cadastrarFuncionario(event) {
         if (typeof db !== 'undefined' && db) {
             try {
                 await addDoc(collection(db, 'funcionarios'), funcionario);
-                console.log('✅ Funcionário salvo no Firebase');
+                console.log('[OK] Funcionário salvo no Firebase');
             } catch (firebaseError) {
                 console.warn('⚠️ Firebase indisponível, salvando localmente:', firebaseError);
                 // Fallback para localStorage
@@ -160,7 +160,7 @@ async function salvarFuncionarioLocal(funcionario) {
     let funcionarios = JSON.parse(localStorage.getItem('localFuncionarios') || '[]');
     funcionarios.push(funcionario);
     localStorage.setItem('localFuncionarios', JSON.stringify(funcionarios));
-    console.log('💾 Funcionário salvo no localStorage');
+    console.log('[STORAGE] Funcionário salvo no localStorage');
 }
 
 async function listarFuncionarios() {
@@ -181,7 +181,7 @@ async function listarFuncionarios() {
                     ...doc.data()
                 }));
                 
-                console.log('✅ Funcionários carregados do Firebase:', funcionarios.length);
+                console.log('[OK] Funcionários carregados do Firebase:', funcionarios.length);
             } catch (firebaseError) {
                 console.warn('⚠️ Firebase indisponível, carregando localStorage:', firebaseError);
                 funcionarios = await carregarFuncionariosLocal();
@@ -208,7 +208,7 @@ async function carregarFuncionariosLocal() {
     // Filtrar por empresa
     funcionarios = funcionarios.filter(f => f.companyId === companyId);
     
-    console.log('💾 Funcionários carregados do localStorage:', funcionarios.length);
+    console.log('[STORAGE] Funcionários carregados do localStorage:', funcionarios.length);
     return funcionarios;
 }
 
@@ -327,7 +327,7 @@ async function removerFuncionario(id) {
         if (typeof db !== 'undefined' && db) {
             try {
                 await deleteDoc(doc(db, 'funcionarios', id));
-                console.log('✅ Funcionário excluído do Firebase');
+                console.log('[OK] Funcionário excluído do Firebase');
             } catch (firebaseError) {
                 console.warn('⚠️ Firebase indisponível, excluindo localmente:', firebaseError);
                 await removerFuncionarioLocal(id);
@@ -353,7 +353,7 @@ async function removerFuncionarioLocal(id) {
     let funcionarios = JSON.parse(localStorage.getItem('localFuncionarios') || '[]');
     funcionarios = funcionarios.filter(f => f.id !== id);
     localStorage.setItem('localFuncionarios', JSON.stringify(funcionarios));
-    console.log('💾 Funcionário excluído do localStorage');
+    console.log('[STORAGE] Funcionário excluído do localStorage');
 }
 
 async function calcularFolhaPagamento() {

@@ -97,7 +97,7 @@ async function cadastrarProduto(event) {
         document.getElementById('formEstoqueEntrada').reset();
         
         // Atualizar Dashboard automaticamente
-        console.log('✅ Produto cadastrado - Atualizando dashboard...');
+        console.log('[OK] Produto cadastrado - Atualizando dashboard...');
         if (typeof loadDashboard === 'function') {
             setTimeout(() => loadDashboard(), 500);
         }

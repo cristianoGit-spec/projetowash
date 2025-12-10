@@ -5,7 +5,7 @@
 // Modo híbrido: Firebase prioritário, localStorage como backup
 // ============================================================================
 
-console.log('💾 local-auth.js v15.0 carregado - Modo Fallback Híbrido');
+console.log('[STORAGE] local-auth.js v15.0 carregado - Modo Fallback Híbrido');
 
 // Variáveis globais locais
 let localUsers = [];
@@ -258,7 +258,7 @@ function saveLocalCurrentUser() {
  */
 async function loginLocal(emailOrLogin, password) {
     console.log('🔑 Tentando login local:', emailOrLogin);
-    console.log('📋 Usuários disponíveis:', localUsers.length);
+    console.log('[DATA] Usuários disponíveis:', localUsers.length);
     
     // Garantir que os usuários foram carregados
     if (localUsers.length === 0) {
@@ -273,7 +273,7 @@ async function loginLocal(emailOrLogin, password) {
     
     if (!user) {
         console.error('❌ Usuário não encontrado:', emailOrLogin);
-        console.log('📋 Usuários disponíveis:', localUsers.map(u => ({ email: u.email, login: u.loginUsuario })));
+        console.log('[DATA] Usuários disponíveis:', localUsers.map(u => ({ email: u.email, login: u.loginUsuario })));
         
         // Mensagem mais amigável com sugestões claras
         const usuariosDisponiveis = localUsers.length > 0 
@@ -283,7 +283,7 @@ async function loginLocal(emailOrLogin, password) {
         throw new Error(`Email "${emailOrLogin}" não encontrado.${usuariosDisponiveis}`);
     }
     
-    console.log('✅ Usuário encontrado:', user.email);
+    console.log('[OK] Usuário encontrado:', user.email);
     
     // Verificar senha (texto simples - modo desenvolvimento)
     if (user.senha !== password) {
@@ -295,7 +295,7 @@ async function loginLocal(emailOrLogin, password) {
         throw new Error('Usuário inativo. Entre em contato com o administrador.');
     }
     
-    console.log('✅ Login bem-sucedido:', user.email);
+    console.log('[OK] Login bem-sucedido:', user.email);
     
     // Login bem-sucedido
     localCurrentUser = user;
@@ -327,7 +327,7 @@ async function loginLocal(emailOrLogin, password) {
 async function cadastrarUsuarioLocal(nome, email, contato, loginUsuario, senha, extraData) {
     // Se Firebase estiver ativo, usar Firebase ao invés de local
     if (typeof firebaseInitialized !== 'undefined' && firebaseInitialized && typeof cadastrarEmpresaFirebase !== 'undefined') {
-        console.log('☁️ Cadastrando empresa no Firebase Cloud...');
+        console.log('[CLOUD] Cadastrando empresa no Firebase Cloud...');
         return await cadastrarEmpresaFirebase(nome, email, contato, loginUsuario, senha, extraData);
     }
     
@@ -364,7 +364,7 @@ async function cadastrarUsuarioLocal(nome, email, contato, loginUsuario, senha, 
         newUser.companyId = 'comp-' + Date.now();
         newUser.allowedModules = ['operacional', 'estoque-entrada', 'estoque-saida', 'financeiro', 'rh', 'visualizar'];
         
-        console.log('✅ Empresa criada:', {
+        console.log('[OK] Empresa criada:', {
             nome: newUser.nomeEmpresa,
             email: newUser.email,
             segmento: newUser.segmento,

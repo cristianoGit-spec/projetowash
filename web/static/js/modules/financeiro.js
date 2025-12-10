@@ -1,178 +1,134 @@
 // ============================================================================
-// MÓDULO FINANCEIRO - LAYOUT MODERNO v31
+// MÓDULO FINANCEIRO - LAYOUT MODERNO v39
 // ============================================================================
+
+console.log('[MODULE] Módulo Financeiro v39 carregado');
 
 function loadFinanceiroModule(container) {
     const html = `
         <div class="financeiro-module">
-            <!-- Header -->
-            <div class="welcome-header">
-                <div>
-                    <h2><i class="fas fa-chart-line"></i> Financeiro</h2>
-                    <p>Gestão completa de receitas, despesas e fluxo de caixa.</p>
-                </div>
-            </div>
-
-            <!-- Cards de Estatísticas Financeiras -->
-            <div class="stats-grid" id="financeiroStats">
-                <div class="stat-card blue">
-                    <div class="stat-icon blue">
-                        <i class="fas fa-dollar-sign"></i>
+            <!-- Header Moderno com Gradiente -->
+            <div class="modern-header">
+                <div class="header-content">
+                    <div class="header-icon">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                    <div class="stat-info">
-                        <h3 id="saldoAtual">R$ 0,00</h3>
-                        <p>Saldo Atual</p>
-                    </div>
-                </div>
-
-                <div class="stat-card green">
-                    <div class="stat-icon green">
-                        <i class="fas fa-arrow-trend-up"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="receitasTotal">+R$ 0,00</h3>
-                        <p>Receitas</p>
-                    </div>
-                </div>
-
-                <div class="stat-card orange">
-                    <div class="stat-icon orange">
-                        <i class="fas fa-arrow-trend-down"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="despesasTotal">-R$ 0,00</h3>
-                        <p>Despesas</p>
-                    </div>
-                </div>
-
-                <div class="stat-card purple">
-                    <div class="stat-icon purple">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="previsaoSaldo">R$ 0,00</h3>
-                        <p>Previsão</p>
+                    <div>
+                        <h2>Módulo Financeiro</h2>
+                        <p>Gestão de Custos e Lucros</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Filtros e Busca -->
-            <div class="financeiro-filters">
-                <div class="filter-group">
-                    <input type="text" id="searchTransacao" class="search-input" placeholder="🔍 Buscar transações...">
-                </div>
-                <div class="filter-group">
-                    <select id="filterTipo" class="filter-select">
-                        <option value="">Todos os tipos</option>
-                        <option value="receita">Receitas</option>
-                        <option value="despesa">Despesas</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <select id="filterStatus" class="filter-select">
-                        <option value="">Todos os status</option>
-                        <option value="pago">Pago</option>
-                        <option value="pendente">Pendente</option>
-                        <option value="vencido">Vencido</option>
-                    </select>
-                </div>
-                <button onclick="abrirModalNovaTransacao()" class="btn-novo">
-                    <i class="fas fa-plus"></i> Nova Transação
-                </button>
-            </div>
-
-            <!-- Área de Transações -->
-            <div class="chart-card">
-                <h3><i class="fas fa-list"></i> Transações Recentes</h3>
-                <div id="listaTransacoes" class="empty-state">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    <h4>Nenhuma transação registrada</h4>
-                    <p>Registre entradas ou saídas de valores para visualizar o histórico</p>
-                    <button onclick="abrirModalNovaTransacao()" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Nova Transação
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal Nova Transação -->
-        <div id="modalNovaTransacao" class="modal hidden">
-            <div class="modal-content modal-medium">
-                <div class="modal-header">
-                    <h3><i class="fas fa-plus-circle"></i> Nova Transação</h3>
-                    <button onclick="fecharModalNovaTransacao()" class="modal-close">&times;</button>
-                </div>
-                <form id="formNovaTransacao" onsubmit="salvarTransacao(event)">
-                    <div class="modal-body">
-                        <div class="form-row">
+            <!-- Cards Principais -->
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <!-- Card Lançamentos -->
+                <div class="modern-card">
+                    <div class="modern-body">
+                        <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #1e40af;">
+                            <i class="fas fa-exchange-alt"></i>
+                            Lançamentos
+                        </h3>
+                        <form id="formLancamento" onsubmit="salvarLancamento(event)">
                             <div class="form-group">
-                                <label for="tipoTransacao">
-                                    <i class="fas fa-exchange-alt"></i> Tipo
-                                </label>
-                                <select id="tipoTransacao" required>
+                                <label><i class="fas fa-tag"></i> Tipo</label>
+                                <select id="tipoLancamento" required style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
                                     <option value="">Selecione...</option>
-                                    <option value="receita">💰 Receita</option>
-                                    <option value="despesa">💸 Despesa</option>
+                                    <option value="receita">Receita</option>
+                                    <option value="despesa">Despesa</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="valorTransacao">
-                                    <i class="fas fa-dollar-sign"></i> Valor (R$)
-                                </label>
-                                <input type="number" id="valorTransacao" step="0.01" min="0" required placeholder="0,00">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="descricaoTransacao">
-                                <i class="fas fa-align-left"></i> Descrição
-                            </label>
-                            <input type="text" id="descricaoTransacao" required placeholder="Ex: Venda de produto X">
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="categoriaTransacao">
-                                    <i class="fas fa-tag"></i> Categoria
-                                </label>
-                                <select id="categoriaTransacao" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="vendas">Vendas</option>
-                                    <option value="servicos">Serviços</option>
-                                    <option value="fornecedores">Fornecedores</option>
-                                    <option value="salarios">Salários</option>
-                                    <option value="impostos">Impostos</option>
-                                    <option value="contas">Contas (água, luz)</option>
-                                    <option value="outros">Outros</option>
-                                </select>
+                                <label><i class="fas fa-dollar-sign"></i> Valor (R$)</label>
+                                <input type="number" id="valorLancamento" step="0.01" min="0" required 
+                                       placeholder="0,00" 
+                                       style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
                             </div>
                             <div class="form-group">
-                                <label for="dataTransacao">
-                                    <i class="fas fa-calendar"></i> Data
-                                </label>
-                                <input type="date" id="dataTransacao" required>
+                                <label><i class="fas fa-align-left"></i> Descrição</label>
+                                <input type="text" id="descricaoLancamento" required 
+                                       placeholder="Ex: Venda de produto X" 
+                                       style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> Data</label>
+                                <input type="date" id="dataLancamento" required 
+                                       style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                            </div>
+                            <button type="submit" class="btn btn-primary" 
+                                    style="width: 100%; padding: 12px; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                <i class="fas fa-save"></i> Salvar Lançamento
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Card Resumo Financeiro -->
+                <div class="modern-card">
+                    <div class="modern-body">
+                        <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #1e40af;">
+                            <i class="fas fa-calculator"></i>
+                            Resumo Financeiro
+                        </h3>
+                        <div class="info-grid" id="resumoFinanceiro">
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-arrow-up" style="color: #10b981;"></i> Total Receitas:</span>
+                                <span class="info-value" style="color: #10b981; font-weight: 600;" id="totalReceitas">R$ 0,00</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-arrow-down" style="color: #ef4444;"></i> Total Despesas:</span>
+                                <span class="info-value" style="color: #ef4444; font-weight: 600;" id="totalDespesas">R$ 0,00</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-balance-scale" style="color: #3b82f6;"></i> Saldo:</span>
+                                <span class="info-value" style="color: #3b82f6; font-weight: 700; font-size: 18px;" id="saldoTotal">R$ 0,00</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-list"></i> Total de Lançamentos:</span>
+                                <span class="info-value" id="totalLancamentos">0</span>
                             </div>
                         </div>
+                        <div style="margin-top: 20px;">
+                            <button onclick="calcularFluxoCaixa()" class="btn btn-secondary" 
+                                    style="width: 100%; padding: 10px; background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                <i class="fas fa-chart-bar"></i> Atualizar Resumo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="form-group">
-                            <label for="statusTransacao">
-                                <i class="fas fa-check-circle"></i> Status
-                            </label>
-                            <select id="statusTransacao" required>
-                                <option value="pago">✅ Pago/Recebido</option>
-                                <option value="pendente">⏳ Pendente</option>
+            <!-- Alert de Informação -->
+            <div class="simple-alert">
+                <i class="fas fa-info-circle"></i>
+                <span>Registre todas as receitas e despesas para acompanhar o fluxo de caixa da empresa.</span>
+            </div>
+
+            <!-- Histórico de Lançamentos -->
+            <div class="modern-card" style="margin-top: 30px;">
+                <div class="modern-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                        <h3 style="display: flex; align-items: center; gap: 10px; margin: 0; color: #1e40af;">
+                            <i class="fas fa-history"></i>
+                            Histórico de Lançamentos
+                        </h3>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <select id="filtroTipo" onchange="filtrarLancamentos()" 
+                                    style="padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: white;">
+                                <option value="">Todos os tipos</option>
+                                <option value="receita">Receitas</option>
+                                <option value="despesa">Despesas</option>
                             </select>
+                            <button onclick="limparHistorico()" class="btn btn-danger" 
+                                    style="padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-trash"></i> Limpar Histórico
+                            </button>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" onclick="fecharModalNovaTransacao()" class="btn btn-secondary">
-                            Cancelar
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Salvar Transação
-                        </button>
+                    <div id="listaLancamentos" style="min-height: 200px;">
+                        <!-- Lançamentos serão inseridos aqui via JavaScript -->
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     `;
@@ -180,177 +136,187 @@ function loadFinanceiroModule(container) {
     container.innerHTML = html;
     
     // Definir data atual no campo de data
-    document.getElementById('dataTransacao').valueAsDate = new Date();
+    document.getElementById('dataLancamento').valueAsDate = new Date();
     
-    // Carregar transações salvas
-    carregarTransacoes();
+    // Carregar lançamentos salvos
+    carregarLancamentos();
 }
 
-async function calcularFinanceiro(event) {
+// ============================================================================
+// FUNÇÕES DE GERENCIAMENTO
+// ============================================================================
+
+function salvarLancamento(event) {
     event.preventDefault();
     
-    const agua = parseFloat(document.getElementById('agua').value);
-    const luz = parseFloat(document.getElementById('luz').value);
-    const impostos = parseFloat(document.getElementById('impostos').value);
-    const salarios = parseFloat(document.getElementById('salarios').value);
-    const totalPallets = parseInt(document.getElementById('totalPallets').value);
+    const tipo = document.getElementById('tipoLancamento').value;
+    const valor = parseFloat(document.getElementById('valorLancamento').value);
+    const descricao = document.getElementById('descricaoLancamento').value;
+    const data = document.getElementById('dataLancamento').value;
     
-    if (agua < 0 || luz < 0 || impostos < 0 || salarios < 0 || totalPallets <= 0) {
-        showToast('Valores inválidos. Verifique os dados inseridos', 'error');
+    if (!tipo || !valor || !descricao || !data) {
+        showToast('Preencha todos os campos', 'error');
         return;
     }
     
-    showLoading('Calculando...');
+    const lancamento = {
+        id: Date.now().toString(),
+        tipo,
+        valor,
+        descricao,
+        data,
+        timestamp: new Date().toISOString()
+    };
     
-    try {
-        const custoTotal = agua + luz + impostos + salarios;
-        const custoPorPallet = custoTotal / totalPallets;
-        const margemLucro = 0.50; // 50%
-        const precoVenda = custoPorPallet * (1 + margemLucro);
-        const lucroUnitario = precoVenda - custoPorPallet;
-        
-        const receitaMensal = precoVenda * totalPallets;
-        const lucroMensal = lucroUnitario * totalPallets;
-        const receitalAnual = receitaMensal * 12;
-        const lucroAnual = lucroMensal * 12;
-        
-        const margemReal = (lucroMensal / receitaMensal * 100);
-        const pontoEquilibrio = custoTotal / lucroUnitario;
-        const roi = (lucroMensal / custoTotal * 100);
-        
-        const data = {
-            custos: {
-                agua: agua,
-                luz: luz,
-                impostos: impostos,
-                salarios: salarios,
-                total: custoTotal
-            },
-            precificacao: {
-                custo_por_pallet: custoPorPallet,
-                preco_venda: precoVenda,
-                lucro_por_unidade: lucroUnitario,
-                margem_lucro: 50
-            },
-            mensal: {
-                receita: receitaMensal,
-                lucro: lucroMensal,
-                margem_real: margemReal
-            },
-            anual: {
-                receita: receitalAnual,
-                lucro: lucroAnual
-            },
-            indicadores: {
-                ponto_equilibrio: Math.ceil(pontoEquilibrio),
-                roi: roi
-            }
-        };
-        
-        exibirResultadoFinanceiro(data);
-        showToast('Cálculo realizado com sucesso!', 'success');
-        
-    } catch (error) {
-        console.error('Erro ao calcular:', error);
-        showToast('Erro ao calcular financeiro', 'error');
-    } finally {
-        hideLoading();
-    }
+    // Salvar no localStorage
+    let lancamentos = JSON.parse(localStorage.getItem('financeiro_lancamentos') || '[]');
+    lancamentos.unshift(lancamento); // Adicionar no início
+    localStorage.setItem('financeiro_lancamentos', JSON.stringify(lancamentos));
+    
+    console.log('[OK] Lançamento salvo:', lancamento);
+    
+    // Limpar formulário
+    document.getElementById('formLancamento').reset();
+    document.getElementById('dataLancamento').valueAsDate = new Date();
+    
+    // Recarregar lista
+    carregarLancamentos();
+    
+    showToast('Lançamento registrado com sucesso!', 'success');
 }
 
-function exibirResultadoFinanceiro(data) {
-    const resultado = document.getElementById('resultadoFinanceiro');
+function carregarLancamentos() {
+    const lancamentos = JSON.parse(localStorage.getItem('financeiro_lancamentos') || '[]');
+    const lista = document.getElementById('listaLancamentos');
+    const filtroTipo = document.getElementById('filtroTipo')?.value || '';
     
-    const html = `
-        <div class="card">
-            <h4><i class="fas fa-chart-pie"></i> Relatório Financeiro</h4>
-            
-            <h5 class="mt-3"> Custos Mensais</h5>
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <td>Água:</td>
-                        <td>${formatCurrency(data.custos.agua)}</td>
-                    </tr>
-                    <tr>
-                        <td>Luz:</td>
-                        <td>${formatCurrency(data.custos.luz)}</td>
-                    </tr>
-                    <tr>
-                        <td>Impostos:</td>
-                        <td>${formatCurrency(data.custos.impostos)}</td>
-                    </tr>
-                    <tr>
-                        <td>Salários:</td>
-                        <td>${formatCurrency(data.custos.salarios)}</td>
-                    </tr>
-                    <tr style="font-weight: bold; background: #f0f0f0;">
-                        <td>TOTAL:</td>
-                        <td>${formatCurrency(data.custos.total)}</td>
-                    </tr>
-                </table>
-            </div>
-            
-            <h5 class="mt-3"> Precificação</h5>
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <td>Custo por Pallet:</td>
-                        <td>${formatCurrency(data.precificacao.custo_por_pallet)}</td>
-                    </tr>
-                    <tr>
-                        <td>Preço de Venda:</td>
-                        <td>${formatCurrency(data.precificacao.preco_venda)}</td>
-                    </tr>
-                    <tr>
-                        <td>Lucro por Unidade:</td>
-                        <td>${formatCurrency(data.precificacao.lucro_por_unidade)}</td>
-                    </tr>
-                    <tr>
-                        <td>Margem de Lucro:</td>
-                        <td>${data.precificacao.margem_lucro}%</td>
-                    </tr>
-                </table>
-            </div>
-            
-            <h5 class="mt-3"> Projeções</h5>
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <td><strong>Receita Mensal:</strong></td>
-                        <td><strong>${formatCurrency(data.mensal.receita)}</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Lucro Mensal:</strong></td>
-                        <td><strong>${formatCurrency(data.mensal.lucro)}</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Receita Anual:</strong></td>
-                        <td><strong>${formatCurrency(data.anual.receita)}</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Lucro Anual:</strong></td>
-                        <td><strong>${formatCurrency(data.anual.lucro)}</strong></td>
-                    </tr>
-                </table>
-            </div>
-            
-            <h5 class="mt-3"> Indicadores</h5>
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <td>Ponto de Equilíbrio:</td>
-                        <td>${formatNumber(data.indicadores.ponto_equilibrio)} pallets/mês</td>
-                    </tr>
-                    <tr>
-                        <td>ROI (Retorno):</td>
-                        <td>${data.indicadores.roi.toFixed(2)}%</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    `;
+    // Filtrar lançamentos
+    let lancamentosFiltrados = lancamentos;
+    if (filtroTipo) {
+        lancamentosFiltrados = lancamentos.filter(l => l.tipo === filtroTipo);
+    }
     
-    resultado.innerHTML = html;
-    resultado.classList.remove('hidden');
+    if (lancamentosFiltrados.length === 0) {
+        lista.innerHTML = `
+            <div style="text-align: center; padding: 60px 20px; color: #9ca3af;">
+                <i class="fas fa-file-invoice-dollar" style="font-size: 64px; opacity: 0.3; margin-bottom: 20px;"></i>
+                <h4 style="color: #6b7280; margin: 15px 0 8px 0;">Nenhum lançamento encontrado</h4>
+                <p style="color: #9ca3af; margin: 0; font-size: 14px;">Registre receitas ou despesas para visualizar o histórico</p>
+            </div>
+        `;
+    } else {
+        lista.innerHTML = `
+            <div class="info-grid">
+                ${lancamentosFiltrados.map(lancamento => {
+                    const isReceita = lancamento.tipo === 'receita';
+                    const cor = isReceita ? '#10b981' : '#ef4444';
+                    const icone = isReceita ? 'arrow-up' : 'arrow-down';
+                    const sinal = isReceita ? '+' : '-';
+                    
+                    return `
+                        <div class="info-row" style="padding: 15px; border-left: 4px solid ${cor}; background: ${isReceita ? '#f0fdf4' : '#fef2f2'};">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+                                    <i class="fas fa-${icone}" style="color: ${cor};"></i>
+                                    <span style="font-weight: 600; color: #374151;">${lancamento.descricao}</span>
+                                </div>
+                                <div style="font-size: 13px; color: #6b7280;">
+                                    <i class="fas fa-calendar"></i> ${new Date(lancamento.data).toLocaleDateString('pt-BR')}
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 18px; font-weight: 700; color: ${cor};">
+                                    ${sinal}R$ ${lancamento.valor.toFixed(2)}
+                                </div>
+                                <button onclick="excluirLancamento('${lancamento.id}')" 
+                                        style="margin-top: 5px; padding: 4px 10px; background: transparent; color: #ef4444; border: 1px solid #ef4444; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    }
+    
+    // Atualizar resumo financeiro
+    calcularFluxoCaixa();
 }
+
+function calcularFluxoCaixa() {
+    const lancamentos = JSON.parse(localStorage.getItem('financeiro_lancamentos') || '[]');
+    
+    let totalReceitas = 0;
+    let totalDespesas = 0;
+    
+    lancamentos.forEach(lancamento => {
+        if (lancamento.tipo === 'receita') {
+            totalReceitas += lancamento.valor;
+        } else {
+            totalDespesas += lancamento.valor;
+        }
+    });
+    
+    const saldo = totalReceitas - totalDespesas;
+    
+    // Atualizar cards de resumo
+    document.getElementById('totalReceitas').textContent = `R$ ${totalReceitas.toFixed(2)}`;
+    document.getElementById('totalDespesas').textContent = `R$ ${totalDespesas.toFixed(2)}`;
+    document.getElementById('saldoTotal').textContent = `R$ ${saldo.toFixed(2)}`;
+    document.getElementById('totalLancamentos').textContent = lancamentos.length;
+    
+    // Mudar cor do saldo baseado no valor
+    const saldoElement = document.getElementById('saldoTotal');
+    if (saldo > 0) {
+        saldoElement.style.color = '#10b981';
+    } else if (saldo < 0) {
+        saldoElement.style.color = '#ef4444';
+    } else {
+        saldoElement.style.color = '#3b82f6';
+    }
+    
+    console.log('[DATA] Fluxo de caixa calculado:', { totalReceitas, totalDespesas, saldo });
+}
+
+function filtrarLancamentos() {
+    carregarLancamentos();
+}
+
+function excluirLancamento(id) {
+    if (!confirm('Deseja realmente excluir este lançamento?')) {
+        return;
+    }
+    
+    let lancamentos = JSON.parse(localStorage.getItem('financeiro_lancamentos') || '[]');
+    lancamentos = lancamentos.filter(l => l.id !== id);
+    localStorage.setItem('financeiro_lancamentos', JSON.stringify(lancamentos));
+    
+    console.log('[OK] Lançamento excluído:', id);
+    
+    carregarLancamentos();
+    showToast('Lançamento excluído com sucesso', 'success');
+}
+
+function limparHistorico() {
+    if (!confirm('Deseja realmente limpar TODO o histórico de lançamentos? Esta ação não pode ser desfeita!')) {
+        return;
+    }
+    
+    localStorage.removeItem('financeiro_lancamentos');
+    carregarLancamentos();
+    
+    console.log('[OK] Histórico financeiro limpo');
+    showToast('Histórico limpo com sucesso', 'success');
+}
+
+// Expor funções globalmente
+window.loadFinanceiroModule = loadFinanceiroModule;
+window.salvarLancamento = salvarLancamento;
+window.carregarLancamentos = carregarLancamentos;
+window.calcularFluxoCaixa = calcularFluxoCaixa;
+window.filtrarLancamentos = filtrarLancamentos;
+window.excluirLancamento = excluirLancamento;
+window.limparHistorico = limparHistorico;
+
+console.log('[OK] Módulo Financeiro pronto!');
