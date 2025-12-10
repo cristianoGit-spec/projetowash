@@ -95,41 +95,53 @@ function showModule(moduleName) {
                 </div>
                 
                 <!-- Gráficos -->
-                <div class="cards-grid mt-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3>Movimentações Recentes</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden;">
+                        <div style="padding: 1.25rem; border-bottom: 1px solid #f3f4f6;">
+                            <h3 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-chart-area" style="color: #3b82f6; font-size: 0.875rem;"></i>
+                                Movimentações Recentes
+                            </h3>
                         </div>
-                        <div class="card-body">
+                        <div style="padding: 1.5rem;">
                             <canvas id="chartMovimentacoes"></canvas>
                         </div>
                     </div>
                     
-                    <div class="card">
-                        <div class="card-header">
-                            <h3>Top 5 Produtos</h3>
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden;">
+                        <div style="padding: 1.25rem; border-bottom: 1px solid #f3f4f6;">
+                            <h3 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-star" style="color: #f59e0b; font-size: 0.875rem;"></i>
+                                Top 5 Produtos
+                            </h3>
                         </div>
-                        <div class="card-body">
+                        <div style="padding: 1.5rem;">
                             <canvas id="chartTopProdutos"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h3>Eficiência da Linha</h3>
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem;">
+                    <div style="padding: 1.25rem; border-bottom: 1px solid #f3f4f6;">
+                        <h3 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-tachometer-alt" style="color: #10b981; font-size: 0.875rem;"></i>
+                            Eficiência da Linha
+                        </h3>
                     </div>
-                    <div class="card-body">
+                    <div style="padding: 1.5rem;">
                         <canvas id="chartEficiencia"></canvas>
                     </div>
                 </div>
                 
                 <!-- Histórico Recente -->
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h3>Últimas Movimentações</h3>
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden;">
+                    <div style="padding: 1.25rem; border-bottom: 1px solid #f3f4f6;">
+                        <h3 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-history" style="color: #8b5cf6; font-size: 0.875rem;"></i>
+                            Últimas Movimentações
+                        </h3>
                     </div>
-                    <div class="card-body">
+                    <div style="padding: 1.5rem;">
                         <div id="historicoRecente" class="history-list">
                             <!-- Preenchido via JS -->
                         </div>
