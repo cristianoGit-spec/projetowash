@@ -13,8 +13,8 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS - Novo Layout PrescrMed -->
-    <link rel="stylesheet" href="/static/css/prescrimed-layout.css?v=41">
-    <link rel="stylesheet" href="/static/css/admin.css?v=42">
+    <link rel="stylesheet" href="/static/css/prescrimed-layout.css?v=43">
+    <link rel="stylesheet" href="/static/css/admin.css?v=43">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -397,30 +397,65 @@
                     </button>
 
                     <!-- User Menu Dropdown -->
-                    <div class="user-menu" style="position: relative;">
-                        <button class="topbar-icon-btn" onclick="toggleUserMenu()" title="Menu do usuário">
-                            <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+                    <div class="user-menu">
+                        <button class="user-menu-trigger" onclick="toggleUserMenu()" title="Menu do usuário">
+                            <div class="user-avatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <i class="fas fa-chevron-down user-menu-arrow"></i>
                         </button>
                         
-                        <div id="userMenuDropdown" class="user-menu-dropdown hidden" style="position: absolute; right: 0; top: 100%; margin-top: 0.5rem;">
-                            <div class="company-header" style="padding: 1rem; background: linear-gradient(135deg, var(--primary-blue), var(--primary-light)); color: white; border-radius: var(--radius-md) var(--radius-md) 0 0;">
-                                <i class="fas fa-building"></i>
-                                <div>
-                                    <small style="opacity: 0.9; font-size: 0.75rem;">Empresa:</small>
-                                    <strong id="companyName" style="display: block; margin: 0.25rem 0;">Carregando...</strong>
-                                    <small id="userEmail" style="opacity: 0.8; font-size: 0.75rem;">usuario@email.com</small>
+                        <div id="userMenuDropdown" class="user-menu-dropdown hidden">
+                            <!-- Header do Menu com Informações do Usuário -->
+                            <div class="user-menu-header">
+                                <div class="user-menu-avatar-large">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <div class="user-menu-info">
+                                    <div class="user-menu-company-label">Empresa</div>
+                                    <div class="user-menu-company-name" id="companyName">Carregando...</div>
+                                    <div class="user-menu-role" id="userRole">Administração Master</div>
                                 </div>
                             </div>
-                            <div style="padding: 0.5rem 0;">
-                                <a href="#" onclick="showProfile(); return false;" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: var(--text-primary); text-decoration: none; transition: var(--transition);">
-                                    <i class="fas fa-user"></i> Meu Perfil
+                            
+                            <!-- Email do Usuário -->
+                            <div class="user-menu-email">
+                                <i class="fas fa-envelope"></i>
+                                <span id="userEmail">superadmin@quatrocantos.com</span>
+                            </div>
+                            
+                            <!-- Menu Items -->
+                            <div class="user-menu-items">
+                                <a href="#" onclick="showProfile(); return false;" class="user-menu-item">
+                                    <div class="user-menu-item-icon">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="user-menu-item-content">
+                                        <div class="user-menu-item-title">Meu Perfil</div>
+                                        <div class="user-menu-item-subtitle">Gerencie suas informações</div>
+                                    </div>
                                 </a>
-                                <a href="#" onclick="showConfig(); return false;" class="admin-only hidden" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: var(--text-primary); text-decoration: none; transition: var(--transition);">
-                                    <i class="fas fa-cog"></i> Configurações
+                                
+                                <a href="#" onclick="showConfig(); return false;" class="user-menu-item admin-only hidden">
+                                    <div class="user-menu-item-icon">
+                                        <i class="fas fa-cog"></i>
+                                    </div>
+                                    <div class="user-menu-item-content">
+                                        <div class="user-menu-item-title">Configurações</div>
+                                        <div class="user-menu-item-subtitle">Preferências do sistema</div>
+                                    </div>
                                 </a>
-                                <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #f1f5f9;">
-                                <a href="#" onclick="handleLogout(); return false;" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: var(--danger); text-decoration: none; transition: var(--transition);">
-                                    <i class="fas fa-sign-out-alt"></i> Sair
+                                
+                                <div class="user-menu-divider"></div>
+                                
+                                <a href="#" onclick="handleLogout(); return false;" class="user-menu-item user-menu-item-danger">
+                                    <div class="user-menu-item-icon">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                    </div>
+                                    <div class="user-menu-item-content">
+                                        <div class="user-menu-item-title">Sair do Sistema</div>
+                                        <div class="user-menu-item-subtitle">Encerrar sessão</div>
+                                    </div>
                                 </a>
                             </div>
                         </div>
@@ -590,14 +625,14 @@
     <script>
         // SISTEMA HÍBRIDO COM LAYOUT PRESCRIMED - Firebase Cloud + Fallback Local
         // Versão 42.1 - Layout moderno com sidebar lateral
-        const APP_VERSION = '42.3';
+        const APP_VERSION = '42.4';
         const IS_PRODUCTION = window.location.hostname.includes('netlify.app');
         const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         
         // Sistema tenta usar Firebase primeiro, fallback para localStorage se falhar
         console.log('[ENV] Ambiente:', IS_PRODUCTION ? 'PRODUÇÃO (Netlify)' : IS_LOCALHOST ? 'LOCAL (Dev)' : 'OUTRO');
         console.log('[SYSTEM] Versão:', APP_VERSION, '- Layout PrescrMed Inspirado');
-        console.log('[v42.3] Correção Firebase: Tratamento robusto de permissões, fallback automático para localStorage');
+        console.log('[v42.4] UI Profissional: Menu dropdown modernizado, design responsivo e animado');
         
         // Toggle Mobile Menu
         function toggleMobileMenu() {
