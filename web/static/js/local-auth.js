@@ -325,6 +325,14 @@ async function loginLocal(emailOrLogin, password) {
  * Cadastro local com senha em texto simples
  */
 async function cadastrarUsuarioLocal(nome, email, contato, loginUsuario, senha, extraData) {
+    // Se Firebase estiver ativo, usar Firebase ao invés de local
+    if (typeof firebaseInitialized !== 'undefined' && firebaseInitialized && typeof cadastrarEmpresaFirebase !== 'undefined') {
+        console.log('☁️ Cadastrando empresa no Firebase Cloud...');
+        return await cadastrarEmpresaFirebase(nome, email, contato, loginUsuario, senha, extraData);
+    }
+    
+    console.warn('💾 Firebase offline - cadastrando localmente');
+    
     // Verificar se email ja existe
     if (localUsers.find(u => u.email === email)) {
         throw new Error('Este email já está cadastrado');

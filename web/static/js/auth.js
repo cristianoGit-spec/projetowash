@@ -207,28 +207,39 @@ async function handleRegister(event) {
         role: 'admin' 
     };
     
-    showLoading('Criando empresa...');
+    showLoading('Criando empresa na nuvem...');
     
     try {
         // Verificar se Firebase está disponível
         const isFirebaseActive = typeof firebaseInitialized !== 'undefined' && firebaseInitialized;
         
-        if (isFirebaseActive && typeof cadastrarUsuarioFirebase !== 'undefined') {
-            // Modo Firebase Cloud
-            console.log('🌐 Cadastrando via Firebase...');
-            await cadastrarUsuarioFirebase(nome, email, password, extraData);
-            console.log('✅ Cadastro Firebase bem-sucedido');
+        if (isFirebaseActive && typeof cadastrarEmpresaFirebase !== 'undefined') {
+            // Modo Firebase Cloud - PRIORITÁRIO
+            console.log('☁️ Cadastrando empresa no Firebase Cloud...');
+            const userData = await cadastrarEmpresaFirebase(nome, email, contato, loginUsuario, password, extraData);
+            console.log('✅ Empresa cadastrada na nuvem:', userData.nomeEmpresa);
             
-            // Fazer login automático
-            await loginFirebase(email, password);
+            showToast(`✅ Empresa ${userData.nomeEmpresa} cadastrada com sucesso! Fazendo login...`, 'success', 5000);
+            
+            // Fazer login automático após 2 segundos
+            setTimeout(async () => {
+                try {
+                    await loginFirebase(email, password);
+                } catch (loginError) {
+                    console.warn('Erro no login automático:', loginError);
+                    showLogin();
+                    showToast('Login na sua conta criada', 'info');
+                }
+            }, 2000);
             
         } else if (typeof cadastrarUsuarioLocal !== 'undefined') {
-            // Modo Local (fallback)
-            console.log('📦 Cadastrando localmente...');
+            // Modo Local (fallback apenas se Firebase estiver offline)
+            console.log('⚠️ Firebase offline - Cadastrando localmente...');
+            console.warn('⚠️ ATENÇÃO: Dados locais não serão acessíveis de outros dispositivos!');
             await cadastrarUsuarioLocal(nome, email, contato, loginUsuario, password, extraData);
             console.log('✅ Cadastro local bem-sucedido');
             
-            showToast('✅ Cadastro realizado com sucesso! Redirecionando...', 'success');
+            showToast('⚠️ Cadastro local realizado. Dados apenas neste navegador.', 'warning', 6000);
             
             // Fazer login automático
             setTimeout(async () => {

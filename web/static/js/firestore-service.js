@@ -61,9 +61,119 @@ async function syncFirebaseToLocal() {
 // ===== AUTENTICAÇÃO FIREBASE =====
 
 /**
+ * Gerar próximo número de empresa no Firebase
+ */
+async function getNextEmpresaNumberFirebase() {
+    if (!firebaseInitialized || !db) {
+        // Fallback para local
+        return getNextEmpresaNumber();
+    }
+    
+    try {
+        const counterRef = db.collection('system').doc('counters');
+        const counterDoc = await counterRef.get();
+        
+        let counter = 0;
+        if (counterDoc.exists) {
+            counter = counterDoc.data().empresaCounter || 0;
+        }
+        
+        counter++;
+        await counterRef.set({ 
+            empresaCounter: counter,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        
+        return counter.toString().padStart(4, '0');
+    } catch (error) {
+        console.error('❌ Erro ao gerar número da empresa:', error);
+        // Fallback para local
+        return getNextEmpresaNumber();
+    }
+}
+
+/**
+ * Adicionar numeração ao nome da empresa (Firebase)
+ */
+async function addEmpresaNumberFirebase(nomeEmpresa) {
+    // Verificar se já tem número no formato [0001]
+    if (/^\[\d{4}\]/.test(nomeEmpresa)) {
+        return nomeEmpresa;
+    }
+    const numero = await getNextEmpresaNumberFirebase();
+    return `[${numero}] ${nomeEmpresa}`;
+}
+
+/**
+ * Cadastrar empresa no Firebase (acesso de qualquer rede)
+ */
+async function cadastrarEmpresaFirebase(nome, email, contato, loginUsuario, senha, extraData) {
+    if (!firebaseInitialized) {
+        throw new Error('Firebase não disponível - usando modo local');
+    }
+    
+    try {
+        console.log('🏢 Cadastrando empresa no Firebase Cloud...');
+        
+        // Adicionar numeração ao nome da empresa
+        const nomeEmpresaComNumero = await addEmpresaNumberFirebase(extraData.nomeEmpresa);
+        
+        // Criar usuário no Authentication
+        const userCredential = await auth.createUserWithEmailAndPassword(email, senha);
+        const user = userCredential.user;
+        
+        // Atualizar perfil
+        await user.updateProfile({
+            displayName: nome
+        });
+        
+        // Gerar ID único da empresa
+        const companyId = 'comp-' + Date.now();
+        
+        // Criar documento no Firestore
+        const userData = {
+            uid: user.uid,
+            nome: nome,
+            email: email,
+            contato: contato || '',
+            loginUsuario: loginUsuario || email,
+            nomeEmpresa: nomeEmpresaComNumero,
+            segmento: extraData.segmento || 'outros',
+            companyId: companyId,
+            role: extraData.role || 'admin',
+            cargo: 'Administrador',
+            ativo: true,
+            criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+            atualizadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+            allowedModules: ['operacional', 'estoque-entrada', 'estoque-saida', 'financeiro', 'rh', 'visualizar']
+        };
+        
+        await db.collection('usuarios').doc(user.uid).set(userData);
+        
+        console.log('✅ Empresa cadastrada no Firebase:', {
+            nome: userData.nomeEmpresa,
+            email: userData.email,
+            companyId: userData.companyId
+        });
+        console.log('☁️ Dados na nuvem - acessível de qualquer lugar!');
+        
+        return userData;
+        
+    } catch (error) {
+        console.error('❌ Erro ao cadastrar empresa no Firebase:', error);
+        throw error;
+    }
+}
+
+/**
  * Cadastrar usuário no Firebase (acesso de qualquer rede)
  */
 async function cadastrarUsuarioFirebase(nome, email, senha, extraData) {
+    // Se for cadastro de empresa (role === 'admin'), usar função específica
+    if (extraData && extraData.role === 'admin') {
+        return await cadastrarEmpresaFirebase(nome, email, '', '', senha, extraData);
+    }
+    
     if (!firebaseInitialized) {
         throw new Error('Firebase não disponível - usando modo local');
     }

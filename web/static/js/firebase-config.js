@@ -37,16 +37,23 @@ const firebaseConfig = {
 let auth = null;
 let db = null;
 let firebaseInitialized = false;
-let useFirebase = false; // Usar modo local por padrão (Firebase ainda não configurado)
+let useFirebase = true; // ATIVADO: Usar Firebase na nuvem por padrão
 
-// Tentar inicializar Firebase (desabilitado por enquanto - usar modo local)
+// Inicializar Firebase
 try {
-    // Firebase desabilitado - usando modo local até configuração completa
-    // Para ativar Firebase: configure a API key real e remova este bloco
-    throw new Error("Firebase em modo local - API key não configurada");
-        firebase.initializeApp(firebaseConfig);
-        auth = firebase.auth();
-        db = firebase.firestore();
+    firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+    db = firebase.firestore();
+    
+    // Configurar persistência offline
+    db.enablePersistence({ synchronizeTabs: true })
+        .catch((err) => {
+            if (err.code == 'failed-precondition') {
+                console.warn('⚠️ Persistência desabilitada - múltiplas abas abertas');
+            } else if (err.code == 'unimplemented') {
+                console.warn('⚠️ Persistência não suportada neste navegador');
+            }
+        });
         
         // Configurar persistência local
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
