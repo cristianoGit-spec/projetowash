@@ -118,28 +118,28 @@ function exibirResultadoOperacional(data) {
                     Análise de Capacidade - ${data.turnos} Turno(s)
                 </h3>
                 
-                <!-- Cards de Destaque -->
-                <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                    <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);">
+                <!-- Cards de Destaque - 2 Colunas 1 Linha -->
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);">
                         <div style="display: flex; align-items: center; gap: 15px;">
-                            <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 10px; font-size: 24px;">
+                            <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; font-size: 28px;">
                                 <i class="fas fa-clock"></i>
                             </div>
                             <div>
-                                <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">${formatNumber(data.capacidade_por_turno)}</div>
-                                <div style="font-size: 13px; opacity: 0.9;">Capacidade/Turno</div>
+                                <div style="font-size: 32px; font-weight: 700; margin-bottom: 4px;">${formatNumber(data.capacidade_por_turno)}</div>
+                                <div style="font-size: 14px; opacity: 0.9;">Capacidade/Turno</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);">
                         <div style="display: flex; align-items: center; gap: 15px;">
-                            <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 10px; font-size: 24px;">
+                            <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; font-size: 28px;">
                                 <i class="fas fa-calendar-day"></i>
                             </div>
                             <div>
-                                <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">${formatNumber(data.capacidade_diaria)}</div>
-                                <div style="font-size: 13px; opacity: 0.9;">Capacidade Diária</div>
+                                <div style="font-size: 32px; font-weight: 700; margin-bottom: 4px;">${formatNumber(data.capacidade_diaria)}</div>
+                                <div style="font-size: 14px; opacity: 0.9;">Capacidade Diária</div>
                             </div>
                         </div>
                     </div>
@@ -170,18 +170,27 @@ function exibirResultadoOperacional(data) {
                     `<div class="simple-alert" style="background: #fef3c7; border-left: 4px solid #f59e0b; color: #92400e;">
                         <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
                         <div>
-                            <strong>Capacidade Total:</strong> A fábrica está operando com capacidade MÁXIMA!
+                            <strong>Atenção:</strong> Existe capacidade ociosa de ${formatNumber(data.diferenca_diaria)} unidades/dia. Percentual de uso: ${data.percentual_uso}%
                         </div>
                     </div>` : 
                     `<div class="simple-alert" style="background: #d1fae5; border-left: 4px solid #10b981; color: #065f46;">
                         <i class="fas fa-check-circle" style="color: #10b981;"></i>
                         <div>
-                            <strong>Capacidade Total:</strong> A fábrica está operando em capacidade MÁXIMA!
+                            <strong>Excelente!</strong> A fábrica está operando em capacidade MÁXIMA (100%)!
                         </div>
                     </div>`
                 }
             </div>
         </div>
+        
+        <!-- CSS Responsivo Inline -->
+        <style>
+            @media (max-width: 768px) {
+                .modern-card > .modern-body > div:first-of-type {
+                    grid-template-columns: 1fr !important;
+                }
+            }
+        </style>
     `;
     
     resultado.innerHTML = html;
