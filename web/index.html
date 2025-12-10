@@ -13,8 +13,8 @@
     <title>Quatro Cantos - Sistema de Gestao</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css?v=32">
-    <link rel="stylesheet" href="/static/css/admin.css?v=32">
+    <link rel="stylesheet" href="/static/css/style.css?v=33">
+    <link rel="stylesheet" href="/static/css/admin.css?v=33">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -30,7 +30,7 @@
     <!-- Segments Config -->
     <script src="/static/js/segments-config.js?v=17"></script>
     
-    <!-- Limpeza de Cache v32 - Dashboard Reconstruído -->
+    <!-- Limpeza de Cache v33 - Módulo Operacional Modernizado -->
     <script>
         // Limpar cache antigo do Service Worker
         if ('serviceWorker' in navigator) {
@@ -44,7 +44,7 @@
             if ('caches' in window) {
                 caches.keys().then(function(names) {
                     for (let name of names) {
-                        if (name !== 'estoque-certo-v32') {
+                        if (name !== 'estoque-certo-v33') {
                             console.log('🗑️ Removendo cache antigo:', name);
                             caches.delete(name);
                         }
@@ -53,14 +53,14 @@
             }
         }
         
-        // Dashboard Reconstruído v32
-        if (!localStorage.getItem('dashboard_rebuilt_v32')) {
-            console.log('🎨 Dashboard reconstruído v32...');
+        // Módulo Operacional Modernizado v33
+        if (!localStorage.getItem('operacional_modern_v33')) {
+            console.log('🏭 Modernizando Módulo Operacional v33...');
             // Limpar flags antigas
-            localStorage.removeItem('layout_improved_v31');
-            localStorage.setItem('dashboard_rebuilt_v32', 'true');
-            console.log('✅ Cards limpos e modernos ativados!');
-            console.log('📊 Layout minimalista e profissional');
+            localStorage.removeItem('dashboard_rebuilt_v32');
+            localStorage.setItem('operacional_modern_v33', 'true');
+            console.log('✅ Layout moderno e profissional ativado!');
+            console.log('📊 Cards limpos, header gradiente, responsivo');
         }
     </script>
 </head>

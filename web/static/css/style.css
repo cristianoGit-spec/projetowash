@@ -3778,3 +3778,332 @@ select {
         -webkit-overflow-scrolling: touch;
     }
 }
+
+/* ============================================================================
+   MÓDULO OPERACIONAL - ESTILOS MODERNOS v33
+   ============================================================================ */
+
+/* Card Moderno */
+.modern-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    animation: fadeInUp 0.4s ease;
+}
+
+/* Header Moderno */
+.modern-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    padding: 2rem;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.header-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: white;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header-text h3 {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.02em;
+}
+
+.header-text .subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9375rem;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Body Moderno */
+.modern-body {
+    padding: 2rem;
+}
+
+/* Form Group Moderno */
+.modern-form-group {
+    margin-bottom: 2rem;
+}
+
+.modern-label {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    font-size: 0.9375rem;
+}
+
+.modern-label i {
+    color: var(--primary-color);
+    font-size: 1rem;
+}
+
+.modern-select {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-lg);
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+    background: white;
+    transition: all var(--transition-base);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231e3a8a'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 20px;
+    cursor: pointer;
+}
+
+.modern-select:hover {
+    border-color: var(--primary-light);
+}
+
+.modern-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+/* Botão Moderno */
+.modern-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 0.875rem 2rem;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+}
+
+.modern-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(30, 58, 138, 0.4);
+}
+
+.modern-btn:active {
+    transform: translateY(0);
+}
+
+.modern-btn i {
+    font-size: 1.125rem;
+}
+
+/* Results Header */
+.results-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.results-header i {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.results-header h4 {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Results Grid */
+.results-grid {
+    margin-bottom: 2rem;
+}
+
+/* Info Cards */
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+}
+
+.info-card:hover {
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.info-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.info-icon.blue {
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+}
+
+.info-icon.green {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+}
+
+.info-icon.orange {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+}
+
+.info-icon.purple {
+    background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-content h5 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin: 0 0 0.25rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-content .value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* Alert Moderno */
+.modern-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    margin-top: 1.5rem;
+}
+
+.modern-alert i {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.modern-alert strong {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.modern-alert p {
+    font-size: 0.9375rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.modern-alert.alert-warning {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid var(--warning-color);
+}
+
+.modern-alert.alert-warning i {
+    color: var(--warning-color);
+}
+
+.modern-alert.alert-success {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-left: 4px solid var(--success-color);
+}
+
+.modern-alert.alert-success i {
+    color: var(--success-color);
+}
+
+/* Responsividade Operacional */
+@media (max-width: 768px) {
+    .modern-header {
+        padding: 1.5rem;
+    }
+    
+    .header-content {
+        gap: 1rem;
+    }
+    
+    .header-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+    
+    .header-text h3 {
+        font-size: 1.25rem;
+    }
+    
+    .header-text .subtitle {
+        font-size: 0.875rem;
+    }
+    
+    .modern-body {
+        padding: 1.5rem;
+    }
+    
+    .info-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .results-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .results-grid {
+        grid-template-columns: 1fr;
+    }
+}
