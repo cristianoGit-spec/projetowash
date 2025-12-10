@@ -1,108 +1,216 @@
 <div align="center">
 
-# 🏢 Sistema Quatro Cantos
+# 🏢 Sistema Quatro Cantos v41
 
-### Sistema de Gestão Empresarial Multi-Empresa com Layout Responsivo
+### Sistema Completo de Gestão Empresarial Multi-Tenant com Layout Profissional
 
-[![Status](https://img.shields.io/badge/Status-Active-success.svg)](https://github.com/cristiano-superacao/projetowash)
+[![Status](https://img.shields.io/badge/Status-Production-success.svg)](https://github.com/cristiano-superacao/projetowash)
 [![Deploy](https://img.shields.io/badge/Deploy-Netlify-00C7B7.svg)](https://quatrocanto.netlify.app)
+[![Version](https://img.shields.io/badge/Version-41.0-blue.svg)](https://github.com/cristiano-superacao/projetowash/releases)
 [![License](https://img.shields.io/badge/License-Educational-green.svg)](LICENSE)
 
-**🌐 Demo Online:** [quatrocanto.netlify.app](https://quatrocanto.netlify.app)
+**🌐 Aplicação Online:** [quatrocanto.netlify.app](https://quatrocanto.netlify.app)
+
+---
+
+### 💎 Sistema de Gestão Empresarial com Arquitetura Híbrida
+**Firebase Cloud + LocalStorage | Multi-Tenant | PWA | Layout PrescrMed Inspirado**
 
 </div>
 
 ---
 
-## 📋 Visão Geral
+## 📋 Sobre o Projeto
 
-O **Sistema Quatro Cantos** é uma solução completa e profissional para gestão empresarial multi-tenant (múltiplas empresas) com controle de acesso baseado em permissões. Interface moderna, responsiva e intuitiva com suporte PWA (Progressive Web App).
+O **Sistema Quatro Cantos** é uma solução empresarial completa e profissional desenvolvida com arquitetura moderna, focada em gestão multi-tenant (múltiplas empresas) com isolamento total de dados. Interface responsiva inspirada no PrescrMed com suporte PWA (Progressive Web App) para instalação em dispositivos móveis e desktop.
 
-### 🎯 Características Principais
+### 🎯 Módulos e Funcionalidades
 
-| Módulo | Descrição | Status |
-|--------|-----------|--------|
-| 🔐 **Autenticação** | Sistema completo de login/registro | ✅ Ativo |
-| 🏢 **Multi-Empresa** | Suporte a múltiplas empresas com isolamento de dados | ✅ Ativo |
-| 👥 **Gestão de Usuários** | Cadastro e gerenciamento de usuários por empresa | ✅ Ativo |
-| 🛡️ **Painel Admin** | Super administrador com controle total das empresas | ✅ Ativo |
-| 🔒 **Controle de Acesso** | Permissões granulares por módulo (RBAC) | ✅ Ativo |
-| ⚙️ **Operacional** | Cálculo de capacidade produtiva por turnos | ✅ Ativo |
-| 📦 **Estoque** | Controle completo de entrada e saída de produtos | ✅ Ativo |
-| 💰 **Financeiro** | Análise de custos, precificação e projeções | ✅ Ativo |
-| 👨‍💼 **RH** | Folha de pagamento com INSS e IR progressivos | ✅ Ativo |
+| Módulo | Descrição | Fórmulas | Status |
+|--------|-----------|----------|--------|
+| 🔐 **Autenticação** | Login/Registro com Firebase + Fallback Local | - | ✅ Produção |
+| 🏢 **Multi-Tenant** | Isolamento completo de dados por companyId | - | ✅ Produção |
+| 👥 **Gestão de Usuários** | CRUD completo com permissões granulares | - | ✅ Produção |
+| 🛡️ **Painel Admin** | Super admin para gerenciar todas empresas | - | ✅ Produção |
+| 📊 **Dashboard** | KPIs, estatísticas e gráficos em tempo real | `valorEstoque = Σ(qtd × valor)` | ✅ Produção |
+| ⚙️ **Operacional** | Capacidade produtiva com análise de turnos | `capDiária = 1.666 × turnos`<br>`capOciosa = capMax - capDiária` | ✅ Produção |
+| 📦 **Estoque** | Entrada/Saída com controle automático | `valorTotal = qtd × preço` | ✅ Produção |
+| 💰 **Financeiro** | Fluxo de caixa e análise DRE | `saldo = receitas - despesas` | ✅ Produção |
+| 👨‍💼 **RH** | Folha de pagamento INSS/IR 2025 | `INSS progressivo`<br>`IR = (base × aliq) - ded`<br>`líquido = bruto - INSS - IR` | ✅ Produção |
+| 📈 **Relatórios** | Exportação PDF com jsPDF | - | ✅ Produção |
 
 ---
 
-## 🚀 Acesso Rápido - Demo Online
+## 🎨 Interface e Design
 
-### 🌐 URL: [quatrocanto.netlify.app](https://quatrocanto.netlify.app)
+### Layout Profissional PrescrMed Inspirado
 
-### 👤 Credenciais de Teste
+```
+✓ Sidebar lateral responsiva
+✓ Gradientes modernos em headers
+✓ Cards com bordas coloridas e hover effects
+✓ Typography consistente e hierárquica
+✓ Icons FontAwesome 6.4.0
+✓ Animações suaves (transitions)
+✓ Mobile-first responsive design
+✓ Dark mode ready (estrutura preparada)
+```
 
-**Super Administrador** (Acesso Total)
+### Cores do Sistema
+
+```css
+Primary:   #3b82f6 → #2563eb (Blue gradient)
+Success:   #10b981 (Green)
+Warning:   #f59e0b (Amber)
+Danger:    #ef4444 (Red)
+Info:      #0ea5e9 (Sky)
+Purple:    #8b5cf6 (Purple)
+Gray:      #6b7280 (Neutral)
+```
+
+---
+
+## 🚀 Acesso ao Sistema
+
+### 🌐 Aplicação Online: [quatrocanto.netlify.app](https://quatrocanto.netlify.app)
+
+### 👤 Credenciais de Demonstração
+
+**🔐 Super Administrador** (Acesso Total ao Sistema)
 ```
 Email: superadmin@quatrocantos.com
 Senha: admin@2025
+
+Permissões: Gerenciar empresas, visualizar todas as empresas, acesso total
 ```
 
-**Administrador** (Empresa Demo)
+**🏢 Administrador de Empresa** (Empresa Demo)
 ```
 Email: admin@local.com
 Senha: admin123
+
+Permissões: Acesso completo aos módulos da empresa
 ```
 
 ---
 
-## 🎨 Layout Responsivo e Profissional
+## 💻 Tecnologias Utilizadas
 
-O sistema possui design moderno e totalmente adaptável a qualquer dispositivo:
+### Frontend
+```
+├── HTML5 (Semântico e Acessível)
+├── CSS3 (Flexbox, Grid, Animations)
+├── JavaScript ES6+ (Modular)
+├── Font Awesome 6.4.0 (Icons)
+└── Chart.js 4.4.0 (Gráficos)
+```
 
-- ✅ **Desktop** - Layout completo com sidebar e dashboard expansivo
-- ✅ **Tablet** - Interface otimizada com navegação adaptativa
-- ✅ **Mobile** - Menu mobile responsivo e cards otimizados
-- ✅ **PWA** - Instalável como aplicativo nativo
-- ✅ **Tema Personalizável** - Cores adaptadas ao segmento da empresa
+### Backend/Database
+```
+├── Firebase 9.22.0
+│   ├── Authentication (Login/Registro)
+│   ├── Firestore (Banco NoSQL)
+│   └── Hosting (Opcional)
+├── LocalStorage (Fallback/Cache)
+└── IndexedDB (Dados offline)
+```
 
-### 🎯 Melhorias Recentes de UI/UX
+### Deploy & PWA
+```
+├── Netlify (Deploy Automático)
+├── Service Worker (Cache estratégico)
+├── Manifest.json (Instalação PWA)
+└── GitHub Actions (CI/CD Ready)
+```
 
-**Submenu Expandivel:**
-- 📦 Menu Estoque com 3 sub-opções (Entrada, Saída, Saldo)
-- ⚙️ Animações suaves com `cubic-bezier` profissional
-- 🔄 Rotação do ícone chevron em 180°
-- 📊 Scroll suave no sidebar com scrollbar customizada
-
-**Otimizações de Layout:**
-- 📊 Espaçamento compacto e profissional
-- 🎯 Ícones otimizados (38px principais, 34px submenu)
-- 🖌️ Fontes balanceadas para melhor legibilidade
-- 💡 Hover effects com feedback visual
-- 🎨 Background sutil e bordas temáticas
-
-### 🎯 Segmentos Empresariais Suportados
-
-| Segmento | Ícone | Cor |
-|----------|-------|-----|
-| 🏗️ Construção | `fa-hard-hat` | #d97706 |
-| 🍔 Restaurante | `fa-utensils` | #dc2626 |
-| 🛒 Varejo | `fa-shopping-cart` | #2563eb |
-| 🏥 Saúde | `fa-heartbeat` | #16a34a |
-| 🎓 Educação | `fa-graduation-cap` | #7c3aed |
-| 🚗 Automotivo | `fa-car` | #0891b2 |
-| 🏭 Indústria | `fa-industry` | #64748b |
-| 💻 Tecnologia | `fa-laptop-code` | #6366f1 |
+### Bibliotecas Adicionais
+```
+├── jsPDF 2.5.1 (Exportação PDF)
+├── jsPDF-AutoTable 3.5.31 (Tabelas PDF)
+├── bcrypt.js (Hash de senhas)
+└── SweetAlert2 (Alertas elegantes)
+```
 
 ---
 
-## 💻 Instalação Local
+## 📐 Arquitetura do Sistema
+
+### 🏗️ Estrutura de Pastas
+
+```
+projetowash/
+│
+├── web/                          # Frontend da aplicação
+│   ├── index.html               # Página principal (SPA)
+│   ├── _redirects               # Configuração Netlify
+│   ├── _headers                 # Headers de segurança
+│   │
+│   └── static/                  # Arquivos estáticos
+│       ├── manifest.json        # PWA manifest
+│       ├── service-worker.js    # Service Worker (Cache)
+│       │
+│       ├── css/                 # Estilos
+│       │   ├── prescrimed-layout.css  # Layout principal
+│       │   ├── admin.css        # Estilos admin
+│       │   └── segments.css     # Estilos por segmento
+│       │
+│       ├── js/                  # JavaScript principal
+│       │   ├── firebase-config.js      # Config Firebase
+│       │   ├── firestore-service.js    # Serviços Firestore
+│       │   ├── local-auth.js           # Autenticação local
+│       │   ├── local-firestore.js      # Banco local
+│       │   ├── auth.js                 # UI de autenticação
+│       │   ├── app.js                  # App principal
+│       │   ├── modules.js              # Loader de módulos
+│       │   ├── dashboard.js            # Dashboard
+│       │   ├── admin-module.js         # Painel admin
+│       │   ├── pwa.js                  # PWA controller
+│       │   │
+│       │   └── modules/         # Módulos funcionais
+│       │       ├── rh.js               # Folha de pagamento
+│       │       ├── operacional.js      # Capacidade produtiva
+│       │       ├── financeiro.js       # Fluxo de caixa
+│       │       ├── estoque_entrada.js  # Entrada de produtos
+│       │       ├── estoque_saida.js    # Saída/Vendas
+│       │       ├── visualizar_estoque.js # Saldo de estoque
+│       │       ├── gestao-empresas.js  # CRUD empresas
+│       │       └── historico.js        # Histórico
+│       │
+│       └── icons/               # PWA icons
+│           ├── icon-192x192.png
+│           └── icon-512x512.png
+│
+├── config/                      # Configurações
+│   ├── firebase.json           # Config Firebase
+│   ├── firestore.rules         # Regras de segurança
+│   ├── firestore.indexes.json  # Índices Firestore
+│   └── netlify.toml            # Config Netlify
+│
+├── tests/                       # Testes automatizados
+│   ├── test_auth_utils.py
+│   ├── test_multi_tenant.py
+│   └── test_integracao_estoque.py
+│
+├── scripts/                     # Scripts auxiliares
+│   └── configure-netlify.ps1
+│
+├── README.md                    # Este arquivo
+├── netlify.toml                # Deploy Netlify
+├── package.json                # Dependências Node
+└── requirements.txt            # Dependências Python
+---
+
+## 💻 Instalação e Execução Local
 
 ### 📋 Pré-requisitos
 
-- **Node.js 18+** (para desenvolvimento local)
-- **Git** (para clonar o repositório)
-- **Navegador moderno** (Chrome, Firefox, Edge, Safari)
+```bash
+✓ Git instalado
+✓ Node.js 18+ (opcional, para server.js)
+✓ Navegador moderno (Chrome, Firefox, Edge, Safari)
+```
 
-### 📥 Passo a Passo
+### 📥 Instalação
 
 #### 1️⃣ Clone o repositório
 
@@ -111,106 +219,196 @@ git clone https://github.com/cristiano-superacao/projetowash.git
 cd projetowash
 ```
 
-#### 2️⃣ Inicie o servidor local
+#### 2️⃣ Instale dependências (opcional para server local)
 
 ```bash
+npm install
+```
+
+#### 3️⃣ Inicie o servidor local
+
+**Opção A: Com Node.js**
+```bash
 node server.js
+# Acesse: http://localhost:8000
 ```
 
-#### 3️⃣ Acesse no navegador
+**Opção B: Python HTTP Server**
+```bash
+cd web
+python -m http.server 8000
+# Acesse: http://localhost:8000
+```
+
+**Opção C: VS Code Live Server**
+```
+1. Abra a pasta 'web' no VS Code
+2. Clique com botão direito em index.html
+3. Selecione "Open with Live Server"
+```
+
+#### 4️⃣ Acesse o sistema
 
 ```
-http://localhost:8000
+URL: http://localhost:8000
+Login: superadmin@quatrocantos.com
+Senha: admin@2025
 ```
 
 ---
 
-## 🗄️ Banco de Dados
+## 🔥 Firebase Setup (Opcional)
 
-### LocalStorage (Atual - Modo Demo)
+### Para usar Firebase em vez de LocalStorage:
 
-O sistema utiliza `localStorage` do navegador para armazenar dados:
+#### 1️⃣ Crie um projeto no Firebase Console
 
-- ✅ Sem necessidade de servidor backend
-- ✅ Funciona 100% offline
-- ✅ Perfeito para demonstrações
-- ✅ Dados persistem no navegador
-- ⚠️ Limitado ao navegador/dispositivo
-
-### Estrutura de Dados
-
-**localUsers** - Array de usuários/empresas
-```javascript
-{
-  uid: string,
-  nome: string,
-  email: string,
-  senha: string,
-  role: 'admin' | 'superadmin' | 'user',
-  nomeEmpresa: string,
-  companyId: string,
-  segmento: string,
-  ativo: boolean,
-  dataCadastro: string
-}
+```
+https://console.firebase.google.com
 ```
 
-**localCurrentUser** - Usuário logado atualmente
+#### 2️⃣ Configure o arquivo `firebase-config.js`
+
 ```javascript
-{
-  uid: string,
-  email: string,
-  role: string,
-  companyId: string,
-  // ... outros campos
-}
+const firebaseConfig = {
+    apiKey: "SUA_API_KEY",
+    authDomain: "SEU_AUTH_DOMAIN",
+    projectId: "SEU_PROJECT_ID",
+    storageBucket: "SEU_STORAGE_BUCKET",
+    messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+    appId: "SEU_APP_ID"
+};
 ```
 
-### Firebase (Opcional - Produção)
+#### 3️⃣ Descomente as linhas no `index.html`
 
-Para ambiente de produção, descomente as linhas no `index.html`:
 ```html
-<!-- <script src="/static/js/firebase-config.js"></script> -->
-<!-- <script src="/static/js/firestore-service.js"></script> -->
+<!-- Descomente estas linhas: -->
+<script src="/static/js/firebase-config.js?v=41"></script>
+<script src="/static/js/firestore-service.js?v=41"></script>
+```
+
+#### 4️⃣ Configure as regras do Firestore
+
+```javascript
+// Em config/firestore.rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
 ```
 
 ---
 
-## 📁 Estrutura do Projeto
+## 🗄️ Estrutura de Dados
 
+### 📊 Collections Firebase / LocalStorage
+
+#### `usuarios` / `localUsers`
+```javascript
+{
+  uid: string,              // ID único do usuário
+  nome: string,             // Nome completo
+  email: string,            // Email (unique)
+  senha: string,            // Hash da senha
+  role: enum,               // 'superadmin' | 'admin' | 'user'
+  nomeEmpresa: string,      // Nome da empresa
+  companyId: string,        // ID da empresa (isolamento)
+  segmento: string,         // Segmento de atuação
+  ativo: boolean,           // Status ativo/inativo
+  dataCadastro: timestamp,  // Data de cadastro
+  permissions: {            // Permissões granulares
+    rh: boolean,
+    operacional: boolean,
+    financeiro: boolean,
+    estoque: boolean
+  }
+}
 ```
-projetowash/
-│
-├── 📂 web/                      # Frontend (deploy no Netlify)
-│   ├── index.html               # Página principal
-│   ├── favicon.ico              # Ícone do site
-│   ├── service-worker.js        # PWA Service Worker
-│   │
-│   └── 📂 static/
-│       ├── 📂 css/
-│       │   ├── style.css        # Estilos principais
-│       │   ├── admin.css        # Estilos do painel admin
-│       │   └── segments.css     # Estilos dos segmentos
-│       │
-│       ├── 📂 js/
-│       │   ├── app.js           # Lógica principal
-│       │   ├── auth.js          # Autenticação
-│       │   ├── admin-module.js  # Painel super admin
-│       │   ├── dashboard.js     # Dashboard principal
-│       │   ├── local-auth.js    # Auth localStorage
-│       │   ├── local-firestore.js # DB localStorage
-│       │   │
-│       │   └── 📂 modules/
-│       │       ├── operacional.js
-│       │       ├── estoque_entrada.js
-│       │       ├── estoque_saida.js
-│       │       ├── financeiro.js
-│       │       ├── rh.js
-│       │       └── visualizar_estoque.js
-│       │
-│       └── 📂 icons/            # Ícones PWA
-│
-├── 📂 config/
+
+#### `produtos`
+```javascript
+{
+  id: string,
+  codigo: string,           // Código do produto
+  nome: string,             // Nome do produto
+  quantidade: number,       // Quantidade em estoque
+  valor: number,            // Valor unitário (custo)
+  fornecedor: string,       // Nome do fornecedor
+  local: string,            // Localização no estoque
+  companyId: string,        // ID da empresa (multi-tenant)
+  createdAt: timestamp,
+  updatedAt: timestamp
+}
+```
+
+#### `movimentacoes`
+```javascript
+{
+  id: string,
+  tipo: enum,               // 'entrada' | 'saida'
+  produtoId: string,        // ID do produto
+  produtoNome: string,      // Nome do produto
+  quantidade: number,       // Quantidade movimentada
+  valorUnitario: number,    // Valor por unidade
+  valorTotal: number,       // Valor total da movimentação
+  valorVenda: number,       // Valor de venda (apenas saída)
+  companyId: string,        // ID da empresa
+  data: timestamp,          // Data da movimentação
+  usuario: string           // Usuário que registrou
+}
+```
+
+#### `folha_pagamento`
+```javascript
+{
+  id: string,
+  mes: string,              // Mês de referência
+  ano: number,              // Ano de referência
+  data: string,             // Data de geração
+  funcionarios: [{
+    nome: string,
+    cargo: string,
+    salarioBase: number,
+    horasExtras: number,
+    valorHorasExtras: number,
+    salarioBruto: number,
+    inss: number,           // INSS progressivo 2025
+    ir: number,             // IR progressivo 2025
+    descontos: number,
+    salarioLiquido: number
+  }],
+  totais: {
+    salarioBase: number,
+    horasExtras: number,
+    salarioBruto: number,
+    inss: number,
+    ir: number,
+    descontos: number,
+    salarioLiquido: number
+  },
+  companyId: string,
+  createdAt: timestamp
+}
+```
+
+#### `financeiro_lancamentos`
+```javascript
+{
+  id: string,
+  tipo: enum,               // 'receita' | 'despesa'
+  descricao: string,        // Descrição do lançamento
+  valor: number,            // Valor do lançamento
+  data: string,             // Data do lançamento
+  categoria: string,        // Categoria (opcional)
+  companyId: string,        // ID da empresa
+  createdAt: timestamp
+}
+```
 │   ├── netlify.toml             # Config Netlify
 │   ├── firebase.json            # Config Firebase
 │   └── firestore.rules          # Regras Firestore
@@ -619,27 +817,108 @@ chore: Manutenção geral
 
 ---
 
+---
+
+## 🚀 Como Usar
+
+### 🔐 1. Login no Sistema
+
+#### SuperAdmin (Acesso Total)
+```
+Email: superadmin@quatrocantos.com
+Senha: admin@2025
+Permissões: Acesso completo ao sistema + painel de gestão de empresas
+```
+
+#### Empresas Demo
+```
+Indústria:
+  Email: industria@demo.com
+  Senha: demo123
+  Segmento: Indústria
+
+Comércio:
+  Email: comercio@demo.com
+  Senha: demo123
+  Segmento: Comércio
+
+Serviços:
+  Email: servicos@demo.com
+  Senha: demo123
+  Segmento: Serviços
+```
+
+### 📊 2. Navegação por Módulos
+
+#### Dashboard
+- KPIs principais, gráficos e estatísticas em tempo real
+
+#### Estoque
+- **Entrada**: Cadastro de produtos e fornecedores
+- **Saída/Venda**: Vendas com cálculo automático de margem 30%
+- **Visualização**: Tabela completa com busca e export PDF
+
+#### RH
+- Folha de pagamento com INSS/IRRF 2025
+- Horas extras CLT (1.5×)
+- Relatórios PDF
+
+#### Operacional
+- Análise de capacidade produtiva
+- Gráficos de turnos e ocupação
+- Integração com dados reais
+
+#### Financeiro
+- Receitas e despesas
+- Saldo e fluxo de caixa
+- Gráficos e export PDF
+
+---
+
+## 🤝 Contribuindo
+
+1. Fork o repositório
+2. Crie branch: `git checkout -b feature/nova-feature`
+3. Commit: `git commit -m "feat: adiciona nova funcionalidade"`
+4. Push: `git push origin feature/nova-feature`
+5. Abra Pull Request
+
+**Commits semânticos**: `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`
+
+---
+
 ## 📞 Suporte
 
 ### 🆘 Precisa de Ajuda?
 
-- 🐛 **Issues**: [Reportar Bug ou Sugerir Feature](https://github.com/gabrielamnss1/Quatro-Cantos/issues)
-- 📖 **Documentação**: Abra `docs/index.html` no navegador
-- 📊 **Fluxograma**: Abra `docs/fluxograma.html` no navegador
-- 📘 **Guia de Autenticação**: Leia `GUIA_AUTENTICACAO.md`
-
-### 🔗 Links Úteis
-
-- [Repositório GitHub](https://github.com/gabrielamnss1/Quatro-Cantos)
-- [Documentação SQLAlchemy](https://docs.sqlalchemy.org/)
-- [Python.org](https://www.python.org/)
-- [PEP 8 - Style Guide](https://pep8.org/)
+- 🐛 **Issues**: [Reportar Bug ou Sugerir Feature](https://github.com/cristiano-superacao/projetowash/issues)
+- 📖 **Documentação**: Leia este README completo
+- 💬 **Contato**: GitHub [@cristiano-superacao](https://github.com/cristiano-superacao)
 
 ---
 
 ## 📜 Licença
 
-Este projeto foi desenvolvido para fins educacionais e de gestão empresarial.
+Licença **MIT**. Veja LICENSE para detalhes.
+
+---
+
+## 📈 Roadmap
+
+### v42 (Próxima)
+- [ ] Dashboard com ROI/EBITDA
+- [ ] Export Excel
+- [ ] Notificações PWA
+
+### v43
+- [ ] Sistema de tarefas
+- [ ] API REST
+- [ ] Auditoria de ações
+
+### v44
+- [ ] Módulo CRM
+- [ ] App mobile
+- [ ] BI com ML
 
 ---
 
@@ -674,9 +953,9 @@ Este projeto foi desenvolvido para fins educacionais e de gestão empresarial.
 <td>gabriela.m.silva@ba.estudante.senai.br</td>
 <td>
   🎯 Desenvolvedora Principal<br>
-  📝 Autora da conta GitHub<br>
-  🔗 Integração com repositório remoto<br>
-  📊 Gerenciamento do projeto
+  📝 GitHub Owner<br>
+  🔗 Integração remota<br>
+  📊 Gestão do projeto
 </td>
 </tr>
 <tr>
@@ -685,7 +964,7 @@ Este projeto foi desenvolvido para fins educacionais e de gestão empresarial.
 <td>cristiano.s.santos@ba.estudante.senai.br</td>
 <td>
   💻 Desenvolvedor<br>
-  🔐 Sistema de Autenticação<br>
+  🔐 Autenticação<br>
   🗄️ Banco de Dados<br>
   📖 Documentação
 </td>
@@ -697,23 +976,41 @@ Este projeto foi desenvolvido para fins educacionais e de gestão empresarial.
 <td>
   💻 Desenvolvedor<br>
   ⚙️ Módulos de Negócio<br>
-  🧪 Testes e Validação<br>
+  🧪 Testes<br>
   📊 Análises
 </td>
 </tr>
 </tbody>
 </table>
 
-### 🤝 Áreas de Contribuição
+---
 
-Todos os integrantes contribuem ativamente para:
+## ⭐ Agradecimentos
 
-- ✅ **Implementação de Funcionalidades** - Desenvolvimento de módulos e recursos
-- ✅ **Testes e Validação** - Garantia de qualidade do código
-- ✅ **Documentação** - Manutenção de documentação técnica e de usuário
-- ✅ **Revisão de Código** - Code review e melhorias contínuas
-- ✅ **Arquitetura** - Decisões técnicas e de design
-- ✅ **Suporte** - Auxílio aos usuários e correção de bugs
+- **Chart.js** - Gráficos interativos
+- **jsPDF** - Geração de PDFs
+- **FontAwesome** - Ícones
+- **Firebase** - Backend as a Service
+- **Netlify** - Hospedagem
+- **GitHub Copilot** - Assistência no desenvolvimento
+
+---
+
+<div align="center">
+
+## 🌟 Se este projeto foi útil, deixe uma ⭐ no GitHub!
+
+**Sistema Quatro Cantos v41** - Gestão Empresarial Multi-Tenant Completa
+
+Desenvolvido com ❤️ pela equipe SENAI
+
+[🔗 Acessar Sistema](https://quatrocanto.netlify.app) | [📖 Documentação](https://github.com/cristiano-superacao/projetowash) | [🐛 Issues](https://github.com/cristiano-superacao/projetowash/issues)
+
+---
+
+**© 2025 Sistema Quatro Cantos** | Licença MIT
+
+</div>
 
 ---
 
