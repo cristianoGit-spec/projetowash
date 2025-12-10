@@ -871,7 +871,7 @@
         // Sistema tenta usar Firebase primeiro, fallback para localStorage se falhar
         console.log('[ENV] Ambiente:', IS_PRODUCTION ? 'PRODUÇÃO (Netlify)' : IS_LOCALHOST ? 'LOCAL (Dev)' : 'OUTRO');
         console.log('[SYSTEM] Versão:', APP_VERSION, '- Layout PrescrMed Inspirado');
-        console.log('[v42.1] Correções: SyntaxError firebase-config, ReferenceError dashboard, Funções implementadas: toggleStatusEmpresa, excluirEmpresa, exportarPDF RH completo');
+        console.log('[v42.1] Gestão de Empresas COMPLETA: Busca híbrida (Firebase+Local), CRUD total, badges origem, layout profissional responsivo');
         
         // Toggle Mobile Menu
         function toggleMobileMenu() {
@@ -916,10 +916,10 @@
     <!-- 3. Scripts de Interface e Módulos -->
     <script src="/static/js/auth.js?v=42"></script>
     <script src="/static/js/admin-module.js?v=1.1"></script>
+    <script src="/static/js/modules/gestao-empresas.js?v=42"></script>
     <script src="/static/js/app.js?v=42"></script>
     <script src="/static/js/modules.js?v=42"></script>
     <script src="/static/js/dashboard.js?v=42"></script>
-    <!-- gestao-empresas.js removido - funcionalidade integrada em admin-module.js -->
     <script src="/static/js/pwa.js?v=41"></script>
     
     <!-- Inicialização do formulário de cadastro -->

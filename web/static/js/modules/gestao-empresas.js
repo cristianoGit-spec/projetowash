@@ -1,7 +1,9 @@
 /**
- * Módulo de Gestão de Empresas (Super Admin) - v40.14
+ * Módulo de Gestão de Empresas (Super Admin) - v42.1
  * Sistema completo de gerenciamento de empresas com layout profissional
+ * Sistema Híbrido: Firebase Cloud + LocalStorage
  * Funcionalidades: Visualizar, Criar, Editar, Excluir, Buscar, Filtrar
+ * Integrado com buscarTodasEmpresasFirebase() do firestore-service.js
  */
 
 // ========================================
@@ -99,24 +101,48 @@ async function carregarEmpresas() {
     try {
         showLoadingGE('Carregando empresas...');
         
-        if (!isFirebaseAvailableGE()) {
-            console.warn('[GE] Firebase não disponível');
-            empresasList = [];
-            empresasFiltered = [];
-            renderizarEmpresas();
-            hideLoadingGE();
-            return;
+        let empresasFirebase = [];
+        let empresasLocal = [];
+        
+        // 1. BUSCAR DO FIREBASE (usando função do firestore-service)
+        if (isFirebaseAvailableGE() && typeof buscarTodasEmpresasFirebase === 'function') {
+            try {
+                console.log('[GE] Buscando empresas do Firebase Cloud...');
+                empresasFirebase = await buscarTodasEmpresasFirebase();
+                console.log(`[GE] Firebase: ${empresasFirebase.length} empresas encontradas`);
+            } catch (error) {
+                console.warn('[GE] Erro ao buscar do Firebase:', error.message);
+            }
         }
         
-        // Buscar todas as empresas do Firestore
-        const snapshot = await db.collection('empresas').get();
+        // 2. BUSCAR DO LOCALSTORAGE (fallback)
+        try {
+            const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+            empresasLocal = localUsers.filter(u => 
+                u.role === 'admin' && 
+                u.email !== 'superadmin@quatrocantos.com'
+            );
+            console.log(`[GE] LocalStorage: ${empresasLocal.length} empresas encontradas`);
+        } catch (error) {
+            console.warn('[GE] Erro ao buscar do localStorage:', error);
+        }
         
-        empresasList = snapshot.docs.map(doc => ({
-            uid: doc.id,
-            ...doc.data()
-        }));
+        // 3. COMBINAR (Firebase tem prioridade, sem duplicatas por email)
+        const empresasMap = new Map();
         
-        console.log(`[GE] ${empresasList.length} empresas carregadas`);
+        empresasFirebase.forEach(emp => {
+            empresasMap.set(emp.email, { ...emp, origem: 'firebase' });
+        });
+        
+        empresasLocal.forEach(emp => {
+            if (!empresasMap.has(emp.email)) {
+                empresasMap.set(emp.email, { ...emp, origem: 'local' });
+            }
+        });
+        
+        empresasList = Array.from(empresasMap.values());
+        
+        console.log(`[GE] Total: ${empresasList.length} empresas (${empresasFirebase.length} Firebase + ${empresasLocal.length} Local)`);
         
         // Aplicar filtro atual
         aplicarFiltro(filtroAtual);
@@ -187,9 +213,17 @@ function renderizarEmpresas() {
                             <h3 style="font-size: 1.125rem; font-weight: 600; color: #0f172a; margin: 0 0 0.25rem 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                 ${empresa.nomeEmpresa}
                             </h3>
-                            <span style="display: inline-block; padding: 0.25rem 0.625rem; background: ${statusBg}; color: ${statusColor}; border-radius: 6px; font-size: 0.75rem; font-weight: 500; text-transform: uppercase;">
-                                ${status}
-                            </span>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <span style="display: inline-block; padding: 0.25rem 0.625rem; background: ${statusBg}; color: ${statusColor}; border-radius: 6px; font-size: 0.75rem; font-weight: 500; text-transform: uppercase;">
+                                    ${status}
+                                </span>
+                                ${empresa.origem ? `
+                                <span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.625rem; background: ${empresa.origem === 'firebase' ? '#3b82f615' : '#8b5cf615'}; color: ${empresa.origem === 'firebase' ? '#3b82f6' : '#8b5cf6'}; border-radius: 6px; font-size: 0.75rem; font-weight: 500;">
+                                    <i class="fas fa-${empresa.origem === 'firebase' ? 'cloud' : 'hdd'}" style="font-size: 0.7rem;"></i>
+                                    ${empresa.origem === 'firebase' ? 'Cloud' : 'Local'}
+                                </span>
+                                ` : ''}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -473,8 +507,8 @@ async function cadastrarNovaEmpresa() {
         const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, senha);
         const uid = userCredential.user.uid;
         
-        // Criar documento da empresa
-        await db.collection('empresas').doc(uid).set({
+        // Criar documento da empresa (coleção 'usuarios')
+        const empresaData = {
             companyId: companyId,
             nomeEmpresa: nomeEmpresa,
             segmento: segmento,
@@ -484,7 +518,23 @@ async function cadastrarNovaEmpresa() {
             ativo: true,
             criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
             atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        };
+        
+        await db.collection('usuarios').doc(uid).set(empresaData);
+        
+        // Também salvar no localStorage como backup
+        try {
+            const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+            localUsers.push({
+                uid: uid,
+                ...empresaData,
+                criadoEm: new Date().toISOString(),
+                atualizadoEm: new Date().toISOString()
+            });
+            localStorage.setItem('localUsers', JSON.stringify(localUsers));
+        } catch (e) {
+            console.warn('[GE] Erro ao salvar backup local:', e);
+        }
         
         mostrarToastGE('✅ Empresa cadastrada com sucesso!', 'success');
         fecharModalNovaEmpresa();
@@ -572,7 +622,7 @@ async function salvarEdicaoEmpresa() {
             atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
         };
         
-        await db.collection('empresas').doc(empresaEditando.uid).update(dadosAtualizados);
+        await db.collection('usuarios').doc(empresaEditando.uid).update(dadosAtualizados);
         
         mostrarToastGE('✅ Empresa atualizada com sucesso!', 'success');
         fecharModalEdicao();
@@ -608,7 +658,7 @@ async function toggleStatusEmpresa(uid, ativoAtual) {
             throw new Error('Firebase não disponível');
         }
         
-        await db.collection('empresas').doc(uid).update({
+        await db.collection('usuarios').doc(uid).update({
             ativo: novoStatus,
             atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
         });
@@ -676,29 +726,43 @@ async function excluirEmpresa() {
         const uid = empresaEditando.uid;
         const companyId = empresaEditando.companyId;
         
-        // Excluir todos os dados da empresa
-        const batch = db.batch();
+        // Usar função do firestore-service se disponível
+        if (typeof deletarEmpresaFirebase === 'function') {
+            await deletarEmpresaFirebase(uid);
+        } else {
+            // Fallback: exclusão manual
+            const batch = db.batch();
+            
+            // Excluir produtos (estoque)
+            const estoqueSnapshot = await db.collection('estoque').where('companyId', '==', companyId).get();
+            estoqueSnapshot.docs.forEach(doc => batch.delete(doc.ref));
+            
+            // Excluir movimentações
+            const movimentacoesSnapshot = await db.collection('movimentacoes').where('companyId', '==', companyId).get();
+            movimentacoesSnapshot.docs.forEach(doc => batch.delete(doc.ref));
+            
+            // Excluir transações financeiras
+            const financeiroSnapshot = await db.collection('financeiro').where('companyId', '==', companyId).get();
+            financeiroSnapshot.docs.forEach(doc => batch.delete(doc.ref));
+            
+            // Excluir funcionários
+            const funcionariosSnapshot = await db.collection('funcionarios').where('companyId', '==', companyId).get();
+            funcionariosSnapshot.docs.forEach(doc => batch.delete(doc.ref));
+            
+            // Excluir empresa (coleção 'usuarios')
+            batch.delete(db.collection('usuarios').doc(uid));
+            
+            await batch.commit();
+        }
         
-        // Excluir produtos
-        const produtosSnapshot = await db.collection('produtos').where('companyId', '==', companyId).get();
-        produtosSnapshot.docs.forEach(doc => batch.delete(doc.ref));
-        
-        // Excluir movimentações
-        const movimentacoesSnapshot = await db.collection('movimentacoes').where('companyId', '==', companyId).get();
-        movimentacoesSnapshot.docs.forEach(doc => batch.delete(doc.ref));
-        
-        // Excluir transações financeiras
-        const financeiroSnapshot = await db.collection('financeiro').where('companyId', '==', companyId).get();
-        financeiroSnapshot.docs.forEach(doc => batch.delete(doc.ref));
-        
-        // Excluir funcionários
-        const funcionariosSnapshot = await db.collection('funcionarios').where('companyId', '==', companyId).get();
-        funcionariosSnapshot.docs.forEach(doc => batch.delete(doc.ref));
-        
-        // Excluir empresa
-        batch.delete(db.collection('empresas').doc(uid));
-        
-        await batch.commit();
+        // Também remover do localStorage
+        try {
+            const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+            const filteredUsers = localUsers.filter(u => u.uid !== uid && u.email !== empresaEditando.email);
+            localStorage.setItem('localUsers', JSON.stringify(filteredUsers));
+        } catch (e) {
+            console.warn('[GE] Erro ao remover do localStorage:', e);
+        }
         
         mostrarToastGE('✅ Empresa e todos os seus dados foram excluídos', 'success');
         fecharModalExclusao();
@@ -784,4 +848,4 @@ if (typeof window !== 'undefined') {
     window.excluirEmpresa = excluirEmpresa;
 }
 
-console.log('[GESTÃO EMPRESAS] Módulo carregado - v40.14');
+console.log('[GESTÃO EMPRESAS] Módulo carregado - v42.1 (Sistema Híbrido: Firebase + LocalStorage)');

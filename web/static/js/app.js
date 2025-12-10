@@ -190,7 +190,7 @@ function showModule(moduleName) {
             } else {
                 // Carregar script se não estiver disponível
                 const script = document.createElement('script');
-                script.src = '/static/js/modules/gestao-empresas.js?v=40';
+                script.src = '/static/js/modules/gestao-empresas.js?v=42';
                 script.onload = () => {
                     if (typeof initGestaoEmpresas === 'function') {
                         initGestaoEmpresas();
