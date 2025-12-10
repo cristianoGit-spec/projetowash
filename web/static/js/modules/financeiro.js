@@ -6,121 +6,149 @@ console.log('[MODULE] Módulo Financeiro v39 carregado');
 
 function loadFinanceiroModule(container) {
     const html = `
-        <div class="financeiro-module">
-            <!-- Header Moderno com Gradiente -->
-            <div class="modern-header">
-                <div class="header-content">
-                    <div class="header-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div>
-                        <h2>Módulo Financeiro</h2>
-                        <p>Gestão de Custos e Lucros</p>
-                    </div>
-                </div>
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden;">
+            <!-- Header -->
+            <div style="padding: 1.25rem; border-bottom: 1px solid #f3f4f6;">
+                <h3 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-chart-line" style="color: #10b981; font-size: 0.875rem;"></i>
+                    Módulo Financeiro
+                </h3>
+                <p style="color: #6b7280; font-size: 0.8125rem; margin: 0;">Gestão de Custos e Lucros</p>
             </div>
 
-            <!-- Cards Principais -->
-            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                <!-- Card Lançamentos -->
-                <div class="modern-card">
-                    <div class="modern-body">
-                        <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #1e40af;">
-                            <i class="fas fa-exchange-alt"></i>
+            <!-- Content -->
+            <div style="padding: 1.5rem;">
+                <!-- Grid: Lançamentos + Resumo -->
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <!-- Card Lançamentos -->
+                    <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.25rem;">
+                        <h4 style="font-size: 0.9375rem; font-weight: 600; color: #0f172a; margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-exchange-alt" style="color: #3b82f6; font-size: 0.875rem;"></i>
                             Lançamentos
-                        </h3>
+                        </h4>
                         <form id="formLancamento" onsubmit="salvarLancamento(event)">
-                            <div class="form-group">
-                                <label><i class="fas fa-tag"></i> Tipo</label>
-                                <select id="tipoLancamento" required style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-tag" style="color: #6b7280; font-size: 0.75rem;"></i>
+                                    Tipo
+                                </label>
+                                <select id="tipoLancamento" required 
+                                        style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                                        onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                                        onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                                     <option value="">Selecione...</option>
                                     <option value="receita">Receita</option>
                                     <option value="despesa">Despesa</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-dollar-sign"></i> Valor (R$)</label>
-                                <input type="number" id="valorLancamento" step="0.01" min="0" required 
-                                       placeholder="0,00" 
-                                       style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-dollar-sign" style="color: #6b7280; font-size: 0.75rem;"></i>
+                                    Valor (R$)
+                                </label>
+                                <input type="number" id="valorLancamento" step="0.01" min="0" required placeholder="0,00"
+                                       style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                                       onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                                       onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                             </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-align-left"></i> Descrição</label>
-                                <input type="text" id="descricaoLancamento" required 
-                                       placeholder="Ex: Venda de produto X" 
-                                       style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-align-left" style="color: #6b7280; font-size: 0.75rem;"></i>
+                                    Descrição
+                                </label>
+                                <input type="text" id="descricaoLancamento" required placeholder="Ex: Venda de produto X"
+                                       style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                                       onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                                       onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                             </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-calendar"></i> Data</label>
-                                <input type="date" id="dataLancamento" required 
-                                       style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                            <div style="margin-bottom: 1.25rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-calendar" style="color: #6b7280; font-size: 0.75rem;"></i>
+                                    Data
+                                </label>
+                                <input type="date" id="dataLancamento" required
+                                       style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                                       onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                                       onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                             </div>
-                            <button type="submit" class="btn btn-primary" 
-                                    style="width: 100%; padding: 12px; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <button type="submit" 
+                                    style="width: 100%; padding: 0.75rem; background: #3b82f6; color: white; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s ease;"
+                                    onmouseover="this.style.background='#2563eb'"
+                                    onmouseout="this.style.background='#3b82f6'">
                                 <i class="fas fa-save"></i> Salvar Lançamento
                             </button>
                         </form>
                     </div>
-                </div>
 
-                <!-- Card Resumo Financeiro -->
-                <div class="modern-card">
-                    <div class="modern-body">
-                        <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #1e40af;">
-                            <i class="fas fa-calculator"></i>
+                    <!-- Card Resumo -->
+                    <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.25rem;">
+                        <h4 style="font-size: 0.9375rem; font-weight: 600; color: #0f172a; margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-calculator" style="color: #8b5cf6; font-size: 0.875rem;"></i>
                             Resumo Financeiro
-                        </h3>
-                        <div class="info-grid" id="resumoFinanceiro">
-                            <div class="info-row">
-                                <span class="info-label"><i class="fas fa-arrow-up" style="color: #10b981;"></i> Total Receitas:</span>
-                                <span class="info-value" style="color: #10b981; font-weight: 600;" id="totalReceitas">R$ 0,00</span>
+                        </h4>
+                        <div id="resumoFinanceiro" style="display: grid; gap: 0.75rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 0.5rem;">
+                                <span style="color: #6b7280; font-size: 0.875rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-arrow-up" style="color: #10b981; font-size: 0.75rem;"></i>
+                                    Total Receitas:
+                                </span>
+                                <span style="font-weight: 600; color: #10b981; font-size: 0.875rem;" id="totalReceitas">R$ 0,00</span>
                             </div>
-                            <div class="info-row">
-                                <span class="info-label"><i class="fas fa-arrow-down" style="color: #ef4444;"></i> Total Despesas:</span>
-                                <span class="info-value" style="color: #ef4444; font-weight: 600;" id="totalDespesas">R$ 0,00</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 0.5rem;">
+                                <span style="color: #6b7280; font-size: 0.875rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-arrow-down" style="color: #ef4444; font-size: 0.75rem;"></i>
+                                    Total Despesas:
+                                </span>
+                                <span style="font-weight: 600; color: #ef4444; font-size: 0.875rem;" id="totalDespesas">R$ 0,00</span>
                             </div>
-                            <div class="info-row">
-                                <span class="info-label"><i class="fas fa-balance-scale" style="color: #3b82f6;"></i> Saldo:</span>
-                                <span class="info-value" style="color: #3b82f6; font-weight: 700; font-size: 18px;" id="saldoTotal">R$ 0,00</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                                <span style="color: #0f172a; font-size: 0.875rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-balance-scale" style="color: #3b82f6; font-size: 0.75rem;"></i>
+                                    Saldo:
+                                </span>
+                                <span style="font-weight: 700; color: #3b82f6; font-size: 1.125rem;" id="saldoTotal">R$ 0,00</span>
                             </div>
-                            <div class="info-row">
-                                <span class="info-label"><i class="fas fa-list"></i> Total de Lançamentos:</span>
-                                <span class="info-value" id="totalLancamentos">0</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 0.5rem;">
+                                <span style="color: #6b7280; font-size: 0.875rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-list" style="color: #6b7280; font-size: 0.75rem;"></i>
+                                    Total de Lançamentos:
+                                </span>
+                                <span style="font-weight: 600; color: #0f172a; font-size: 0.875rem;" id="totalLancamentos">0</span>
                             </div>
                         </div>
-                        <div style="margin-top: 20px;">
-                            <button onclick="calcularFluxoCaixa()" class="btn btn-secondary" 
-                                    style="width: 100%; padding: 10px; background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                                <i class="fas fa-chart-bar"></i> Atualizar Resumo
-                            </button>
-                        </div>
+                        <button onclick="calcularFluxoCaixa()" 
+                                style="width: 100%; margin-top: 1rem; padding: 0.625rem; background: white; color: #374151; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s ease;"
+                                onmouseover="this.style.background='#f9fafb'; this.style.borderColor='#9ca3af'"
+                                onmouseout="this.style.background='white'; this.style.borderColor='#d1d5db'">
+                            <i class="fas fa-chart-bar"></i> Atualizar Resumo
+                        </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Alert de Informação -->
-            <div class="simple-alert">
-                <i class="fas fa-info-circle"></i>
-                <span>Registre todas as receitas e despesas para acompanhar o fluxo de caixa da empresa.</span>
-            </div>
+                <!-- Alert -->
+                <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #3b82f6; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                    <i class="fas fa-info-circle" style="color: #3b82f6; font-size: 1.25rem;"></i>
+                    <span style="color: #1e40af; font-size: 0.875rem;">Registre todas as receitas e despesas para acompanhar o fluxo de caixa da empresa.</span>
+                </div>
 
-            <!-- Histórico de Lançamentos -->
-            <div class="modern-card" style="margin-top: 30px;">
-                <div class="modern-body">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-                        <h3 style="display: flex; align-items: center; gap: 10px; margin: 0; color: #1e40af;">
-                            <i class="fas fa-history"></i>
+                <!-- Histórico -->
+                <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                        <h4 style="font-size: 0.9375rem; font-weight: 600; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-history" style="color: #8b5cf6; font-size: 0.875rem;"></i>
                             Histórico de Lançamentos
-                        </h3>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        </h4>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
                             <select id="filtroTipo" onchange="filtrarLancamentos()" 
-                                    style="padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: white;">
+                                    style="padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; background: white; color: #374151;">
                                 <option value="">Todos os tipos</option>
                                 <option value="receita">Receitas</option>
                                 <option value="despesa">Despesas</option>
                             </select>
-                            <button onclick="limparHistorico()" class="btn btn-danger" 
-                                    style="padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                            <button onclick="limparHistorico()" 
+                                    style="padding: 0.5rem 0.75rem; background: #ef4444; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; font-weight: 500; display: flex; align-items: center; gap: 0.375rem; transition: all 0.2s ease;"
+                                    onmouseover="this.style.background='#dc2626'"
+                                    onmouseout="this.style.background='#ef4444'">
                                 <i class="fas fa-trash"></i> Limpar Histórico
                             </button>
                         </div>
