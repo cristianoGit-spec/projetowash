@@ -4,44 +4,50 @@
 
 function loadEstoqueSaidaModule(container) {
     const html = `
-        <div class="card modern-card">
-            <div class="card-header modern-header">
-                <div class="header-content">
-                    <div class="header-icon">
-                        <i class="fas fa-truck-loading"></i>
-                    </div>
-                    <div class="header-text">
-                        <h3>Registrar Venda/Saída</h3>
-                        <p class="subtitle">Controle de saída de produtos do estoque</p>
-                    </div>
-                </div>
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden;">
+            <!-- Header -->
+            <div style="padding: 1.25rem; border-bottom: 1px solid #f3f4f6;">
+                <h3 style="font-size: 1rem; font-weight: 600; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-truck-loading" style="color: #f59e0b; font-size: 0.875rem;"></i>
+                    Registrar Venda/Saída
+                </h3>
+                <p style="color: #6b7280; font-size: 0.8125rem; margin: 0.375rem 0 0 1.375rem;">Controle de saída de produtos do estoque</p>
             </div>
             
-            <div class="card-body modern-body">
+            <!-- Form -->
+            <div style="padding: 1.5rem;">
                 <form id="formEstoqueSaida" onsubmit="venderProduto(event)">
-                    <div class="form-group modern-form-group">
-                        <label class="modern-label">
-                            <i class="fas fa-search"></i>
-                            <span>Nome do Produto</span>
+                    <!-- Nome do Produto -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                            <i class="fas fa-search" style="color: #6b7280; font-size: 0.75rem;"></i>
+                            Nome do Produto
                         </label>
-                        <input type="text" id="nomeProduto" name="nomeProduto" 
-                               class="modern-input" required 
-                               placeholder="Digite o nome do produto">
+                        <input type="text" id="nomeProduto" name="nomeProduto" required placeholder="Digite o nome do produto"
+                               style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                               onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                               onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                     </div>
                     
-                    <div class="form-group modern-form-group">
-                        <label class="modern-label">
-                            <i class="fas fa-cubes"></i>
-                            <span>Quantidade a Vender</span>
+                    <!-- Quantidade a Vender -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                            <i class="fas fa-cubes" style="color: #6b7280; font-size: 0.75rem;"></i>
+                            Quantidade a Vender
                         </label>
-                        <input type="number" id="quantidadeVenda" name="quantidadeVenda" 
-                               class="modern-input" required min="1" 
-                               placeholder="Ex: 50">
+                        <input type="number" id="quantidadeVenda" name="quantidadeVenda" required min="1" placeholder="Ex: 50"
+                               style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #0f172a; transition: all 0.2s ease;"
+                               onfocus="this.style.borderColor='#3b82f6'; this.style.outline='none'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
+                               onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                     </div>
                     
-                    <button type="submit" class="btn btn-warning modern-btn-warning">
+                    <!-- Botão Submit -->
+                    <button type="submit" 
+                            style="width: 100%; padding: 0.75rem; background: #f59e0b; color: white; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s ease;"
+                            onmouseover="this.style.background='#d97706'"
+                            onmouseout="this.style.background='#f59e0b'">
                         <i class="fas fa-shopping-cart"></i>
-                        <span>Registrar Venda</span>
+                        Registrar Venda
                     </button>
                 </form>
                 
