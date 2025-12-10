@@ -26,7 +26,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     
-    <!-- Firebase SDK (Sistema Híbrido - Nuvem + Local) -->
+    <!-- Firebase SDK (DESABILITADO - Sistema usando apenas localStorage) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -625,14 +625,14 @@
     <script>
         // SISTEMA HÍBRIDO COM LAYOUT PRESCRIMED - Firebase Cloud + Fallback Local
         // Versão 42.1 - Layout moderno com sidebar lateral
-        const APP_VERSION = '42.4';
+        const APP_VERSION = '42.5';
         const IS_PRODUCTION = window.location.hostname.includes('netlify.app');
         const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         
         // Sistema tenta usar Firebase primeiro, fallback para localStorage se falhar
         console.log('[ENV] Ambiente:', IS_PRODUCTION ? 'PRODUÇÃO (Netlify)' : IS_LOCALHOST ? 'LOCAL (Dev)' : 'OUTRO');
         console.log('[SYSTEM] Versão:', APP_VERSION, '- Layout PrescrMed Inspirado');
-        console.log('[v42.4] UI Profissional: Menu dropdown modernizado, design responsivo e animado');
+        console.log('[v42.4] MODO LOCAL: Firebase desabilitado, sistema usando localStorage exclusivamente');
         
         // Toggle Mobile Menu
         function toggleMobileMenu() {
@@ -667,7 +667,7 @@
     <!-- JavaScript - Ordem: Firebase Config > Firestore Service > Local Fallback > Auth > App -->
     
     <!-- 1. Configuração Firebase (Sistema Híbrido) -->
-    <script src="/static/js/firebase-config.js?v=41"></script>
+    <script src="/static/js/firebase-config.js?v=43"></script>
     <script src="/static/js/firestore-service.js?v=42"></script>
     
     <!-- 2. Fallback Local (se Firebase falhar) -->

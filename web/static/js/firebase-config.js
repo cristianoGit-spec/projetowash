@@ -37,11 +37,14 @@ const firebaseConfig = {
 let auth = null;
 let db = null;
 let firebaseInitialized = false;
-let useFirebase = true; // ATIVADO: Usar Firebase na nuvem por padrão
+let useFirebase = false; // DESABILITADO: API key inválida - usando apenas localStorage
 
-// Inicializar Firebase
+console.warn('⚠️ Firebase DESABILITADO: API key inválida. Sistema operando em modo LOCAL (localStorage).');
+console.log('💾 Todas as operações usarão localStorage como banco de dados principal.');
+
+// Inicializar Firebase (desabilitado temporariamente)
 try {
-    if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length === 0) {
+    if (false && typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length === 0) {
         firebase.initializeApp(firebaseConfig);
         auth = firebase.auth();
         db = firebase.firestore();
@@ -65,22 +68,20 @@ try {
                 console.warn('⚠️ Erro ao configurar persistência:', error.message);
             });
         
-        firebaseInitialized = true;
-        useFirebase = true;
+        firebaseInitialized = false; // DESABILITADO
+        useFirebase = false; // DESABILITADO
         
-        console.log("[OK] Firebase inicializado com sucesso!");
-        console.log("🌐 Modo: PRODUÇÃO - Dados na nuvem Google Cloud");
-        console.log("[REGION] Região: southamerica-east1 (São Paulo, Brasil)");
-        console.log("[SECURITY] Multi-tenant: Isolamento completo por empresa (companyId)");
-        console.log("[SYSTEM] Sistema híbrido: Firebase ativo com backup local");
+        console.log("[INFO] Firebase SDK carregado mas DESABILITADO");
+        console.log("💾 Modo: LOCAL - Todos os dados em localStorage");
+        console.log("📝 Motivo: API key inválida (auth/api-key-not-valid)");
+        console.log("✅ Sistema totalmente funcional em modo local");
         
     } else {
         throw new Error("Firebase SDK não disponível ou configuração inválida");
     }
 } catch (e) {
-    console.warn("⚠️ Firebase não disponível:", e.message);
-    console.log("[MODE] Usando modo LOCAL como fallback");
-    console.log("[STORAGE] Dados serão armazenados apenas no localStorage do navegador");
+    console.log("💾 Firebase desabilitado - usando modo LOCAL");
+    console.log("📝 Sistema operando com localStorage exclusivamente");
     firebaseInitialized = false;
     useFirebase = false;
 }
