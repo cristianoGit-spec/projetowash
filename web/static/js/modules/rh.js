@@ -592,7 +592,7 @@ function exibirResultadoRH(data) {
                     <strong>Cálculos conforme legislação 2025:</strong>
                 </p>
                 <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: #78350f;">
-                    <li><strong>Horas Extras:</strong> Valor/hora × 1.5 (adicional de 50% por lei)</li>
+                    <li><strong>Horas Extras:</strong> Valor/hora x 1.5 (adicional de 50% por lei)</li>
                     <li><strong>INSS:</strong> Progressivo de 7,5% a 14% (máx. R$ 908,85)</li>
                     <li><strong>IR:</strong> Progressivo de 0% a 27,5% (isento até R$ 2.259,20)</li>
                     <li><strong>Base de Cálculo:</strong> 220 horas/mês (44h/semana)</li>
@@ -610,7 +610,7 @@ function exibirResultadoRH(data) {
 
 async function exportarFolhaPDF() {
     if (!lastCalculatedFolha) {
-        showToast('⚠️ Nenhuma folha calculada para exportar', 'warning');
+        showToast('Nenhuma folha calculada para exportar', 'warning');
         return;
     }
 
@@ -697,10 +697,10 @@ async function exportarFolhaPDF() {
         const filename = `Folha_${lastCalculatedFolha.mes.replace(/\s/g, '_')}_${Date.now()}.pdf`;
         doc.save(filename);
         
-        showToast('✅ PDF exportado com sucesso!', 'success');
+        showToast('PDF exportado com sucesso!', 'success');
         
     } catch (error) {
-        console.error('❌ Erro ao exportar PDF:', error);
-        showToast('❌ Erro ao exportar PDF', 'error');
+        console.error('[ERROR] Erro ao exportar PDF:', error);
+        showToast('Erro ao exportar PDF', 'error');
     }
 }
