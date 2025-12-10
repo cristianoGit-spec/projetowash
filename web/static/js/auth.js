@@ -437,14 +437,14 @@ function showConfig() {
             
             <div class="system-info mt-3">
                 <h4>Informações do Sistema</h4>
-                <div class="info-grid">
-                    <div class="info-item">
+                <div class="info-stack" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div class="info-item" style="width: 100%;">
                         <strong>Versão:</strong> 2.0
                     </div>
-                    <div class="info-item">
+                    <div class="info-item" style="width: 100%;">
                         <strong>Modo:</strong> ${typeof localCurrentUser !== 'undefined' ? 'Local/Demo' : 'Online (Firebase)'}
                     </div>
-                    <div class="info-item">
+                    <div class="info-item" style="width: 100%;">
                         <strong>Deploy:</strong> Netlify (Automático)
                     </div>
                 </div>
